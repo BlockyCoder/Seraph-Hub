@@ -9,7 +9,7 @@ local scriptURLs = {
 
 
 local placeId = game.PlaceId
-local scriptURL = scriptURLs[placeId] or "https://raw.githubusercontent.com/mohamedyoo/owlhub/main/universal%20list"
+local scriptURL = scriptURLs[placeId] or "https://pastebin.com/raw/D5PmBV7c"
 
 local function loadScript(url)
     local success, response = pcall(function()
