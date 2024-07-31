@@ -1,0 +1,28 @@
+local scriptURLs = {
+    [15610971848] = "https://pastebin.com/raw/0e9Mk0uY", -- Sword Training Simulator
+    [17524285289] = "https://pastebin.com/raw/dx695sSK", -- Scythe Simulator
+    [15675066449] = "https://pastebin.com/raw/zmdMtq1h", -- Bike Race Clicker
+    [11914921236] = "https://pastebin.com/raw/QiX320Rg", -- Fortune Incremental
+    [16702428031] = "https://pastebin.com/raw/EQRXcfdF" -- Orb Tree Incremental
+}
+
+
+
+local placeId = game.PlaceId
+local scriptURL = scriptURLs[placeId] or "https://raw.githubusercontent.com/mohamedyoo/owlhub/main/universal%20list"
+
+local function loadScript(url)
+    local success, response = pcall(function()
+        return game:HttpGet(url, true)
+    end)
+    if success then
+        local loadSuccess, loadError = pcall(loadstring(response))
+        if not loadSuccess then
+            warn("Error loading script from URL: " .. url .. "\nError: " .. loadError)
+        end
+    else
+        warn("Failed to fetch script from URL: " .. url .. "\nError: " .. response)
+    end
+end
+
+loadScript(scriptURL)
