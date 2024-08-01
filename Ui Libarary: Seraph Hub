@@ -321,7 +321,7 @@ function Library:Create(xHubName)
 		wait(1)
 		LoadingFrame:Destroy()
 		wait(3)
-		shake(Menu, 10, 1) -- Shake by 10 pixels over 0.5 seconds
+		--shake(Menu, 10, 0.5) -- Shake by 10 pixels over 0.5 seconds
 	else
 		return
 	end
