@@ -211,11 +211,11 @@ function Library:Create(xHubName)
 	ImageLabel_2.Parent = Close
 	ImageLabel_2.AnchorPoint = Vector2.new(0.5, 0.5)
 	ImageLabel_2.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-	ImageLabel_2.BackgroundTransparency = 1.000
+	ImageLabel_2.BackgroundTransparency = 2.000
 	ImageLabel_2.BorderColor3 = Color3.fromRGB(27, 42, 53)
 	ImageLabel_2.Position = UDim2.new(0.5, 0, 0.5, 0)
 	ImageLabel_2.Size = UDim2.new(0, 21, 0, 21)
-	ImageLabel_2.Image = "rbxassetid://7733997870"
+	ImageLabel_2.Image = "rbxassetid://7743878857"
 	ImageLabel_2.ImageColor3 = Color3.fromRGB(134, 134, 134)
 
 	UIScale_2.Parent = ImageLabel_2
@@ -253,11 +253,7 @@ function Library:Create(xHubName)
 	ExampleContainer.Size = UDim2.new(0, 515, 0, 248)
 
 	PageHold.Name = "PageHold"
-	PageHold.Parent = ScreenGui
-	PageHold.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-	PageHold.BackgroundTransparency = 1.000
-	PageHold.BorderColor3 = Color3.fromRGB(27, 42, 53)
-	PageHold.Size = UDim2.new(0, 515, 0, 248)
+	PageHold.Parent = ExampleContainer
 
 
 
