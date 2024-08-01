@@ -423,7 +423,7 @@ function Library:Create(xHubName)
 	Shadow.AnchorPoint = Vector2.new(0.5, 0.5)
 	Shadow.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
 	Shadow.BackgroundTransparency = 1.000
-	Shadow.BorderColor3 = Color3.fromRGB(27, 42, 53)
+	Shadow.BorderColor3 = Color3.fromRGB(23, 36, 45)
 	Shadow.BorderSizePixel = 0
 	Shadow.Position = UDim2.new(0.5, 0, 0.5, 0)
 	Shadow.Size = UDim2.new(1, 35, 1, 35)
@@ -496,8 +496,11 @@ function Library:Create(xHubName)
 
 	Close.MouseButton1Click:Connect(function()
 		Library:Fade(Menu, 1, 0, 1)
+		print("faded now waiting 0.3 seconds")
 		wait(0.3)  -- Delay to ensure fade out completes
+		print("Distroying screen gui...")
 		ScreenGui:Destroy()
+		print("destroyed Screen GUI")
 	end)
 
 
@@ -507,11 +510,17 @@ function Library:Create(xHubName)
 		end
 
 		if Menu.Visible then
-			Library:Fade(Menu, 1, 0, 1)  -- Fade out Main frame
+			--Library:Fade(Menu, 1, 0, 1)  -- Fade out Main frame
+			
+			Library:Fade(Menu, 0.5, 0, 1)
+			print("faded out Menu")
 			--Menu.Visible = false
 			--fadeOut(ShadowHolder, 0.3)  -- Fade out ShadowHolder frame
 		else
-			Library:Fade(Menu, 0, 1, 1) -- Fade in Main frame
+		--	Library:Fade(Menu, 0, 1, 1) -- Fade in Main frame
+			
+			Library:Fade(Menu, 0.5, 1, 1)
+			print("faded in Menu")
 			--fadeIn(ShadowHolder, 0.3)  -- Fade in ShadowHolder frame
 			--Menu.Visible = true
 
