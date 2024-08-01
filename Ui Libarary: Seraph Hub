@@ -493,6 +493,8 @@ function Library:Create(xHubName)
 	end)
 
 	Close.MouseButton1Click:Connect(function()
+		Library:Fade(Menu, 1, 0, 1)
+		wait(0.3)  -- Delay to ensure fade out completes
 		ScreenGui:Destroy()
 	end)
 
