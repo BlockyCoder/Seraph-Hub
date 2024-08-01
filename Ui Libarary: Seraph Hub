@@ -1,3 +1,4 @@
+
 -- Gui to Lua
 -- Version: 3.2
 
@@ -6,10 +7,18 @@ local Library = {}
 -- Random UI Name
 local LibraryName = tostring(math.random(100000,200000))..tostring(math.random(100000,200000))..tostring(math.random(100000,200000))
 
+
+
+
 function Library:Drag(obj)
 	local UserInputService = game:GetService("UserInputService")
+
 	local gui = obj
-	local dragging, dragInput, dragStart, startPos
+
+	local dragging
+	local dragInput
+	local dragStart
+	local startPos
 
 	local function update(input)
 		local delta = input.Position - dragStart
@@ -44,6 +53,7 @@ function Library:Drag(obj)
 end
 
 function Library:Create(xHubName)
+
 	if game.CoreGui:FindFirstChild(xHubName) then
 		game.CoreGui[xHubName]:Destroy()
 	end
@@ -71,15 +81,18 @@ function Library:Create(xHubName)
 	local UIPadding_2 = Instance.new("UIPadding")
 	local ExampleContainer = Instance.new("Frame")
 	local PageHold = Instance.new("Folder")
-
+	
+	
 	local LoadingFrame = Instance.new("Frame")
 	local LoadingLabel = Instance.new("TextLabel")
-
-	-- Properties
+	
+	
+	--Properties:
 	ScreenGui.Name = xHubName
-	ScreenGui.Parent = game.CoreGui
+	ScreenGui.Parent =  game.CoreGui
 	ScreenGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
-
+	
+	
 	LoadingFrame.Name = "LoadingFrame"
 	LoadingFrame.Parent = ScreenGui
 	LoadingFrame.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
@@ -108,7 +121,7 @@ function Library:Create(xHubName)
 	local tween = game:GetService("TweenService"):Create(LoadingLabel, tweenInfo, {Position = UDim2.new(0.5, -100, 0.5, -100)})
 	tween:Play()
 
-	
+
 	local function cycleLoadingText()
 		local textArray = {"Loading.", "Loading..", "Loading..."}
 		local index = 1
@@ -119,7 +132,7 @@ function Library:Create(xHubName)
 		end
 	end
 
-	
+
 	local textCoroutine = coroutine.create(cycleLoadingText)
 	coroutine.resume(textCoroutine)
 
@@ -131,7 +144,8 @@ function Library:Create(xHubName)
 	else
 		return
 	end
-
+	
+	
 	Menu.Name = "Menu"
 	Menu.Parent = ScreenGui
 	Menu.BackgroundColor3 = Color3.fromRGB(29, 29, 29)
@@ -205,13 +219,14 @@ function Library:Create(xHubName)
 	Close.Text = ""
 	Close.TextTransparency = 1.000
 
+
 	UICorner_4.CornerRadius = UDim.new(0, 4)
 	UICorner_4.Parent = Close
 
 	ImageLabel_2.Parent = Close
 	ImageLabel_2.AnchorPoint = Vector2.new(0.5, 0.5)
 	ImageLabel_2.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-	ImageLabel_2.BackgroundTransparency = 2.000
+	ImageLabel_2.BackgroundTransparency = 1.000
 	ImageLabel_2.BorderColor3 = Color3.fromRGB(27, 42, 53)
 	ImageLabel_2.Position = UDim2.new(0.5, 0, 0.5, 0)
 	ImageLabel_2.Size = UDim2.new(0, 21, 0, 21)
@@ -219,42 +234,94 @@ function Library:Create(xHubName)
 	ImageLabel_2.ImageColor3 = Color3.fromRGB(134, 134, 134)
 
 	UIScale_2.Parent = ImageLabel_2
-	UIScale_2.Scale = 0.600
+	UIScale_2.Scale = 0.700
 
 	TabHold.Name = "TabHold"
 	TabHold.Parent = Menu
 	TabHold.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
 	TabHold.BackgroundTransparency = 1.000
-	TabHold.BorderColor3 = Color3.fromRGB(27, 42, 53)
-	TabHold.Position = UDim2.new(0, 0, 0.115072839, 0)
-	TabHold.Size = UDim2.new(0, 515, 0, 248)
+	TabHold.BorderColor3 = Color3.fromRGB(0, 0, 0)
+	TabHold.BorderSizePixel = 0
+	TabHold.Position = UDim2.new(0.00190476188, 0, 0.113207549, 0)
+	TabHold.Size = UDim2.new(0, 218, 0, 282)
 
-	Holder2.Name = "Holder2"
+	Holder2.Name = "Holder"
 	Holder2.Parent = TabHold
+	Holder2.Active = true
 	Holder2.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
 	Holder2.BackgroundTransparency = 1.000
 	Holder2.BorderColor3 = Color3.fromRGB(27, 42, 53)
-	Holder2.Size = UDim2.new(0, 515, 0, 248)
-	Holder2.CanvasSize = UDim2.new(0, 0, 0, 0)
+	Holder2.Size = UDim2.new(1, 0, 0.996453881, 1)
+	Holder2.ZIndex = 3
 	Holder2.ScrollBarThickness = 0
 
 	UIListLayout.Parent = Holder2
+	UIListLayout.HorizontalAlignment = Enum.HorizontalAlignment.Center
 	UIListLayout.SortOrder = Enum.SortOrder.LayoutOrder
-	UIListLayout.Padding = UDim.new(0, 5)
+	UIListLayout.Padding = UDim.new(0, 6)
 
 	UIPadding_2.Parent = Holder2
-	UIPadding_2.PaddingTop = UDim.new(0, 5)
+	UIPadding_2.PaddingTop = UDim.new(0, 10)
 
 	ExampleContainer.Name = "ExampleContainer"
-	ExampleContainer.Parent = Holder2
+	ExampleContainer.Parent = Menu
 	ExampleContainer.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
 	ExampleContainer.BackgroundTransparency = 1.000
 	ExampleContainer.BorderColor3 = Color3.fromRGB(27, 42, 53)
-	ExampleContainer.Size = UDim2.new(0, 515, 0, 248)
+	ExampleContainer.Position = UDim2.new(0.425714284, 0, 0.113207549, 0)
+	ExampleContainer.Size = UDim2.new(0, 300, 0, 280)
 
 	PageHold.Name = "PageHold"
 	PageHold.Parent = ExampleContainer
 
+	local UIStroke = Instance.new("UIStroke")
+
+	-- Applying UIStroke to various elements
+	UIStroke.Parent = Menu
+	UIStroke.Color = Color3.fromRGB(50, 50, 50)
+	UIStroke.Thickness = 2
+
+
+	UIStroke:Clone().Parent = Topbar
+	UIStroke:Clone().Parent = TabHold
+	UIStroke:Clone().Parent = ExampleContainer
+
+	local UIGradient = Instance.new("UIGradient")
+	UIGradient.Color = ColorSequence.new{
+		ColorSequenceKeypoint.new(0.00, Color3.fromRGB(40, 40, 40)),
+		ColorSequenceKeypoint.new(1.00, Color3.fromRGB(20, 20, 20))
+	}
+	UIGradient.Parent = Menu
+
+	local Shadow = Instance.new("Frame")
+	local Image = Instance.new("ImageLabel")
+
+	--Properties:
+
+	Shadow.Name = "Shadow"
+	Shadow.Parent = Menu
+	Shadow.AnchorPoint = Vector2.new(0.5, 0.5)
+	Shadow.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+	Shadow.BackgroundTransparency = 1.000
+	Shadow.BorderColor3 = Color3.fromRGB(27, 42, 53)
+	Shadow.BorderSizePixel = 0
+	Shadow.Position = UDim2.new(0.5, 0, 0.5, 0)
+	Shadow.Size = UDim2.new(1, 35, 1, 35)
+	Shadow.ZIndex = 0
+
+	Image.Name = "Image"
+	Image.Parent = Shadow
+	Image.AnchorPoint = Vector2.new(0.5, 0.5)
+	Image.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+	Image.BackgroundTransparency = 1.000
+	Image.BorderColor3 = Color3.fromRGB(27, 42, 53)
+	Image.BorderSizePixel = 0
+	Image.Position = UDim2.new(0.507476628, 0, 0.509803951, 0)
+	Image.Size = UDim2.new(1.60000002, 0, 1.29999995, 0)
+	Image.ZIndex = 0
+	Image.Image = "rbxassetid://5587865193"
+	Image.ImageColor3 = Color3.fromRGB(20, 20, 20)
+	Image.ImageTransparency = 0.400
 
 
 	local minimized = false
@@ -296,8 +363,7 @@ function Library:Create(xHubName)
 			game.CoreGui:FindFirstChild(xHubName).Enabled = true
 		end
 	end
-	
-	
+
 
 	function Library:Tab(TabNam)
 		local TabNam = TabNam or "Tab"
