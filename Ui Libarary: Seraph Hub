@@ -57,107 +57,165 @@ end
 
 --animations
 
-function Library:Fade(element, fromTransparency, toTransparency, duration)
-	local tweenInfo = TweenInfo.new(duration, Enum.EasingStyle.Quad, Enum.EasingDirection.InOut)
-	local tween = game:GetService("TweenService"):Create(element, tweenInfo, {BackgroundTransparency = toTransparency})
+-- TweenService initialization
+local TweenService = game:GetService("TweenService")
+
+-- Fade function: Changes the transparency of an element
+local function fade(element, Trans, duration)
+	local tweenInfo = TweenInfo.new(duration, Enum.EasingStyle.Linear, Enum.EasingDirection.InOut)
+	local tween = TweenService:Create(element, tweenInfo, { BackgroundTransparency = Trans })
 	tween:Play()
 end
 
-
-
-function Library:Slide(element, fromPosition, toPosition, duration)
-	local tweenInfo = TweenInfo.new(duration, Enum.EasingStyle.Quad, Enum.EasingDirection.InOut)
-	local tween = game:GetService("TweenService"):Create(element, tweenInfo, {Position = toPosition})
+-- Slide function: Moves an element from one position to another
+local function slide(element, targetPosition, duration)
+	local tweenInfo = TweenInfo.new(duration, Enum.EasingStyle.Linear, Enum.EasingDirection.InOut)
+	local tween = TweenService:Create(element, tweenInfo, { Position = targetPosition })
 	tween:Play()
 end
 
-
-function Library:Scale(element, fromSize, toSize, duration)
-	local tweenInfo = TweenInfo.new(duration, Enum.EasingStyle.Quad, Enum.EasingDirection.InOut)
-	local tween = game:GetService("TweenService"):Create(element, tweenInfo, {Size = toSize})
+-- Scale function: Changes the size of an element
+local function scale(element, targetSize, duration)
+	local tweenInfo = TweenInfo.new(duration, Enum.EasingStyle.Linear, Enum.EasingDirection.InOut)
+	local tween = TweenService:Create(element, tweenInfo, { Size = targetSize })
 	tween:Play()
 end
 
-function Library:Rotate(element, fromRotation, toRotation, duration)
-	local tweenInfo = TweenInfo.new(duration, Enum.EasingStyle.Quad, Enum.EasingDirection.InOut)
-	local tween = game:GetService("TweenService"):Create(element, tweenInfo, {Rotation = toRotation})
+-- Rotate function: Rotates an element around a specified axis
+local function rotate(element, targetRotation, duration)
+	local tweenInfo = TweenInfo.new(duration, Enum.EasingStyle.Linear, Enum.EasingDirection.InOut)
+	local tween = TweenService:Create(element, tweenInfo, { Rotation = targetRotation })
 	tween:Play()
 end
 
-
-function Library:Pulse(element, minSize, maxSize, duration)
-	local tweenInfo = TweenInfo.new(duration / 2, Enum.EasingStyle.Quad, Enum.EasingDirection.InOut, -1, true)
-	local tween = game:GetService("TweenService"):Create(element, tweenInfo, {Size = maxSize})
+-- Pulse function: Creates a pulsing effect by scaling up and down repeatedly
+local function pulse(element, scaleFactor, duration)
+	local tweenInfo = TweenInfo.new(duration / 2, Enum.EasingStyle.Sine, Enum.EasingDirection.InOut, -1, true)
+	local tween = TweenService:Create(element, tweenInfo, { Size = scaleFactor })
 	tween:Play()
 end
 
-
-
-function Library:Shake(element, intensity, duration)
-	local tweenService = game:GetService("TweenService")
-	local originalPosition = element.Position
-	local tweenInfo = TweenInfo.new(duration / 20, Enum.EasingStyle.Linear, Enum.EasingDirection.InOut, -1, true)
-
-	for i = 1, 20 do
-		local offset = UDim2.new(0, math.random(-intensity, intensity), 0, math.random(-intensity, intensity))
-		local tween = tweenService:Create(element, tweenInfo, {Position = originalPosition + offset})
-		tween:Play()
-		wait(duration / 20)
-	end
-end
-
-
-function Library:ColorChange(element, fromColor, toColor, duration)
-	local tweenInfo = TweenInfo.new(duration, Enum.EasingStyle.Quad, Enum.EasingDirection.InOut)
-	local tween = game:GetService("TweenService"):Create(element, tweenInfo, {BackgroundColor3 = toColor})
-	tween:Play()
-end
-
-
-function Library:Bounce(element, fromPosition, toPosition, duration)
-	local tweenInfo = TweenInfo.new(duration, Enum.EasingStyle.Bounce, Enum.EasingDirection.InOut)
-	local tween = game:GetService("TweenService"):Create(element, tweenInfo, {Position = toPosition})
-	tween:Play()
-end
-
-
-function Library:Flip(element, fromRotation, toRotation, duration)
-	local tweenInfo = TweenInfo.new(duration, Enum.EasingStyle.Quad, Enum.EasingDirection.InOut)
-	local tween = game:GetService("TweenService"):Create(element, tweenInfo, {Rotation = toRotation})
-	tween:Play()
-end
-
-function Library:Wobble(element, intensity, duration)
+-- Shake function: Adds a shaking effect by rapidly changing position
+local function shake(element, shakeAmount, duration)
 	local tweenInfo = TweenInfo.new(duration, Enum.EasingStyle.Sine, Enum.EasingDirection.InOut, -1, true)
-	local tween = game:GetService("TweenService"):Create(element, tweenInfo, {Position = element.Position + UDim2.new(0, intensity, 0, intensity)})
+	local tween = TweenService:Create(element, tweenInfo, { Position = UDim2.new(element.Position.X.Offset + shakeAmount, 0, element.Position.Y.Offset, 0) })
 	tween:Play()
 end
+
+-- Color Change function: Alters the color of an element
+local function colorChange(element, targetColor, duration)
+	local tweenInfo = TweenInfo.new(duration, Enum.EasingStyle.Linear, Enum.EasingDirection.InOut)
+	local tween = TweenService:Create(element, tweenInfo, { BackgroundColor3 = targetColor })
+	tween:Play()
+end
+
+-- Bounce function: Moves an element in a bouncing motion
+local function bounce(element, bounceHeight, duration)
+	local tweenInfo = TweenInfo.new(duration, Enum.EasingStyle.Bounce, Enum.EasingDirection.InOut)
+	local tween = TweenService:Create(element, tweenInfo, { Position = UDim2.new(element.Position.X.Scale, element.Position.X.Offset, bounceHeight, 0) })
+	tween:Play()
+end
+
+-- Flip function: Flips the element around a specified axis
+local function flip(element, flipDirection, duration)
+	local tweenInfo = TweenInfo.new(duration, Enum.EasingStyle.Linear, Enum.EasingDirection.InOut)
+	local tween = TweenService:Create(element, tweenInfo, { Rotation = flipDirection })
+	tween:Play()
+end
+
+-- Wobble function: Applies a wobbling effect to the element
+local function wobble(element, wobbleAmount, duration)
+	local tweenInfo = TweenInfo.new(duration, Enum.EasingStyle.Sine, Enum.EasingDirection.InOut, -1, true)
+	local tween = TweenService:Create(element, tweenInfo, { Position = UDim2.new(element.Position.X.Offset + wobbleAmount, 0, element.Position.Y.Offset, 0) })
+	tween:Play()
+end
+
+-- Fade and Move function: Combines fading and sliding effects
+local function fadeAndMove(element, targetTransparency, targetPosition, duration)
+	local tweenInfo = TweenInfo.new(duration, Enum.EasingStyle.Linear, Enum.EasingDirection.InOut)
+	local tween = TweenService:Create(element, tweenInfo, { BackgroundTransparency = targetTransparency, Position = targetPosition })
+	tween:Play()
+end
+
+-- Rotate and Scale function: Combines rotation and scaling effects
+local function rotateAndScale(element, targetRotation, targetSize, duration)
+	local tweenInfo = TweenInfo.new(duration, Enum.EasingStyle.Linear, Enum.EasingDirection.InOut)
+	local tween = TweenService:Create(element, tweenInfo, { Rotation = targetRotation, Size = targetSize })
+	tween:Play()
+end
+
+-- Flash function: Creates a flashing effect by changing the color repeatedly
+local function flash(element, color1, color2, duration)
+	local tweenInfo = TweenInfo.new(duration / 2, Enum.EasingStyle.Linear, Enum.EasingDirection.InOut, -1, true)
+	local tween = TweenService:Create(element, tweenInfo, { BackgroundColor3 = color1 })
+	tween:Play()
+	tween.Completed:Connect(function()
+		element.BackgroundColor3 = color2
+	end)
+end
+
+-- Expand function: Expands the element from its center
+local function expand(element, targetSize, duration)
+	local originalSize = element.Size
+	local tweenInfo = TweenInfo.new(duration, Enum.EasingStyle.Quad, Enum.EasingDirection.Out)
+	local tween = TweenService:Create(element, tweenInfo, { Size = targetSize })
+	tween:Play()
+end
+
+-- Contract function: Contracts the element to its center
+local function contract(element, duration)
+	local originalSize = element.Size
+	local tweenInfo = TweenInfo.new(duration, Enum.EasingStyle.Quad, Enum.EasingDirection.In)
+	local tween = TweenService:Create(element, tweenInfo, { Size = UDim2.new(0, 0, 0, 0) })
+	tween:Play()
+end
+
 
 
 --example
 
 --[[
-Library:Fade(element, 1, 0, 1) -- Fades out the element in 1 second  (from fully visible to fully transparent)  start,end,dur
+fade(frame, 1, 2)
 
-Library:Slide(element, UDim2.new(0.5, 0, 0.5, 0), 1) -- Slides the element to the center in 1 second
+slide(textLabel, UDim2.new(0.5, 0, 0.5, 0), 1) -- Slide to center position over 1 second
 
-Library:Scale(element, UDim2.new(2, 0, 2, 0), 1) -- Scales the element to twice its size in 1 second
+scale(button, UDim2.new(0, 200, 0, 100), 1.5) -- Scale to new size over 1.5 seconds
 
-Library:Rotate(element, 360, 1) -- Rotates the element 360 degrees in 1 second
 
-Library:Pulse(element, UDim2.new(1.1, 0, 1.1, 0), UDim2.new(1, 0, 1, 0), 1) -- Pulses the element size in 1 second
+rotate(imageLabel, 360, 2) -- Rotate 360 degrees over 2 seconds
 
-Library:Shake(element, 10, 0.1) -- Shakes the element within a 10-pixel range in 0.1 seconds
+pulse(icon, UDim2.new(0, 100, 0, 100), 1) -- Pulse effect with size change over 1 second
 
-Library:ColorChange(element, Color3.fromRGB(255, 0, 0), 1) -- Changes the element's color to red in 1 second
+shake(panel, 10, 0.5) -- Shake by 10 pixels over 0.5 seconds
 
-Library:Bounce(element, UDim2.new(0.5, 0, 0.5, 0), 1) -- Bounces the element to the center in 1 second
+colorChange(frame, Color3.fromRGB(255, 0, 0), 2) -- Change color to red over 2 seconds
 
-Library:Flip(element, 180, 1) -- Flips the element 180 degrees in 1 second
+bounce(label, UDim2.new(0, 0, 0.5, 0), 1) -- Bounce up and down over 1 second
 
-Library:Wobble(element, 5, 0.1) -- Wobbles the element within a 5-pixel range in 0.1 seconds
+flip(card, 180, 1) -- Flip around axis by 180 degrees over 1 second
+
+wobble(icon, 5, 1) -- Wobble effect by 5 pixels over 1 second
+
+fadeAndMove(guiElement, 0.5, UDim2.new(0.5, 0, 0.5, 0), 1) -- Fade to 50% transparency and move to center over 1 second
+
+rotateAndScale(frame, 45, UDim2.new(0, 100, 0, 100), 2) -- Rotate 45 degrees and scale to 100x100 pixels over 2 seconds
+
+flash(button, Color3.fromRGB(255, 255, 0), Color3.fromRGB(255, 0, 0), 1) -- Flash between yellow and red over 1 second
+
+expand(frame, UDim2.new(0, 300, 0, 300), 2) -- Expand to 300x300 pixels over 2 seconds
+
+contract(frame, 1.5) -- Contract to zero size over 1.5 seconds
+
+
+
+
+
+
 
 ]]--
+
+
+
 
 
 
@@ -258,9 +316,12 @@ function Library:Create(xHubName)
 	
 
 	if LoadingFrame and LoadingFrame.Parent then
-		Library:Fade(LoadingFrame, 0.5, 1, 1)
+		
+		fade(LoadingFrame, 1, 1)
 		wait(1)
 		LoadingFrame:Destroy()
+		wait(3)
+		shake(Menu, 10, 1) -- Shake by 10 pixels over 0.5 seconds
 	else
 		return
 	end
@@ -495,7 +556,8 @@ function Library:Create(xHubName)
 	end)
 
 	Close.MouseButton1Click:Connect(function()
-		Library:Fade(Menu, 1, 0, 1)
+		
+		fade(Menu, 0, 1)
 		print("faded now waiting 0.3 seconds")
 		wait(0.3)  -- Delay to ensure fade out completes
 		print("Distroying screen gui...")
@@ -505,21 +567,21 @@ function Library:Create(xHubName)
 
 
 	ImageButtonK.MouseButton1Click:Connect(function()
-		if LoadingFrame.Visible then
-			return
-		end
+		print("ImageButtonK clicked!")
+		-- Check if the Main frame is visible
+		print("Menu Visible: " .. tostring(Menu.Visible))
 
 		if Menu.Visible then
 			--Library:Fade(Menu, 1, 0, 1)  -- Fade out Main frame
 			
-			Library:Fade(Menu, 0.5, 0, 1)
+			fade(Menu, 0, 1)
 			print("faded out Menu")
 			--Menu.Visible = false
 			--fadeOut(ShadowHolder, 0.3)  -- Fade out ShadowHolder frame
 		else
 		--	Library:Fade(Menu, 0, 1, 1) -- Fade in Main frame
 			
-			Library:Fade(Menu, 0.5, 1, 1)
+			fade(Menu, 1, 1)
 			print("faded in Menu")
 			--fadeIn(ShadowHolder, 0.3)  -- Fade in ShadowHolder frame
 			--Menu.Visible = true
