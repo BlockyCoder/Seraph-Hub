@@ -193,24 +193,24 @@ function Library:Create(xHubName)
 	local UIPadding_2 = Instance.new("UIPadding")
 	local ExampleContainer = Instance.new("Frame")
 	local PageHold = Instance.new("Folder")
-	
-	
+
+
 	local LoadingFrame = Instance.new("Frame")
 	local LoadingLabel = Instance.new("TextLabel")
-	
-	
+
+
 	--close and open mobile
-	
+
 	local ImageButtonK = Instance.new("ImageButton")
 	local ImageButtonKCorner = Instance.new("UICorner")
-	
-	
+
+
 	--Properties:
 	ScreenGui.Name = xHubName
 	ScreenGui.Parent =  game.CoreGui
 	ScreenGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
-	
-	
+
+
 	LoadingFrame.Name = "LoadingFrame"
 	LoadingFrame.Parent = ScreenGui
 	LoadingFrame.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
@@ -255,15 +255,17 @@ function Library:Create(xHubName)
 	coroutine.resume(textCoroutine)
 
 	wait(4) -- Simulating loading time
-
+	
 
 	if LoadingFrame and LoadingFrame.Parent then
+		Library:Fade(LoadingFrame, 0.5, 1, 1)
+		wait(1)
 		LoadingFrame:Destroy()
 	else
 		return
 	end
-	
-	
+
+
 	Menu.Name = "Menu"
 	Menu.Parent = ScreenGui
 	Menu.BackgroundColor3 = Color3.fromRGB(29, 29, 29)
@@ -441,8 +443,8 @@ function Library:Create(xHubName)
 	Image.ImageColor3 = Color3.fromRGB(20, 20, 20)
 	Image.ImageTransparency = 0.400
 
-	
-	
+
+
 	-- ImageButtonK setup
 	ImageButtonK.Name = "ImageButtonK"
 	ImageButtonK.Parent = ScreenGui
@@ -465,9 +467,9 @@ function Library:Create(xHubName)
 	local UIAspectRatioConstraint = Instance.new("UIAspectRatioConstraint")
 	UIAspectRatioConstraint.Parent = ImageButtonK
 	UIAspectRatioConstraint.AspectRatio = 1.404
-	
-	
-	
+
+
+
 	local minimized = false
 	local originalSize = Menu.Size
 	local minimizedSize = UDim2.new(0, 525, 0, 36)
@@ -515,8 +517,8 @@ function Library:Create(xHubName)
 
 		end
 	end)
-	
-	
+
+
 	Library:Drag(Menu, Topbar)
 
 
