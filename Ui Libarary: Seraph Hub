@@ -52,6 +52,118 @@ function Library:Drag(obj)
 	end)
 end
 
+
+
+
+--animations
+
+function Library:Fade(element, fromTransparency, toTransparency, duration)
+	local tweenInfo = TweenInfo.new(duration, Enum.EasingStyle.Quad, Enum.EasingDirection.InOut)
+	local tween = game:GetService("TweenService"):Create(element, tweenInfo, {BackgroundTransparency = toTransparency})
+	tween:Play()
+end
+
+
+
+function Library:Slide(element, fromPosition, toPosition, duration)
+	local tweenInfo = TweenInfo.new(duration, Enum.EasingStyle.Quad, Enum.EasingDirection.InOut)
+	local tween = game:GetService("TweenService"):Create(element, tweenInfo, {Position = toPosition})
+	tween:Play()
+end
+
+
+function Library:Scale(element, fromSize, toSize, duration)
+	local tweenInfo = TweenInfo.new(duration, Enum.EasingStyle.Quad, Enum.EasingDirection.InOut)
+	local tween = game:GetService("TweenService"):Create(element, tweenInfo, {Size = toSize})
+	tween:Play()
+end
+
+function Library:Rotate(element, fromRotation, toRotation, duration)
+	local tweenInfo = TweenInfo.new(duration, Enum.EasingStyle.Quad, Enum.EasingDirection.InOut)
+	local tween = game:GetService("TweenService"):Create(element, tweenInfo, {Rotation = toRotation})
+	tween:Play()
+end
+
+
+function Library:Pulse(element, minSize, maxSize, duration)
+	local tweenInfo = TweenInfo.new(duration / 2, Enum.EasingStyle.Quad, Enum.EasingDirection.InOut, -1, true)
+	local tween = game:GetService("TweenService"):Create(element, tweenInfo, {Size = maxSize})
+	tween:Play()
+end
+
+
+
+function Library:Shake(element, intensity, duration)
+	local tweenService = game:GetService("TweenService")
+	local originalPosition = element.Position
+	local tweenInfo = TweenInfo.new(duration / 20, Enum.EasingStyle.Linear, Enum.EasingDirection.InOut, -1, true)
+
+	for i = 1, 20 do
+		local offset = UDim2.new(0, math.random(-intensity, intensity), 0, math.random(-intensity, intensity))
+		local tween = tweenService:Create(element, tweenInfo, {Position = originalPosition + offset})
+		tween:Play()
+		wait(duration / 20)
+	end
+end
+
+
+function Library:ColorChange(element, fromColor, toColor, duration)
+	local tweenInfo = TweenInfo.new(duration, Enum.EasingStyle.Quad, Enum.EasingDirection.InOut)
+	local tween = game:GetService("TweenService"):Create(element, tweenInfo, {BackgroundColor3 = toColor})
+	tween:Play()
+end
+
+
+function Library:Bounce(element, fromPosition, toPosition, duration)
+	local tweenInfo = TweenInfo.new(duration, Enum.EasingStyle.Bounce, Enum.EasingDirection.InOut)
+	local tween = game:GetService("TweenService"):Create(element, tweenInfo, {Position = toPosition})
+	tween:Play()
+end
+
+
+function Library:Flip(element, fromRotation, toRotation, duration)
+	local tweenInfo = TweenInfo.new(duration, Enum.EasingStyle.Quad, Enum.EasingDirection.InOut)
+	local tween = game:GetService("TweenService"):Create(element, tweenInfo, {Rotation = toRotation})
+	tween:Play()
+end
+
+function Library:Wobble(element, intensity, duration)
+	local tweenInfo = TweenInfo.new(duration, Enum.EasingStyle.Sine, Enum.EasingDirection.InOut, -1, true)
+	local tween = game:GetService("TweenService"):Create(element, tweenInfo, {Position = element.Position + UDim2.new(0, intensity, 0, intensity)})
+	tween:Play()
+end
+
+
+--example
+
+--[[
+Library:Fade(element, 1, 0, 1) -- Fades out the element in 1 second  (from fully visible to fully transparent)  start,end,dur
+
+Library:Slide(element, UDim2.new(0.5, 0, 0.5, 0), 1) -- Slides the element to the center in 1 second
+
+Library:Scale(element, UDim2.new(2, 0, 2, 0), 1) -- Scales the element to twice its size in 1 second
+
+Library:Rotate(element, 360, 1) -- Rotates the element 360 degrees in 1 second
+
+Library:Pulse(element, UDim2.new(1.1, 0, 1.1, 0), UDim2.new(1, 0, 1, 0), 1) -- Pulses the element size in 1 second
+
+Library:Shake(element, 10, 0.1) -- Shakes the element within a 10-pixel range in 0.1 seconds
+
+Library:ColorChange(element, Color3.fromRGB(255, 0, 0), 1) -- Changes the element's color to red in 1 second
+
+Library:Bounce(element, UDim2.new(0.5, 0, 0.5, 0), 1) -- Bounces the element to the center in 1 second
+
+Library:Flip(element, 180, 1) -- Flips the element 180 degrees in 1 second
+
+Library:Wobble(element, 5, 0.1) -- Wobbles the element within a 5-pixel range in 0.1 seconds
+
+]]--
+
+
+
+
+--Mains
+
 function Library:Create(xHubName)
 
 	if game.CoreGui:FindFirstChild(xHubName) then
@@ -85,6 +197,12 @@ function Library:Create(xHubName)
 	
 	local LoadingFrame = Instance.new("Frame")
 	local LoadingLabel = Instance.new("TextLabel")
+	
+	
+	--close and open mobile
+	
+	local ImageButtonK = Instance.new("ImageButton")
+	local ImageButtonKCorner = Instance.new("UICorner")
 	
 	
 	--Properties:
@@ -323,7 +441,33 @@ function Library:Create(xHubName)
 	Image.ImageColor3 = Color3.fromRGB(20, 20, 20)
 	Image.ImageTransparency = 0.400
 
+	
+	
+	-- ImageButtonK setup
+	ImageButtonK.Name = "ImageButtonK"
+	ImageButtonK.Parent = ScreenGui
+	ImageButtonK.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+	ImageButtonK.BackgroundTransparency = 1.000
+	ImageButtonK.BorderColor3 = Color3.fromRGB(0, 0, 0)
+	ImageButtonK.BorderSizePixel = 0
+	ImageButtonK.Position = UDim2.new(0.219957083, 0, 0.0619834736, 0)
+	ImageButtonK.Size = UDim2.new(0.044799991, 0, 0.0651629046, 0)
+	ImageButtonK.Image = "rbxassetid://15771991482"
+	ImageButtonK.Visible = true
 
+	-- UICorner for ImageButtonK setup
+	local ImageButtonKCorner = Instance.new("UICorner")
+	ImageButtonKCorner.CornerRadius = UDim.new(0, 12)
+	ImageButtonKCorner.Name = "ImageButtonKCorner"
+	ImageButtonKCorner.Parent = ImageButtonK
+
+	-- UIAspectRatioConstraint for ImageButtonK setup
+	local UIAspectRatioConstraint = Instance.new("UIAspectRatioConstraint")
+	UIAspectRatioConstraint.Parent = ImageButtonK
+	UIAspectRatioConstraint.AspectRatio = 1.404
+	
+	
+	
 	local minimized = false
 	local originalSize = Menu.Size
 	local minimizedSize = UDim2.new(0, 525, 0, 36)
@@ -353,6 +497,24 @@ function Library:Create(xHubName)
 	end)
 
 
+	ImageButtonK.MouseButton1Click:Connect(function()
+		if LoadingFrame.Visible then
+			return
+		end
+
+		if Menu.Visible then
+			Library:Fade(Menu, 1, 0, 1)  -- Fade out Main frame
+			--Menu.Visible = false
+			--fadeOut(ShadowHolder, 0.3)  -- Fade out ShadowHolder frame
+		else
+			Library:Fade(Menu, 0, 1, 1) -- Fade in Main frame
+			--fadeIn(ShadowHolder, 0.3)  -- Fade in ShadowHolder frame
+			--Menu.Visible = true
+
+		end
+	end)
+	
+	
 	Library:Drag(Menu, Topbar)
 
 
@@ -500,8 +662,8 @@ function Library:Create(xHubName)
 			end
 			-- Show the selected tab frame
 			Left.Visible = true
-			Example.TextColor3 = Color3.fromRGB(255, 255, 255)
-			Example.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+			Example.TextColor3 = Color3.fromRGB(4, 34, 40)
+			Example.BackgroundColor3 = Color3.fromRGB(17, 146, 172)
 		end)
 
 		return Holder
