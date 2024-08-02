@@ -1439,7 +1439,7 @@ function Library:Create(xHubName)
 		Title.TextSize = 12.000
 		Title.TextXAlignment = Enum.TextXAlignment.Left
 
-		local List = Instance.new("ScrollingFrame")
+		local List = Instance.new("Frame")
 		List.Name = "List"
 		List.Parent = Dropdown.Parent
 		List.BackgroundColor3 = Color3.fromRGB(35, 35, 35)
@@ -1447,14 +1447,12 @@ function Library:Create(xHubName)
 		List.Position = UDim2.new(0, 0, 0.469696969, 0)
 		List.Size = UDim2.new(1, -20, 0, 200)  -- Adjust height as needed
 		List.ClipsDescendants = true
-		List.CanvasSize = UDim2.new(0, 0, 0, #options * 25)
-		List.ScrollBarThickness = 6
-		List.ScrollingDirection = Enum.ScrollingDirection.Y
 		List.Visible = false
 
-		local UIListLayout = Instance.new("UIListLayout")
+
 		UIListLayout.Parent = List
 		UIListLayout.SortOrder = Enum.SortOrder.LayoutOrder
+		UIListLayout.Padding = UDim.new(0, 3)
 
 		for i, optionText in ipairs(options) do
 			local Option = Instance.new("TextButton")
