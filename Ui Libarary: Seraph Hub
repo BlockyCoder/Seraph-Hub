@@ -541,7 +541,8 @@ function Library:Create(xHubName)
 	ImageButtonK.BorderSizePixel = 0
 	ImageButtonK.Position = UDim2.new(0.219957083, 0, 0.0619834736, 0)
 	ImageButtonK.Size = UDim2.new(0.044799991, 0, 0.0651629046, 0)
-	ImageButtonK.Image = "rbxassetid://15771991482"
+	ImageButtonK.PressedImage = "rbxassetid://15771991482"
+	ImageButtonK.Image = "rbxassetid://18768294886"
 	ImageButtonK.Visible = true
 
 	-- UICorner for ImageButtonK setup
@@ -596,17 +597,53 @@ function Library:Create(xHubName)
 
 
 	ImageButtonK.MouseButton1Click:Connect(function()
-
 		if Menu.Visible then
+			-- Uncomment the desired fade-out effect
 			fadeOut(Menu, 0.3)  -- Fade out Main frame
+			
+			fadeOut(Topbar, 0.3)
+			
+			
+			--scale(Menu, 0.3)  -- Scale down Main frame
+			--rotate(Menu, 0.3)  -- Rotate Main frame
+			--pulse(Menu, 0.3)  -- Pulse Main frame
+			--shake(Menu, 0.3)  -- Shake Main frame
+			--colorChange(Menu, 0.3)  -- Change color of Main frame
+			--bounce(Menu, 0.3)  -- Bounce Main frame
+			--flip(Menu, 0.3)  -- Flip Main frame
+			--wobble(Menu, 0.3)  -- Wobble Main frame
+			--fadeAndMove(Menu, 0.3)  -- Fade and move Main frame
+			--rotateAndScale(Menu, 0.3)  -- Rotate and scale Main frame
+			--flash(Menu, 0.3)  -- Flash Main frame
+			--expand(Menu, 0.3)  -- Expand Main frame
+			--contract(Menu, 0.3)  -- Contract Main frame
+
 			Menu.Visible = false
-			--fadeOut(ShadowHolder, 0.3)  -- Fade out ShadowHolder frame
 		else
-			fadeIn(Menu, 0.3)  -- Fade in Main frame
-			--fadeIn(ShadowHolder, 0.3)  -- Fade in ShadowHolder frame
 			Menu.Visible = true
+			-- Uncomment the desired fade-in effect
+			fadeIn(Menu, 0.3)  -- Fade in Main frame
+			
+			fadeIn(Topbar, 0.3)
+			
+			
+	
+			--scale(Menu, 0.3)  -- Scale up Main frame
+			--rotate(Menu, 0.3)  -- Rotate Main frame
+			--pulse(Menu, 0.3)  -- Pulse Main frame
+			--shake(Menu, 0.3)  -- Shake Main frame
+			--colorChange(Menu, 0.3)  -- Change color of Main frame
+			--bounce(Menu, 0.3)  -- Bounce Main frame
+			--flip(Menu, 0.3)  -- Flip Main frame
+			--wobble(Menu, 0.3)  -- Wobble Main frame
+			--fadeAndMove(Menu, 0.3)  -- Fade and move Main frame
+			--rotateAndScale(Menu, 0.3)  -- Rotate and scale Main frame
+			--flash(Menu, 0.3)  -- Flash Main frame
+			--expand(Menu, 0.3)  -- Expand Main frame
+			--contract(Menu, 0.3)  -- Contract Main frame
 		end
 	end)
+
 
 
 	Library:Drag(Menu, Topbar)
@@ -971,7 +1008,10 @@ function Library:Create(xHubName)
 		local UICorner = Instance.new("UICorner")
 		UICorner.CornerRadius = UDim.new(0, 5)
 		UICorner.Parent = Toggle
-
+		
+		UIStroke:Clone().Parent = Toggle
+		
+		
 		local TextLabel = Instance.new("TextLabel")
 		TextLabel.Parent = Toggle
 		TextLabel.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
@@ -1009,7 +1049,13 @@ function Library:Create(xHubName)
 		local UICorner_2 = Instance.new("UICorner")
 		UICorner_2.CornerRadius = UDim.new(0, 5)
 		UICorner_2.Parent = ToggleBckg
-
+		
+		
+		UIStroke:Clone().Parent = Status
+		
+		UIStroke:Clone().Parent = ToggleBckg
+		
+		
 		local Icon = Instance.new("ImageLabel")
 		Icon.Name = "Icon"
 		Icon.Parent = ToggleBckg
@@ -1222,7 +1268,6 @@ function Library:Create(xHubName)
 
 
 
-	-- Assume Library is already defined as your GUI library
 	local UserInputService = game:GetService("UserInputService")
 
 	-- Function to create the keybind GUI
@@ -1238,7 +1283,7 @@ function Library:Create(xHubName)
 		Keybind.Parent = tab
 		Keybind.BackgroundColor3 = Color3.fromRGB(35, 35, 35)
 		Keybind.BorderColor3 = Color3.fromRGB(27, 42, 53)
-		Keybind.Position = UDim2.new(0, 0, 0.439393938, 0)  -- Adjusted vertical position to match other components
+		Keybind.Position = UDim2.new(0, 0, 0.439, 0)  -- Adjusted vertical position to match other components
 		Keybind.Selectable = false
 		Keybind.Size = UDim2.new(1, -20, 0, 31)  -- Adjusted width to fit nicely within parent
 		Keybind.AutoButtonColor = false
@@ -1253,7 +1298,7 @@ function Library:Create(xHubName)
 		TextLabel.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
 		TextLabel.BackgroundTransparency = 1.000
 		TextLabel.BorderColor3 = Color3.fromRGB(27, 42, 53)
-		TextLabel.Size = UDim2.new(0.8, 0, 1, 0)  -- Adjusted width to fit within Keybind
+		TextLabel.Size = UDim2.new(0.75, 0, 1, 0)  -- Adjusted width to fit within Keybind
 		TextLabel.Position = UDim2.new(0, 10, 0, 0)  -- Adjusted left padding
 		TextLabel.Font = Enum.Font.GothamMedium
 		TextLabel.Text = keybindName
@@ -1267,9 +1312,13 @@ function Library:Create(xHubName)
 		Status.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
 		Status.BackgroundTransparency = 1.000
 		Status.BorderColor3 = Color3.fromRGB(27, 42, 53)
-		Status.Position = UDim2.new(0.85, 0, 0, 0)  -- Adjusted position to align right
-		Status.Size = UDim2.new(0.15, 0, 1, 0)  -- Adjusted width to fit within Keybind
-
+		Status.Position = UDim2.new(0.75, 0, 0, 0)  -- Adjusted position to align right
+		Status.Size = UDim2.new(0.25, 0, 1, 0)  -- Adjusted width to fit within Keybind
+		
+		UIStroke:Clone().Parent = Status
+		UIStroke:Clone().Parent = Keybind
+		
+		
 		local TextLabel_2 = Instance.new("TextLabel")
 		TextLabel_2.Parent = Status
 		TextLabel_2.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
@@ -1296,7 +1345,6 @@ function Library:Create(xHubName)
 			end
 		end
 
-
 		UserInputService.InputBegan:Connect(onKeyPress)
 
 		Keybind.MouseButton1Click:Connect(function()
@@ -1313,6 +1361,7 @@ function Library:Create(xHubName)
 
 		return Keybind
 	end
+
 
 
 
