@@ -597,6 +597,8 @@ function Library:Create(xHubName)
 
 
 	ImageButtonK.MouseButton1Click:Connect(function()
+		
+		
 		if Menu.Visible then
 			-- Uncomment the desired fade-out effect
 			fadeOut(Menu, 0.3)  -- Fade out Main frame
@@ -619,8 +621,9 @@ function Library:Create(xHubName)
 			--contract(Menu, 0.3)  -- Contract Main frame
 
 			Menu.Visible = false
+			
 		else
-			Menu.Visible = true
+			
 			-- Uncomment the desired fade-in effect
 			fadeIn(Menu, 0.3)  -- Fade in Main frame
 			
@@ -641,6 +644,8 @@ function Library:Create(xHubName)
 			--flash(Menu, 0.3)  -- Flash Main frame
 			--expand(Menu, 0.3)  -- Expand Main frame
 			--contract(Menu, 0.3)  -- Contract Main frame
+			
+			Menu.Visible = true
 		end
 	end)
 
@@ -773,7 +778,9 @@ function Library:Create(xHubName)
 
 		UIPadding_2.Parent = Left
 		UIPadding_2.PaddingTop = UDim.new(0, 5)
-
+		
+		UIStroke:Clone().Parent = Example
+		
 		-- Store the original color
 		local originalBackgroundColor = Example.BackgroundColor3
 
@@ -875,7 +882,10 @@ function Library:Create(xHubName)
 		UIScale.Parent = ImageLabel
 		UIScale.Scale = 0.800
 
-
+		
+		UIStroke:Clone().Parent = Button
+		UIStroke:Clone().Parent = ActualThing
+		
 		-- Button click event
 		Button.MouseButton1Click:Connect(function()
 			print("Button clicked: " .. ButName)
@@ -901,12 +911,15 @@ function Library:Create(xHubName)
 		Label.Parent = parent
 		Label.BackgroundColor3 = Color3.fromRGB(35, 35, 35)
 		Label.BorderColor3 = Color3.fromRGB(27, 42, 53)
-		Label.Size = UDim2.new(1, 0, 0, 31)
+		Label.Size = UDim2.new(1, -20, 0, 31)
 		Label.Text = LabelText
 		Label.TextColor3 = Color3.fromRGB(193, 193, 193)
 		Label.TextSize = 12
 		Label.Font = Enum.Font.GothamMedium
-
+		
+		UIStroke:Clone().Parent = Label
+		
+		
 		function labelFunctions:UpdateLabel(newText)
 			Label.Text = newText
 		end
@@ -972,7 +985,12 @@ function Library:Create(xHubName)
 		TextBox.Text = ""
 		TextBox.TextColor3 = Color3.fromRGB(177, 177, 177)
 		TextBox.TextSize = 12.000
+		
+		
+		UIStroke:Clone().Parent = TextBox
+		UIStroke:Clone().Parent = Status
 
+		
 		-- Apply corner radius to TextBox
 		local UICorner_2 = Instance.new("UICorner")
 		UICorner_2.CornerRadius = UDim.new(0, 2)
@@ -1049,9 +1067,7 @@ function Library:Create(xHubName)
 		local UICorner_2 = Instance.new("UICorner")
 		UICorner_2.CornerRadius = UDim.new(0, 5)
 		UICorner_2.Parent = ToggleBckg
-		
-		
-		UIStroke:Clone().Parent = Status
+	
 		
 		UIStroke:Clone().Parent = ToggleBckg
 		
@@ -1328,7 +1344,8 @@ function Library:Create(xHubName)
 		TextLabel_2.Font = Enum.Font.GothamMedium
 		TextLabel_2.Text = tostring(defaultKey):gsub("Enum.KeyCode.", "")  -- Display default key
 		TextLabel_2.TextColor3 = Color3.fromRGB(85, 85, 85)
-		TextLabel_2.TextSize = 12.000
+		TextLabel_2.TextScaled = true
+		TextLabel_2.TextWrapped = true
 		TextLabel_2.TextXAlignment = Enum.TextXAlignment.Right
 
 		-- Function to update keybind status
@@ -1379,7 +1396,13 @@ function Library:Create(xHubName)
 		Dropdown.Size = UDim2.new(1, -20, 0, 31)
 		Dropdown.AutoButtonColor = false
 		Dropdown.Text = ""
+		
+		
+		UIStroke:Clone().Parent = Dropdown
 
+		
+		
+		
 		local Main = Instance.new("Frame")
 		Main.Name = "Main"
 		Main.Parent = Dropdown
@@ -1444,7 +1467,10 @@ function Library:Create(xHubName)
 			Option.Text = optionText
 			Option.TextColor3 = Color3.fromRGB(193, 193, 193)
 			Option.TextWrapped = true
-
+			
+			UIStroke:Clone().Parent = Option
+			
+			
 			Option.MouseButton1Click:Connect(function()
 				callback(optionText)
 				Title.Text = optionText
