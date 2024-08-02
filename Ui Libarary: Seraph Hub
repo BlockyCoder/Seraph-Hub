@@ -541,7 +541,6 @@ function Library:Create(xHubName)
 	ImageButtonK.BorderSizePixel = 0
 	ImageButtonK.Position = UDim2.new(0.219957083, 0, 0.0619834736, 0)
 	ImageButtonK.Size = UDim2.new(0.044799991, 0, 0.0651629046, 0)
-	ImageButtonK.PressedImage = "rbxassetid://15771991482"
 	ImageButtonK.Image = "rbxassetid://18768294886"
 	ImageButtonK.Visible = true
 
