@@ -779,6 +779,8 @@ function Library:Create(xHubName)
 		UIPadding_2.Parent = Left
 		UIPadding_2.PaddingTop = UDim.new(0, 5)
 		
+		UIStroke:Clone().Parent = Example
+		
 		-- Store the original color
 		local originalBackgroundColor = Example.BackgroundColor3
 
@@ -1451,7 +1453,10 @@ function Library:Create(xHubName)
 		UIListLayout.Parent = List
 		UIListLayout.SortOrder = Enum.SortOrder.LayoutOrder
 		UIListLayout.Padding = UDim.new(0, 3)
-
+		
+		
+		
+		
 		for i, optionText in ipairs(options) do
 			local Option = Instance.new("TextButton")
 			Option.Name = "Option"
@@ -1464,7 +1469,7 @@ function Library:Create(xHubName)
 			Option.TextColor3 = Color3.fromRGB(193, 193, 193)
 			Option.TextWrapped = true
 			
-			UIStroke:Clone().Parent = Option
+			
 			
 			
 			Option.MouseButton1Click:Connect(function()
