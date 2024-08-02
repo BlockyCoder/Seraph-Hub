@@ -463,7 +463,7 @@ function Library:Create(xHubName)
 	Holder2.ScrollBarThickness = 0
 
 	UIListLayout.Parent = Holder2
-	UIListLayout.HorizontalAlignment = Enum.HorizontalAlignment.Center
+	--UIListLayout.HorizontalAlignment = Enum.VerticalAlignment.Center
 	UIListLayout.SortOrder = Enum.SortOrder.LayoutOrder
 	UIListLayout.Padding = UDim.new(0, 6)
 
