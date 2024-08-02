@@ -1381,7 +1381,6 @@ function Library:Create(xHubName)
 
 
 
-
 	function Library:Dropdown(tab, dropdownName, options, callback)
 		-- Validate options
 		assert(type(options) == "table" and #options > 0, "Options should be a non-empty table.")
@@ -1396,13 +1395,7 @@ function Library:Create(xHubName)
 		Dropdown.Size = UDim2.new(1, -20, 0, 31)
 		Dropdown.AutoButtonColor = false
 		Dropdown.Text = ""
-		
-		
-		UIStroke:Clone().Parent = Dropdown
 
-		
-		
-		
 		local Main = Instance.new("Frame")
 		Main.Name = "Main"
 		Main.Parent = Dropdown
@@ -1442,9 +1435,7 @@ function Library:Create(xHubName)
 		local List = Instance.new("ScrollingFrame")
 		List.Name = "List"
 		List.Parent = Dropdown.Parent
-		List.Active = true
 		List.BackgroundColor3 = Color3.fromRGB(35, 35, 35)
-		List.BorderSizePixel = 0
 		List.BorderColor3 = Color3.fromRGB(27, 42, 53)
 		List.Position = UDim2.new(0, 0, 0.469696969, 0)
 		List.Size = UDim2.new(1, -20, 0, 200)  -- Adjust height as needed
@@ -1454,14 +1445,10 @@ function Library:Create(xHubName)
 		List.ScrollingDirection = Enum.ScrollingDirection.Y
 		List.Visible = false
 
-
+		local UIListLayout = Instance.new("UIListLayout")
 		UIListLayout.Parent = List
 		UIListLayout.SortOrder = Enum.SortOrder.LayoutOrder
-		UIListLayout.Padding = UDim.new(0, 3)
-		
-		
-		
-		
+
 		for i, optionText in ipairs(options) do
 			local Option = Instance.new("TextButton")
 			Option.Name = "Option"
@@ -1473,10 +1460,7 @@ function Library:Create(xHubName)
 			Option.Text = optionText
 			Option.TextColor3 = Color3.fromRGB(193, 193, 193)
 			Option.TextWrapped = true
-			
-			
-			
-			
+
 			Option.MouseButton1Click:Connect(function()
 				callback(optionText)
 				Title.Text = optionText
