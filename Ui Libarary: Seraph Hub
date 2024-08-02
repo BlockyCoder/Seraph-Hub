@@ -442,8 +442,8 @@ function Library:Create(xHubName)
 
 	UIScale_2.Parent = ImageLabel_2
 	UIScale_2.Scale = 0.700
-	
-	
+
+
 	TabHold.Name = "TabHold"
 	TabHold.Parent = Menu
 	TabHold.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
@@ -599,15 +599,15 @@ function Library:Create(xHubName)
 
 
 	ImageButtonK.MouseButton1Click:Connect(function()
-		
-		
+
+
 		if Menu.Visible then
 			-- Uncomment the desired fade-out effect
 			fadeOut(Menu, 0.3)  -- Fade out Main frame
-			
+
 			fadeOut(Topbar, 0.3)
-			
-			
+
+
 			--scale(Menu, 0.3)  -- Scale down Main frame
 			--rotate(Menu, 0.3)  -- Rotate Main frame
 			--pulse(Menu, 0.3)  -- Pulse Main frame
@@ -623,16 +623,16 @@ function Library:Create(xHubName)
 			--contract(Menu, 0.3)  -- Contract Main frame
 
 			Menu.Visible = false
-			
+
 		else
-			
+
 			-- Uncomment the desired fade-in effect
 			fadeIn(Menu, 0.3)  -- Fade in Main frame
-			
+
 			fadeIn(Topbar, 0.3)
-			
-			
-	
+
+
+
 			--scale(Menu, 0.3)  -- Scale up Main frame
 			--rotate(Menu, 0.3)  -- Rotate Main frame
 			--pulse(Menu, 0.3)  -- Pulse Main frame
@@ -646,7 +646,7 @@ function Library:Create(xHubName)
 			--flash(Menu, 0.3)  -- Flash Main frame
 			--expand(Menu, 0.3)  -- Expand Main frame
 			--contract(Menu, 0.3)  -- Contract Main frame
-			
+
 			Menu.Visible = true
 		end
 	end)
@@ -883,10 +883,10 @@ function Library:Create(xHubName)
 		UIScale.Parent = ImageLabel
 		UIScale.Scale = 0.800
 
-		
+
 		UIStroke:Clone().Parent = Button
 		UIStroke:Clone().Parent = ActualThing
-		
+
 		-- Button click event
 		Button.MouseButton1Click:Connect(function()
 			print("Button clicked: " .. ButName)
@@ -917,10 +917,10 @@ function Library:Create(xHubName)
 		Label.TextColor3 = Color3.fromRGB(193, 193, 193)
 		Label.TextSize = 12
 		Label.Font = Enum.Font.GothamMedium
-		
+
 		UIStroke:Clone().Parent = Label
-		
-		
+
+
 		function labelFunctions:UpdateLabel(newText)
 			Label.Text = newText
 		end
@@ -986,12 +986,12 @@ function Library:Create(xHubName)
 		TextBox.Text = ""
 		TextBox.TextColor3 = Color3.fromRGB(177, 177, 177)
 		TextBox.TextSize = 12.000
-		
-		
+
+
 		UIStroke:Clone().Parent = TextBox
 		UIStroke:Clone().Parent = Status
 
-		
+
 		-- Apply corner radius to TextBox
 		local UICorner_2 = Instance.new("UICorner")
 		UICorner_2.CornerRadius = UDim.new(0, 2)
@@ -1027,10 +1027,10 @@ function Library:Create(xHubName)
 		local UICorner = Instance.new("UICorner")
 		UICorner.CornerRadius = UDim.new(0, 5)
 		UICorner.Parent = Toggle
-		
+
 		UIStroke:Clone().Parent = Toggle
-		
-		
+
+
 		local TextLabel = Instance.new("TextLabel")
 		TextLabel.Parent = Toggle
 		TextLabel.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
@@ -1068,11 +1068,11 @@ function Library:Create(xHubName)
 		local UICorner_2 = Instance.new("UICorner")
 		UICorner_2.CornerRadius = UDim.new(0, 5)
 		UICorner_2.Parent = ToggleBckg
-	
-		
+
+
 		UIStroke:Clone().Parent = ToggleBckg
-		
-		
+
+
 		local Icon = Instance.new("ImageLabel")
 		Icon.Name = "Icon"
 		Icon.Parent = ToggleBckg
@@ -1331,11 +1331,11 @@ function Library:Create(xHubName)
 		Status.BorderColor3 = Color3.fromRGB(27, 42, 53)
 		Status.Position = UDim2.new(0.75, 0, 0, 0)  -- Adjusted position to align right
 		Status.Size = UDim2.new(0.25, 0, 1, 0)  -- Adjusted width to fit within Keybind
-		
+
 		UIStroke:Clone().Parent = Status
 		UIStroke:Clone().Parent = Keybind
-		
-		
+
+
 		local TextLabel_2 = Instance.new("TextLabel")
 		TextLabel_2.Parent = Status
 		TextLabel_2.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
@@ -1469,7 +1469,6 @@ function Library:Create(xHubName)
 				Icon.ImageColor3 = Color3.fromRGB(109, 109, 109)
 				Icon.Image = "rbxassetid://6031091000"
 				List.Visible = false
-				isOpen = false
 
 				-- Show all other elements
 				for _, child in ipairs(tab:GetChildren()) do
@@ -1480,16 +1479,15 @@ function Library:Create(xHubName)
 			end)
 		end
 
-		local isOpen = false
+	
 		Dropdown.MouseButton1Click:Connect(function()
-			isOpen = not isOpen
-			List.Visible = isOpen
-			Icon.Image = isOpen and "rbxassetid://6031090999" or "rbxassetid://6031091000"
+			List.Visible = not List.Visible 
+			Icon.Image = List.Visible and "rbxassetid://6031090999" or "rbxassetid://6031091000"
 
 			-- Hide or show all other elements
 			for _, child in ipairs(tab:GetChildren()) do
 				if child:IsA("GuiObject") and child ~= Dropdown and child.Name ~= "List" then
-					child.Visible = not isOpen
+					child.Visible = not List.Visible
 				end
 			end
 		end)
