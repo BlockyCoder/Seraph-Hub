@@ -596,9 +596,6 @@ function Library:Create(xHubName)
 
 
 	ImageButtonK.MouseButton1Click:Connect(function()
-		if LoadingFrame.Visible then
-			return
-		end
 
 		if Menu.Visible then
 			fadeOut(Menu, 0.3)  -- Fade out Main frame
