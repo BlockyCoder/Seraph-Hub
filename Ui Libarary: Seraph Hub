@@ -779,8 +779,6 @@ function Library:Create(xHubName)
 		UIPadding_2.Parent = Left
 		UIPadding_2.PaddingTop = UDim.new(0, 5)
 		
-		UIStroke:Clone().Parent = Example
-		
 		-- Store the original color
 		local originalBackgroundColor = Example.BackgroundColor3
 
