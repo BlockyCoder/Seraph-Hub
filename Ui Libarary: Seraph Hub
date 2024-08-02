@@ -538,13 +538,14 @@ function Library:Create(xHubName)
 	-- ImageButtonK setup
 	ImageButtonK.Name = "ImageButtonK"
 	ImageButtonK.Parent = ScreenGui
-	ImageButtonK.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-	ImageButtonK.BackgroundTransparency = 1.000
+	ImageButtonK.BackgroundColor3 = Color3.fromRGB(255, 16, 8)
+--	ImageButtonK.BackgroundTransparency = 1.000
 	ImageButtonK.BorderColor3 = Color3.fromRGB(0, 0, 0)
 	ImageButtonK.BorderSizePixel = 0
 	ImageButtonK.Position = UDim2.new(0.219957083, 0, 0.0619834736, 0)
 	ImageButtonK.Size = UDim2.new(0.044799991, 0, 0.0651629046, 0)
 	ImageButtonK.Image = "rbxassetid://18768294886"
+	ImageButtonK.ZIndex = 10
 	ImageButtonK.Visible = true
 
 	-- UICorner for ImageButtonK setup
