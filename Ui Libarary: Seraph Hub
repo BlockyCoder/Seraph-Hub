@@ -539,7 +539,7 @@ function Library:Create(xHubName)
 	ImageButtonK.Name = "ImageButtonK"
 	ImageButtonK.Parent = ScreenGui
 	ImageButtonK.BackgroundColor3 = Color3.fromRGB(255, 16, 8)
---	ImageButtonK.BackgroundTransparency = 1.000
+	--	ImageButtonK.BackgroundTransparency = 1.000
 	ImageButtonK.BorderColor3 = Color3.fromRGB(0, 0, 0)
 	ImageButtonK.BorderSizePixel = 0
 	ImageButtonK.Position = UDim2.new(0.219957083, 0, 0.0619834736, 0)
@@ -808,7 +808,87 @@ function Library:Create(xHubName)
 		return Holder
 	end
 
+	
 
+	function Library:ShowNotify(title, text, duration)
+		
+		local ScreenGuiM = Instance.new("ScreenGui")
+		local Notification = Instance.new("Frame")
+		local NotificationCorner = Instance.new("UICorner")
+		local Title = Instance.new("TextLabel")
+		local Text = Instance.new("TextLabel")
+		
+		
+		ScreenGuiM.Name = title
+		ScreenGuiM.Parent = game.CoreGui
+		ScreenGuiM.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+		ScreenGuiM.ResetOnSpawn = false
+		
+		
+		-- Set propertie
+		Notification.Name = "Notification"
+		Notification.Parent = ScreenGui
+		Notification.BackgroundColor3 = Color3.fromRGB(29, 29, 29)
+		Notification.BorderColor3 = Color3.fromRGB(27, 42, 53)
+		Notification.Position = UDim2.new(0.5, -150, 0.1, 0)
+		Notification.Size = UDim2.new(0, 300, 0, 100)
+		Notification.AnchorPoint = Vector2.new(0.5, 0)
+
+		
+		NotificationCorner.CornerRadius = UDim.new(0, 5)
+		NotificationCorner.Parent = Notification
+
+		
+		Title.Name = "Title"
+		Title.Parent = Notification
+		Title.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+		Title.BackgroundTransparency = 1.000
+		Title.Position = UDim2.new(0.05, 0, 0.1, 0)
+		Title.Size = UDim2.new(0.9, 0, 0.3, 0)
+		Title.Font = Enum.Font.GothamMedium
+		Title.Text = title
+		Title.TextColor3 = Color3.fromRGB(255, 255, 255)
+		Title.TextSize = 18.000
+		Title.TextXAlignment = Enum.TextXAlignment.Left
+
+		
+		Text.Name = "Text"
+		Text.Parent = Notification
+		Text.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+		Text.BackgroundTransparency = 1.000
+		Text.Position = UDim2.new(0.05, 0, 0.5, 0)
+		Text.Size = UDim2.new(0.9, 0, 0.4, 0)
+		Text.Font = Enum.Font.Gotham
+		Text.Text = text
+		Text.TextColor3 = Color3.fromRGB(255, 255, 255)
+		Text.TextSize = 14.000
+		Text.TextWrapped = true
+		Text.TextXAlignment = Enum.TextXAlignment.Left
+
+		
+		Notification.BackgroundTransparency = 1
+		Title.TextTransparency = 1
+		Text.TextTransparency = 1
+		slide(Notification, 0.5)
+		fadeIn(Notification, 0.5)
+		wait(0.5)
+		fadeIn(Title, 0.3)
+		fadeIn(Text, 0.3)
+
+	
+		wait(duration)
+
+	
+		fadeOut(Text, 0.3)
+		fadeOut(Title, 0.3)
+		wait(0.3)
+		fadeOut(Notification, 0.5)
+		wait(0.5)
+
+		Notification:Destroy()
+	end
+	
+	
 
 
 	function Library:Button(Parent, ButName, Callback)
@@ -891,7 +971,9 @@ function Library:Create(xHubName)
 		-- Button click event
 		Button.MouseButton1Click:Connect(function()
 			print("Button clicked: " .. ButName)
+			ImageLabel.ImageColor3 = Color3.fromRGB(255, 255, 255)
 			Callback()
+			ImageLabel.ImageColor3 = Color3.fromRGB(104, 104, 104)
 		end)
 
 		print("Button created: " .. ButName .. " in " .. Parent.Name)
@@ -1398,11 +1480,11 @@ function Library:Create(xHubName)
 		Dropdown.Size = UDim2.new(1, -20, 0, 31)
 		Dropdown.AutoButtonColor = false
 		Dropdown.Text = ""
-		
-		
+
+
 		UIStroke:Clone().Parent = Dropdown
-		
-		
+
+
 		local Main = Instance.new("Frame")
 		Main.Name = "Main"
 		Main.Parent = Dropdown
@@ -1460,16 +1542,16 @@ function Library:Create(xHubName)
 			local Option = Instance.new("TextButton")
 			Option.Name = "Option"
 			Option.Parent = List
-			Option.BackgroundTransparency = 1
+			Option.BackgroundColor3 = Color3.fromRGB(55, 55, 55)
 			Option.BorderSizePixel = 0
 			Option.Size = UDim2.new(1, 0, 0, 25)
-			Option.AutoButtonColor = false
+			Option.AutoButtonColor = true
 			Option.Text = optionText
-			Option.TextColor3 = Color3.fromRGB(193, 193, 193)
+			Option.TextColor3 = Color3.fromRGB(214, 214, 214)
 			Option.TextWrapped = true
-			
+
 			UIStroke:Clone().Parent = Option
-			
+
 			Option.MouseButton1Click:Connect(function()
 				callback(optionText)
 				Title.Text = optionText
@@ -1486,7 +1568,7 @@ function Library:Create(xHubName)
 			end)
 		end
 
-	
+
 		Dropdown.MouseButton1Click:Connect(function()
 			List.Visible = not List.Visible 
 			Icon.Image = List.Visible and "rbxassetid://6031090999" or "rbxassetid://6031091000"
