@@ -866,9 +866,6 @@ function Library:Create(xHubName)
 		Text.TextXAlignment = Enum.TextXAlignment.Left
 
 		
-		Notification.BackgroundTransparency = 1
-		Title.TextTransparency = 1
-		Text.TextTransparency = 1
 		slide(Notification, 0.5)
 		fadeIn(Notification, 0.5)
 		wait(0.5)
