@@ -881,67 +881,6 @@ function Library:Create(xHubName)
 	end
 	
 	
-
-	-- Function to create and handle search functionality
-	function Library:Search(container)
-		-- Create search bar
-		local searchBar = Instance.new("TextBox")
-		searchBar.Name = "SearchBar"
-		searchBar.Size = UDim2.new(1, -20, 0, 30)
-		searchBar.Position = UDim2.new(0, 10, 0, 10)
-		searchBar.PlaceholderText = "Search..."
-		searchBar.ClearTextOnFocus = false
-		searchBar.Parent = container
-
-		-- Create results container
-		local resultsContainer = Instance.new("Frame")
-		resultsContainer.Name = "ResultsContainer"
-		resultsContainer.Size = UDim2.new(1, -20, 1, -50)
-		resultsContainer.Position = UDim2.new(0, 10, 0, 40)
-		resultsContainer.BackgroundTransparency = 1
-		resultsContainer.Parent = container
-
-		-- Function to handle search and scroll to the element
-		local function updateSearch(term)
-			local found = false
-			for _, element in ipairs(container:GetChildren()) do
-				if element:IsA("Frame") and element.Name ~= "SearchBar" and element.Name ~= "ResultsContainer" then
-					if string.match(element.Name:lower(), term:lower()) then
-						-- Scroll to the matching element
-						if element:IsA("GuiObject") then
-							local viewportSize = container.AbsoluteSize
-							local position = element.AbsolutePosition
-							local size = element.AbsoluteSize
-
-							local scrollPosition = UDim2.new(0, position.X, 0, position.Y)
-							local scrollSize = UDim2.new(0, size.X, 0, size.Y)
-
-							-- Adjust scrolling, assuming container is a scrolling frame
-							container.CanvasPosition = UDim2.new(
-								0, math.clamp(scrollPosition.X.Offset - viewportSize.X / 2, 0, container.CanvasSize.X.Offset - viewportSize.X),
-								0, math.clamp(scrollPosition.Y.Offset - viewportSize.Y / 2, 0, container.CanvasSize.Y.Offset - viewportSize.Y)
-							)
-
-							found = true
-							break
-						end
-					end
-				end
-			end
-
-			if not found then
-				--you could show a message or reset the view
-			end
-		end
-
-		-- Connect search bar text changed event
-		searchBar:GetPropertyChangedSignal("Text"):Connect(function()
-			local searchTerm = searchBar.Text
-			updateSearch(searchTerm)
-		end)
-	end
-	
-	
 	
 	function Library:Button(Parent, ButName, Callback)
 		local ButName = ButName or "Button"
@@ -1589,6 +1528,7 @@ function Library:Create(xHubName)
 		local UIListLayout = Instance.new("UIListLayout")
 		UIListLayout.Parent = List
 		UIListLayout.SortOrder = Enum.SortOrder.LayoutOrder
+		UIListLayout.Padding = UDim.new(0, 7)
 
 		for i, optionText in ipairs(options) do
 			local Option = Instance.new("TextButton")
