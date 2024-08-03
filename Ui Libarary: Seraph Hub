@@ -1518,9 +1518,9 @@ function Library:Create(xHubName)
 		List.BackgroundColor3 = Color3.fromRGB(35, 35, 35)
 		List.BorderColor3 = Color3.fromRGB(27, 42, 53)
 		List.Position = UDim2.new(0, 0, 0.469696969, 0)
-		List.Size = UDim2.new(1, -20, 0, 200)  -- Adjust height as needed
+		List.Size = UDim2.new(1, -20, 1, -20)
 		List.ClipsDescendants = true
-		--List.CanvasSize = UDim2.new(0, 0, 0, #options * 25)
+		List.CanvasSize = UDim2.new(0, 0, 0, #options * (25 + 3))
 		List.ScrollBarThickness = 6
 		List.ScrollingDirection = Enum.ScrollingDirection.Y
 		List.Visible = false
