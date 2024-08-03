@@ -1528,7 +1528,7 @@ function Library:Create(xHubName)
 		local UIListLayout = Instance.new("UIListLayout")
 		UIListLayout.Parent = List
 		UIListLayout.SortOrder = Enum.SortOrder.LayoutOrder
-		UIListLayout.Padding = UDim.new(0, 7)
+		UIListLayout.Padding = UDim.new(0, 5)
 
 		for i, optionText in ipairs(options) do
 			local Option = Instance.new("TextButton")
