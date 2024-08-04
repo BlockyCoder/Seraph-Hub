@@ -1056,8 +1056,8 @@ function Library:Create(xHubName)
 		TextBox.ClearTextOnFocus = false
 		TextBox.Font = Enum.Font.Gotham
 		TextBox.PlaceholderColor3 = Color3.fromRGB(104, 104, 104)
-		--TextBox.PlaceholderText = defaultValue
-		TextBox.Text = defaultValue
+		TextBox.PlaceholderText = defaultValue
+		TextBox.Text = ""
 		TextBox.TextColor3 = Color3.fromRGB(177, 177, 177)
 		TextBox.TextSize = 12.000
 
