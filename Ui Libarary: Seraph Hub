@@ -664,7 +664,19 @@ function Library:Create(xHubName)
 			game.CoreGui:FindFirstChild(xHubName).Enabled = true
 		end
 	end
-
+	
+	 
+	function Library:Destroy()
+		print("Close clicked!")
+		-- Fade out the Main frame and ShadowHolder frame
+		fadeOut(Menu, 0.3)
+		fadeOut(Shadow, 0.3)
+		print("faded now waiting 0.3 seconds")
+		wait(0.3)  -- Delay to ensure fade out completes
+		print("Distroying screen gui...")
+		game.CoreGui:FindFirstChild(xHubName):Destroy()
+		print("destroyed Screen GUI")
+	end
 
 	function Library:Tab(TabNam)
 		local TabNam = TabNam or "Tab"
@@ -808,23 +820,23 @@ function Library:Create(xHubName)
 		return Holder
 	end
 
-	
+
 
 	function Library:ShowNotify(title, text, duration)
-		
+
 		local ScreenGuiM = Instance.new("ScreenGui")
 		local Notification = Instance.new("Frame")
 		local NotificationCorner = Instance.new("UICorner")
 		local Title = Instance.new("TextLabel")
 		local Text = Instance.new("TextLabel")
-		
-		
+
+
 		ScreenGuiM.Name = title
 		ScreenGuiM.Parent = game.CoreGui
 		ScreenGuiM.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
 		ScreenGuiM.ResetOnSpawn = false
-		
-		
+
+
 		-- Set propertie
 		Notification.Name = "Notification"
 		Notification.Parent = ScreenGui
@@ -834,11 +846,11 @@ function Library:Create(xHubName)
 		Notification.Size = UDim2.new(0, 300, 0, 100)
 		Notification.AnchorPoint = Vector2.new(0.5, 0)
 
-		
+
 		NotificationCorner.CornerRadius = UDim.new(0, 5)
 		NotificationCorner.Parent = Notification
 
-		
+
 		Title.Name = "Title"
 		Title.Parent = Notification
 		Title.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
@@ -851,7 +863,7 @@ function Library:Create(xHubName)
 		Title.TextSize = 18.000
 		Title.TextXAlignment = Enum.TextXAlignment.Left
 
-		
+
 		Text.Name = "Text"
 		Text.Parent = Notification
 		Text.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
@@ -865,23 +877,23 @@ function Library:Create(xHubName)
 		Text.TextWrapped = true
 		Text.TextXAlignment = Enum.TextXAlignment.Left
 
-		
+
 		slide(Notification, 0.5)
 		fadeIn(Notification, 0.5)
 
-	
+
 		wait(duration)
 
-	
+
 		wait(0.3)
 		fadeOut(Notification, 0.5)
 		wait(0.5)
 
 		Notification:Destroy()
 	end
-	
-	
-	
+
+
+
 	function Library:Button(Parent, ButName, Callback)
 		local ButName = ButName or "Button"
 		local ButtonFunction = {}
