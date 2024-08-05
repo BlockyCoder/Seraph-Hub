@@ -1,0 +1,323 @@
+local Library = loadstring(game:HttpGet("https://raw.githubusercontent.com/xHeptc/Kavo-UI-Library/main/source.lua"))()
+local Window = Library.CreateLib("universal!! works most games!", "Sentinel")
+
+--Library:Newnotify("Info", "Message LOL erm what the sigma", 4)
+
+local Main = Window:NewTab("Main")
+local Section = Main:NewSection("Runes")
+
+
+local Players = game:GetService("Players")
+
+
+local teleporting = false
+
+--teleport a player to all other players
+local function teleportToAllPlayers(playerToTeleport)
+	local allPlayers = Players:GetPlayers()
+
+	for _, player in ipairs(allPlayers) do
+		if player ~= playerToTeleport then
+			local targetPosition = player.Character and player.Character.PrimaryPart and player.Character.PrimaryPart.Position
+			if targetPosition then
+				if playerToTeleport.Character and playerToTeleport.Character.PrimaryPart then
+					playerToTeleport.Character:SetPrimaryPartCFrame(CFrame.new(targetPosition))
+				end
+			end
+		end
+	end
+end
+
+Section:NewToggle("Teleport to player", "ToggleInfo", function(state)
+	if state then
+		print("Toggle On")
+		teleporting = true
+	
+		while teleporting do
+			local localPlayer = Players.LocalPlayer
+			teleportToAllPlayers(localPlayer)
+			game:GetService("RunService").Heartbeat:wait();
+		end
+	else
+		print("Toggle Off")
+		teleporting = false
+	end
+end)
+
+
+
+
+Section:NewButton("Silent Aim (Built in wallbang)", "idk what to put here", function()
+	game:GetService("StarterGui"):SetCore("SendNotification", {
+		Title = "Silent aim executed",
+		Text = "lol never miss now",
+		Duration = 5
+	})
+
+	local CurrentCamera = workspace.CurrentCamera
+	local Players = game.Players
+	local LocalPlayer = Players.LocalPlayer
+	local Mouse = LocalPlayer:GetMouse()
+
+	function ClosestPlayer()
+		local MaxDist, Closest = math.huge, nil
+		for _, v in pairs(Players:GetPlayers()) do
+			if v == LocalPlayer or v.Team == LocalPlayer.Team or not v.Character then continue end
+
+			local Torso = v.Character:FindFirstChild("Torso")
+			if not Torso then continue end
+
+			local Pos, Vis = CurrentCamera:WorldToScreenPoint(Torso.Position)
+			if not Vis then continue end
+
+			local MousePos = Vector2.new(workspace.CurrentCamera.ViewportSize.X / 2, workspace.CurrentCamera.ViewportSize.Y / 2)
+			local TheirPos = Vector2.new(Pos.X, Pos.Y)
+			local Dist = (TheirPos - MousePos).Magnitude
+
+			if Dist < MaxDist then
+				MaxDist = Dist
+				Closest = v
+			end
+		end
+		return Closest
+	end
+
+	local MT = getrawmetatable(game)
+	local OldNC = MT.__namecall
+	local OldIDX = MT.__index
+	setreadonly(MT, false)
+
+	MT.__namecall = newcclosure(function(self, ...)
+		local Args, Method = {...}, getnamecallmethod()
+		if Method == "FindPartOnRayWithIgnoreList" and not checkcaller() then
+			local CP = ClosestPlayer()
+			if CP and CP.Character and CP.Character:FindFirstChild("Head") then
+				Args[1] = Ray.new(CurrentCamera.CFrame.Position, (CP.Character.Head.Position - CurrentCamera.CFrame.Position).Unit * 1000)
+				return OldNC(self, unpack(Args))
+			end
+		end
+		return OldNC(self, ...)
+	end)
+
+	MT.__index = newcclosure(function(self, K)
+		if K == "Clips" then
+			return workspace.Map
+		end
+		return OldIDX(self, K)
+	end)
+
+	setreadonly(MT, true)
+end)
+
+Section:NewToggle("Aimbot (Aim lock)", "lol", function(aimbot)
+	local Players = game:GetService("Players")
+	local RunService = game:GetService("RunService")
+	local UserInputService = game:GetService("UserInputService")
+	local GuiService = game:GetService("GuiService")
+
+	local LocalPlayer = Players.LocalPlayer
+	local Mouse = LocalPlayer:GetMouse()
+	local Camera = workspace.CurrentCamera
+	local sc = Vector2.new(Camera.ViewportSize.X / 2, Camera.ViewportSize.Y / 2)
+	local Down = true
+	local Inset = GuiService:GetGuiInset()
+
+	getgenv().Options = {
+		Enabled = aimbot,
+		TeamCheck = true,
+		Triggerbot = true,
+		Smoothness = true,
+		AimPart = "Torso",
+		FOV = 150
+	}
+
+	local function gc()
+		local nearest = math.huge
+		local nearplr
+		for _, v in pairs(Players:GetPlayers()) do
+			if v ~= LocalPlayer and v.Character and v.Character:FindFirstChild(getgenv().Options.AimPart) then
+				local pos = Camera:WorldToScreenPoint(v.Character[getgenv().Options.AimPart].Position)
+				local diff = math.sqrt((pos.X - sc.X) ^ 2 + (pos.Y + Inset.Y - sc.Y) ^ 2)
+
+				if (getgenv().Options.TeamCheck and LocalPlayer.Team ~= v.Team or not getgenv().Options.TeamCheck) and diff < nearest and diff < getgenv().Options.FOV then
+					nearest = diff
+					nearplr = v
+				end
+			end
+		end
+		return nearplr
+	end
+
+	function Circle()
+		local circ = Drawing.new('Circle')
+		circ.Transparency = 1
+		circ.Thickness = 1.5
+		circ.Visible = true
+		circ.Color = Color3.fromRGB(255, 255, 255)
+		circ.Filled = false
+		circ.NumSides = 150
+		circ.Radius = getgenv().Options.FOV
+		return circ
+	end
+
+	local curc = Circle()
+
+	UserInputService.InputBegan:Connect(function(input)
+		if input.UserInputType == Enum.UserInputType.MouseButton2 then
+			Down = true
+		end
+	end)
+
+	UserInputService.InputEnded:Connect(function(input)
+		if input.UserInputType == Enum.UserInputType.MouseButton2 then
+			Down = false
+		end
+	end)
+
+	RunService.RenderStepped:Connect(function()
+		if getgenv().Options.Enabled then
+			if Down then
+				local target = gc()
+				if target and target.Character:FindFirstChild(getgenv().Options.AimPart) then
+					if getgenv().Options.Smoothness then
+						pcall(function()
+							local Info = TweenInfo.new(0.05, Enum.EasingStyle.Linear, Enum.EasingDirection.Out)
+							game:GetService("TweenService"):Create(Camera, Info, {
+								CFrame = CFrame.new(Camera.CFrame.Position, target.Character[getgenv().Options.AimPart].Position)
+							}):Play()
+						end)
+					else
+						pcall(function()
+							Camera.CFrame = CFrame.new(Camera.CFrame.Position, target.Character[getgenv().Options.AimPart].Position)
+						end)
+					end
+				end
+			end
+			curc.Visible = false
+			curc.Position = Vector2.new(Mouse.X, Mouse.Y + Inset.Y)
+		else
+			curc.Visible = false
+		end
+	end)
+end)
+
+Section:NewToggle("Hit Box (Torso)", "To avoid ban!", function(v)
+	getgenv().HeadSize = 30
+	getgenv().Disabled = v
+
+	game:GetService('RunService').RenderStepped:Connect(function()
+		if getgenv().Disabled then
+			for _, player in ipairs(game:GetService('Players'):GetPlayers()) do
+				if player.Name ~= game:GetService('Players').LocalPlayer.Name then
+					pcall(function()
+						local character = player.Character
+						if character then
+							local torso = character:FindFirstChild("HumanoidRootPart")
+							if torso then
+								torso.Size = Vector3.new(getgenv().HeadSize, getgenv().HeadSize, getgenv().HeadSize)
+								torso.Transparency = 1
+								torso.BrickColor = BrickColor.new("Really blue")
+								torso.Material = "Neon"
+								torso.CanCollide = false
+							end
+						end
+					end)
+				end
+			end
+		end
+	end)
+end)
+
+Section:NewButton("Player", ".", function()
+	_G.FriendColor = Color3.fromRGB(0, 0, 255)
+	_G.EnemyColor = Color3.fromRGB(255, 0, 0)
+	_G.UseTeamColor = true
+
+	local Holder = Instance.new("Folder", game.CoreGui)
+	Holder.Name = "ESP"
+
+	local Box = Instance.new("BoxHandleAdornment")
+	Box.Name = "nilBox"
+	Box.Size = Vector3.new(1, 2, 1)
+	Box.Color3 = Color3.new(100 / 255, 100 / 255, 100 / 255)
+	Box.Transparency = 0.7
+	Box.ZIndex = 0
+	Box.AlwaysOnTop = false
+	Box.Visible = false
+
+	local NameTag = Instance.new("BillboardGui")
+	NameTag.Name = "nilNameTag"
+	NameTag.Enabled = false
+	NameTag.Size = UDim2.new(0, 200, 0, 50)
+	NameTag.AlwaysOnTop = true
+	NameTag.StudsOffset = Vector3.new(0, 1.8, 0)
+	local Tag = Instance.new("TextLabel", NameTag)
+	Tag.Name = "Tag"
+	Tag.BackgroundTransparency = 1
+	Tag.Position = UDim2.new(0, -50, 0, 0)
+	Tag.Size = UDim2.new(0, 300, 0, 20)
+	Tag.TextSize = 15
+	Tag.TextColor3 = Color3.new(100 / 255, 100 / 255, 100 / 255)
+	Tag.TextStrokeColor3 = Color3.new(0 / 255, 0 / 255, 0 / 255)
+	Tag.TextStrokeTransparency = 0.4
+	Tag.Text = "nil"
+	Tag.Font = Enum.Font.SourceSansBold
+	Tag.TextScaled = false
+
+	local function LoadESP(plr)
+		local Char = plr.Character
+		if not Char then return end
+		local HRP = Char:FindFirstChild("HumanoidRootPart")
+		if not HRP then return end
+
+		local box = Box:Clone()
+		local nameTag = NameTag:Clone()
+
+		box.Parent = Holder
+		nameTag.Parent = Holder
+
+		box.Adornee = HRP
+		nameTag.Adornee = HRP
+
+		nameTag.Tag.Text = plr.Name
+		nameTag.Tag.TextColor3 = _G.UseTeamColor and (plr.TeamColor.Color or _G.EnemyColor) or _G.EnemyColor
+		box.Color3 = _G.UseTeamColor and (plr.TeamColor.Color or _G.EnemyColor) or _G.EnemyColor
+		nameTag.Enabled = true
+		box.Visible = true
+	end
+
+	local function UnloadESP(plr)
+		for _, v in pairs(Holder:GetChildren()) do
+			if v:IsA("BoxHandleAdornment") or v:IsA("BillboardGui") then
+				v:Destroy()
+			end
+		end
+	end
+
+	game:GetService("Players").PlayerAdded:Connect(function(plr)
+		plr.CharacterAdded:Connect(function()
+			LoadESP(plr)
+		end)
+	end)
+
+	game:GetService("Players").PlayerRemoving:Connect(function(plr)
+		UnloadESP(plr)
+	end)
+
+	while task.wait() do
+	for _, plr in ipairs(game:GetService("Players"):GetPlayers()) do
+		if plr.Character then
+			LoadESP(plr)
+		end
+		end
+	end
+end)
+
+
+Section:NewButton("Remove ESP", "Remove ESP from all players", function()
+	for _, v in pairs(game.CoreGui:FindFirstChild("ESP"):GetChildren()) do
+		if v:IsA("BoxHandleAdornment") or v:IsA("BillboardGui") then
+			v:Destroy()
+		end
+	end
+end)
