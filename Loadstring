@@ -1,9 +1,10 @@
 local scriptURLs = {
     [15610971848] = "https://pastebin.com/raw/0e9Mk0uY", -- Sword Training Simulator
-    [17524285289] = "https://pastebin.com/raw/dx695sSK", -- Scythe Simulator
-    [15675066449] = "https://pastebin.com/raw/zmdMtq1h", -- Bike Race Clicker
-    [11914921236] = "https://pastebin.com/raw/QiX320Rg", -- Fortune Incremental
-    [16702428031] = "https://pastebin.com/raw/EQRXcfdF" -- Orb Tree Incremental
+
+
+
+
+
 }
 
 
