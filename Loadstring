@@ -9,7 +9,7 @@ local scriptURLs = {
 
 
 local placeId = game.PlaceId
-local scriptURL = scriptURLs[placeId] or "https://pastebin.com/raw/D5PmBV7c"
+local scriptURL = scriptURLs[placeId] or "https://raw.githubusercontent.com/BlockyCoder/Seraph-Hub/main/universal%20gui"
 
 local function loadScript(url)
     local success, response = pcall(function()
