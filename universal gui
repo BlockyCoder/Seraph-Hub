@@ -4,7 +4,7 @@ local Window = Library.CreateLib("universal!! works most games!", "Sentinel")
 --Library:Newnotify("Info", "Message LOL erm what the sigma", 4)
 
 local Main = Window:NewTab("Main")
-local Section = Main:NewSection("Runes")
+local Section = Main:NewSection("Main")
 
 
 local Players = game:GetService("Players")
@@ -321,3 +321,14 @@ Section:NewButton("Remove ESP", "Remove ESP from all players", function()
 		end
 	end
 end)
+
+
+local Misc = Window:NewTab("MISC")
+local Section2 = Misc:NewSection("Credit")
+
+
+
+Section2:NewLabel("Remeber this not my script!! and i found it on the internet!")
+
+Section2:NewLabel("It was for arsenal and i checked and found it works with most other games!!!!!!!!")
+
