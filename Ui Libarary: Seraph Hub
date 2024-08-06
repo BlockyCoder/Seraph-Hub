@@ -289,9 +289,8 @@ function Library:Create(xHubName)
 
 	--Properties:
 	ScreenGui.Name = xHubName
-	ScreenGui.Parent =  game.CoreGui
+	ScreenGui.Parent = game.CoreGui
 	ScreenGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
-
 
 	LoadingFrame.Name = "LoadingFrame"
 	LoadingFrame.Parent = ScreenGui
@@ -303,7 +302,7 @@ function Library:Create(xHubName)
 	LoadingLabel.Parent = LoadingFrame
 	LoadingLabel.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
 	LoadingLabel.BackgroundTransparency = 1.000
-	LoadingLabel.Position = UDim2.new(0.5, -100, 0.5, -100)
+	LoadingLabel.Position = UDim2.new(0.5, -100, 0.5, -50)
 	LoadingLabel.Size = UDim2.new(0, 200, 0, 50)
 	LoadingLabel.Font = Enum.Font.GothamBold
 	LoadingLabel.Text = "Loading."
@@ -313,7 +312,7 @@ function Library:Create(xHubName)
 	LoadingImage.Name = "LoadingImage"
 	LoadingImage.Parent = LoadingFrame
 	LoadingImage.BackgroundTransparency = 1.000
-	LoadingImage.Position = UDim2.new(0.5, -25, 0.4, -25)
+	LoadingImage.Position = UDim2.new(0.5, -25, 0.4, -75)
 	LoadingImage.Size = UDim2.new(0, 50, 0, 50)
 	LoadingImage.Image = "rbxassetid://9559111831"
 
