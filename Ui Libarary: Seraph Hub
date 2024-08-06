@@ -350,7 +350,7 @@ function Library:Create(xHubName)
 	coroutine.resume(textCoroutine)
 	coroutine.resume(progressCoroutine)
 
-	rotate(LoadingImage, 3)
+	rotate(LoadingImage, 4)
 
 	wait(4) -- Simulating loading time
 
