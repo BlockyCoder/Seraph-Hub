@@ -241,7 +241,6 @@ contract(frame, 1.5) -- Contract to zero size over 1.5 seconds
 ]]--
 
 
-
 --Mains
 
 function Library:Create(xHubName)
@@ -254,7 +253,6 @@ function Library:Create(xHubName)
 
 	local ScreenGui = Instance.new("ScreenGui")
 	local Menu = Instance.new("Frame")
-	local mCol = Instance.new("UIStroke")
 	local UICorner = Instance.new("UICorner")
 	local Topbar = Instance.new("Frame")
 	local UICorner_2 = Instance.new("UICorner")
@@ -379,9 +377,6 @@ function Library:Create(xHubName)
 	UICorner.CornerRadius = UDim.new(0, 5)
 	UICorner.Parent = Menu
 	
-	mCol.Parent = Menu
-	mCol.Color = Color3.fromRGB(255, 255, 255)
-	mCol.Thickness = 2
 	
 	Topbar.Name = "Topbar"
 	Topbar.Parent = Menu
@@ -995,7 +990,8 @@ function Library:Create(xHubName)
 		-- Button click event
 		Button.MouseButton1Click:Connect(function()
 			print("Button clicked: " .. ButName)
-			ImageLabel.ImageColor3 = Color3.fromRGB(255, 255, 255)
+			--ImageLabel.ImageColor3 = Color3.fromRGB(255, 255, 255)
+			colorChange(ImageLabel, Color3.fromRGB(255, 255, 255), 2)
 			Callback()
 			ImageLabel.ImageColor3 = Color3.fromRGB(104, 104, 104)
 		end)
