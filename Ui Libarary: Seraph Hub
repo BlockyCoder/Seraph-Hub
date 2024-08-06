@@ -242,10 +242,6 @@ contract(frame, 1.5) -- Contract to zero size over 1.5 seconds
 
 
 
-
-
-
-
 --Mains
 
 function Library:Create(xHubName)
@@ -258,6 +254,7 @@ function Library:Create(xHubName)
 
 	local ScreenGui = Instance.new("ScreenGui")
 	local Menu = Instance.new("Frame")
+	local mCol = Instance.new("UIStroke")
 	local UICorner = Instance.new("UICorner")
 	local Topbar = Instance.new("Frame")
 	local UICorner_2 = Instance.new("UICorner")
@@ -366,6 +363,7 @@ function Library:Create(xHubName)
 		LoadingFrame:Destroy()
 	else
 		return
+			print("Can't open the main gui cuz loading is visible :)")
 	end
 
 	
@@ -380,7 +378,11 @@ function Library:Create(xHubName)
 
 	UICorner.CornerRadius = UDim.new(0, 5)
 	UICorner.Parent = Menu
-
+	
+	mCol.Parent = Menu
+	mCol.Color = Color3.fromRGB(255, 255, 255)
+	mCol.Thickness = 2
+	
 	Topbar.Name = "Topbar"
 	Topbar.Parent = Menu
 	Topbar.BackgroundColor3 = Color3.fromRGB(33, 33, 33)
