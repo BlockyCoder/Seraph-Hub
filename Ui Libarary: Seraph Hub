@@ -1003,7 +1003,7 @@ function Library:Create(xHubName)
 		
 		Button.MouseLeave:Connect(function()
 			game:GetService("TweenService"):Create(Button, TweenInfo.new(0.1, Enum.EasingStyle.Linear, Enum.EasingDirection.In), {
-				BackgroundColor3 = Color3.fromRGB(40, 42, 60)
+				BackgroundColor3 = Color3.fromRGB(35, 35, 35)
 			}):Play()
 		end)
 		
