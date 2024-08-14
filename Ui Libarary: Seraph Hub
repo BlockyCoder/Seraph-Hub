@@ -273,7 +273,7 @@ function Library:Create(xHubName)
 	local ExampleContainer = Instance.new("Frame")
 	local PageHold = Instance.new("Folder")
 
---load
+	--load
 	local LoadingFrame = Instance.new("Frame")
 	local LoadingLabel = Instance.new("TextLabel")
 	local LoadingImage = Instance.new("ImageLabel")
@@ -363,8 +363,8 @@ function Library:Create(xHubName)
 			print("Can't open the main gui cuz loading is visible :)")
 	end
 
-	
-	
+
+
 
 	Menu.Name = "Menu"
 	Menu.Parent = ScreenGui
@@ -375,8 +375,8 @@ function Library:Create(xHubName)
 
 	UICorner.CornerRadius = UDim.new(0, 5)
 	UICorner.Parent = Menu
-	
-	
+
+
 	Topbar.Name = "Topbar"
 	Topbar.Parent = Menu
 	Topbar.BackgroundColor3 = Color3.fromRGB(33, 33, 33)
@@ -994,7 +994,22 @@ function Library:Create(xHubName)
 			Callback()
 			ImageLabel.ImageColor3 = Color3.fromRGB(104, 104, 104)
 		end)
-
+		
+		Button.MouseEnter:Connect(function()
+			game:GetService("TweenService"):Create(Button, TweenInfo.new(0.1, Enum.EasingStyle.Linear, Enum.EasingDirection.In), {
+				BackgroundColor3 = Color3.fromRGB(48, 51, 70)
+			}):Play()
+		end)
+		
+		Button.MouseLeave:Connect(function()
+			game:GetService("TweenService"):Create(Button, TweenInfo.new(0.1, Enum.EasingStyle.Linear, Enum.EasingDirection.In), {
+				BackgroundColor3 = Color3.fromRGB(40, 42, 60)
+			}):Play()
+		end)
+		
+		
+		
+		
 		print("Button created: " .. ButName .. " in " .. Parent.Name)
 
 		function ButtonFunction:UpdateButton(newTitle)
@@ -1112,10 +1127,11 @@ function Library:Create(xHubName)
 
 		return TextBox, UpdateText  -- Return TextBox in case further manipulation is needed
 	end
-
-
+	
+	
+--toggle
 	function Library:Toggle(tab, toggleName, callback)
-		-- Create the toggle structure
+		
 		local Toggle = Instance.new("TextButton")
 		Toggle.Name = "Toggle"
 		Toggle.Parent = tab
@@ -1130,7 +1146,17 @@ function Library:Create(xHubName)
 		UICorner.CornerRadius = UDim.new(0, 5)
 		UICorner.Parent = Toggle
 
-		UIStroke:Clone().Parent = Toggle
+		local uistrokeT = Instance.new("UIStroke")
+		uistrokeT.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
+		uistrokeT.Parent = Toggle
+		uistrokeT.Color = Color3.fromRGB(50, 50, 50)
+		uistrokeT.Thickness = 2
+
+		local Tsound = Instance.new("Sound")
+		Tsound.Parent = Toggle
+		Tsound.SoundId = "rbxassetid://2809024273"
+		Tsound.Volume = 0.5
+
 
 
 		local TextLabel = Instance.new("TextLabel")
@@ -1172,7 +1198,7 @@ function Library:Create(xHubName)
 		UICorner_2.Parent = ToggleBckg
 
 
-		UIStroke:Clone().Parent = ToggleBckg
+		uistrokeT:Clone().Parent = ToggleBckg
 
 
 		local Icon = Instance.new("ImageLabel")
@@ -1204,6 +1230,23 @@ function Library:Create(xHubName)
 
 		Toggle.MouseButton1Click:Connect(updateToggleState)
 
+
+		Toggle.MouseEnter:Connect(function()
+			Tsound:Play()
+			TweenService:Create(ToggleBckg, TweenInfo.new(0.1), {BackgroundColor3 = Color3.fromRGB(45, 45, 45)}):Play()
+
+			TweenService:Create(uistrokeT, TweenInfo.new(0.1), {Color = Color3.fromRGB(86, 34, 34)}):Play()
+		end)
+
+		Toggle.MouseLeave:Connect(function()
+			TweenService:Create(ToggleBckg, TweenInfo.new(0.1), {BackgroundColor3 = Color3.fromRGB(29, 29, 29)}):Play()
+
+			TweenService:Create(uistrokeT, TweenInfo.new(0.1), {Color = Color3.fromRGB(50,50,50)}):Play()
+		end)
+		
+		
+		
+		
 		return Toggle
 	end
 
@@ -1485,7 +1528,19 @@ function Library:Create(xHubName)
 
 
 
-	function Library:Dropdown(tab, dropdownName, options, callback)
+	function Library:Dropdown(tab, dropdownName, options, callback, settings)
+		settings = settings or {}
+
+		local hoverColor = settings.hoverColor or Color3.fromRGB(75, 75, 75)
+		local disabledColor = settings.disabledColor or Color3.fromRGB(100, 100, 100)
+		local selectedColor = settings.selectedColor or Color3.fromRGB(85, 85, 85)
+		local defaultColor = Color3.fromRGB(55, 55, 55)
+		local searchPlaceholder = settings.searchPlaceholder or "Search..."
+		local customFont = settings.customFont or Enum.Font.GothamMedium
+		local customFontSize = settings.customFontSize or 12
+		local showTooltips = settings.showTooltips or true
+		local showIcons = settings.showIcons or false
+
 		-- Validate options
 		assert(type(options) == "table" and #options > 0, "Options should be a non-empty table.")
 
@@ -1500,9 +1555,8 @@ function Library:Create(xHubName)
 		Dropdown.AutoButtonColor = false
 		Dropdown.Text = ""
 
-
-		UIStroke:Clone().Parent = Dropdown
-
+		local UIStroke = Instance.new("UIStroke")
+		UIStroke.Parent = Dropdown
 
 		local Main = Instance.new("Frame")
 		Main.Name = "Main"
@@ -1534,11 +1588,26 @@ function Library:Create(xHubName)
 		Title.BackgroundTransparency = 1.000
 		Title.BorderColor3 = Color3.fromRGB(27, 42, 53)
 		Title.Size = UDim2.new(1, -35, 1, 0)
-		Title.Font = Enum.Font.GothamMedium
+		Title.Font = customFont
 		Title.Text = dropdownName
 		Title.TextColor3 = Color3.fromRGB(193, 193, 193)
-		Title.TextSize = 12.000
+		Title.TextSize = customFontSize
 		Title.TextXAlignment = Enum.TextXAlignment.Left
+
+		local SearchBox = Instance.new("TextBox")
+		SearchBox.Name = "SearchBox"
+		SearchBox.Parent = Dropdown.Parent
+		SearchBox.BackgroundColor3 = Color3.fromRGB(55, 55, 55)
+		SearchBox.BorderSizePixel = 0
+		SearchBox.Position = UDim2.new(0, 0, 1, 0)
+		SearchBox.Size = UDim2.new(1, -20, 0, 25)
+		SearchBox.Text = ""
+		SearchBox.PlaceholderText = searchPlaceholder
+		SearchBox.TextColor3 = Color3.fromRGB(214, 214, 214)
+		SearchBox.TextSize = customFontSize
+		SearchBox.ClearTextOnFocus = false
+		SearchBox.BackgroundTransparency = 0.3
+		SearchBox.Visible = false
 
 		local List = Instance.new("ScrollingFrame")
 		List.Name = "List"
@@ -1558,50 +1627,131 @@ function Library:Create(xHubName)
 		UIListLayout.SortOrder = Enum.SortOrder.LayoutOrder
 		UIListLayout.Padding = UDim.new(0, 3)
 
+		local function updateOptions(filterText)
+			for i, optionText in ipairs(options) do
+				local optionButton = List:FindFirstChild("Option" .. i)
+				if not filterText or optionText:lower():find(filterText:lower()) then
+					optionButton.Visible = true
+				else
+					optionButton.Visible = false
+				end
+			end
+			List.CanvasSize = UDim2.new(0, 0, 0, #List:GetChildren() * (25 + 3))
+		end
+
+		SearchBox:GetPropertyChangedSignal("Text"):Connect(function()
+			updateOptions(SearchBox.Text)
+		end)
+
+		local selectedOption = nil
 		for i, optionText in ipairs(options) do
 			local Option = Instance.new("TextButton")
-			Option.Name = "Option"
+			Option.Name = "Option" .. i
 			Option.Parent = List
-			Option.BackgroundColor3 = Color3.fromRGB(55, 55, 55)
+			Option.BackgroundColor3 = defaultColor
 			Option.BorderSizePixel = 0
 			Option.Size = UDim2.new(1, 0, 0, 25)
 			Option.AutoButtonColor = true
 			Option.Text = optionText
 			Option.TextColor3 = Color3.fromRGB(214, 214, 214)
 			Option.TextWrapped = true
+			Option.TextSize = customFontSize
 
-			UIStroke:Clone().Parent = Option
+			local Dot = Instance.new("ImageLabel")
+			Dot.Name = "Dot"
+			Dot.Parent = Option
+			Dot.BackgroundColor3 = Color3.fromRGB(6, 53, 62)
+			Dot.BorderSizePixel = 0
+			Dot.Size = UDim2.new(0, 15, 0, 15)
+			Dot.Position = UDim2.new(0, 5, 0.5, -7.5)
+			Dot.ImageTransparency = 1
+			Dot.Visible = false
+
+			local dotCor = Instance.new("UICorner")
+			dotCor.Parent = Dot
+
+			local Tooltip = Instance.new("TextLabel")
+			Tooltip.Name = "Tooltip"
+			Tooltip.Parent = Option
+			Tooltip.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+			Tooltip.BackgroundTransparency = 0.5
+			Tooltip.BorderSizePixel = 0
+			Tooltip.Size = UDim2.new(1, 0, 0, 20)
+			Tooltip.Position = UDim2.new(0, 0, -1, -20)
+			Tooltip.Text = optionText
+			Tooltip.TextColor3 = Color3.fromRGB(255, 255, 255)
+			Tooltip.TextSize = 10
+			Tooltip.Visible = false
+
+			if showTooltips then
+				Option.MouseEnter:Connect(function()
+					Tooltip.Visible = true
+				end)
+
+				Option.MouseLeave:Connect(function()
+					Tooltip.Visible = false
+				end)
+			end
+
+			if showIcons then
+				local OptionIcon = Instance.new("ImageLabel")
+				OptionIcon.Name = "OptionIcon"
+				OptionIcon.Parent = Option
+				OptionIcon.BackgroundTransparency = 1.000
+				OptionIcon.Size = UDim2.new(0, 20, 0, 20)
+				OptionIcon.Position = UDim2.new(0, 30, 0.5, -10)
+				OptionIcon.Image = "rbxassetid://6031091000" -- Replace with your icon assets
+			end
 
 			Option.MouseButton1Click:Connect(function()
-				callback(optionText)
-				Title.Text = optionText
-				Icon.ImageColor3 = Color3.fromRGB(109, 109, 109)
-				Icon.Image = "rbxassetid://6031091000"
+				if selectedOption then
+					selectedOption.BackgroundColor3 = defaultColor
+					selectedOption:FindFirstChild("Dot").Visible = false
+					selectedOption.TextColor3 = Color3.fromRGB(214, 214, 214)
+				end
+				Option.BackgroundColor3 = selectedColor
+				Option.TextColor3 = Color3.fromRGB(255, 255, 255)
+				Dot.Visible = true
+				selectedOption = Option
+				Dropdown.Text = optionText
+				fadeOut(List, 0.3)
 				List.Visible = false
+				fadeOut(List, 0.3)
+				SearchBox.Visible = false
+				callback(optionText)
 
-				-- Show all other elements
-				for _, child in ipairs(tab:GetChildren()) do
-					if child:IsA("GuiObject") and child ~= Dropdown and child.Name ~= "List" then
-						child.Visible = true
+				-- Show other elements
+				for _, gui in pairs(tab:GetChildren()) do
+					if gui:IsA("GuiObject") and gui ~= Dropdown and gui ~= List and gui ~= SearchBox then
+						gui.Visible = true
 					end
 				end
 			end)
 		end
 
+		local function toggleDropdown()
+			local isOpen = List.Visible
+			List.Visible = not isOpen
+			SearchBox.Visible = not isOpen
 
-		Dropdown.MouseButton1Click:Connect(function()
-			List.Visible = not List.Visible 
-			Icon.Image = List.Visible and "rbxassetid://6031090999" or "rbxassetid://6031091000"
-
-			-- Hide or show all other elements
-			for _, child in ipairs(tab:GetChildren()) do
-				if child:IsA("GuiObject") and child ~= Dropdown and child.Name ~= "List" then
-					child.Visible = not List.Visible
+			-- Hide other elements
+			for _, gui in pairs(tab:GetChildren()) do
+				if gui:IsA("GuiObject") and gui ~= Dropdown and gui ~= List and gui ~= SearchBox then
+					gui.Visible = isOpen
 				end
 			end
+		end
+
+		Dropdown.MouseButton1Click:Connect(toggleDropdown)
+		Dropdown.MouseEnter:Connect(function()
+			Dropdown.BackgroundColor3 = hoverColor
+		end)
+		Dropdown.MouseLeave:Connect(function()
+			Dropdown.BackgroundColor3 = defaultColor
 		end)
 
 		return Dropdown
+
 	end
 
 
