@@ -1,0 +1,283 @@
+local Library = loadstring(game:HttpGet("https://raw.githubusercontent.com/xHeptc/Kavo-UI-Library/main/source.lua"))()
+
+local Window = Library:CreateLib("Kat | Mobile", "BloodTheme")
+
+local combat = Window:NewTab("Combat")
+local gunmods = Window:NewTab("GunMods")
+local player = Window:NewTab("Player")
+local misc = Window:NewTab("Misc")
+
+local Combat = combat:NewSection("Combat LoL")
+local GunMods = gunmods:NewSection("GunMods LoL")
+local Player = player:NewSection("Player LoL")
+local Misc = misc:NewSection("Misc LoL")
+
+Combat:NewButton("Silent Aim", "idk what to put here", function()
+    game:GetService("StarterGui"):SetCore("SendNotification", {
+        Title = "Silent aim executed",
+        Text = "lol never miss now", 
+        Duration = 5
+    })
+
+    local CurrentCamera = workspace.CurrentCamera
+    local Players = game:GetService("Players")
+    local LocalPlayer = Players.LocalPlayer
+
+    local function ClosestPlayer()
+        local MaxDist, Closest = math.huge, nil
+        for _, v in pairs(Players:GetPlayers()) do
+            if v ~= LocalPlayer and v.Team ~= LocalPlayer.Team and v.Character and v.Character:FindFirstChild("Torso") then
+                local Pos, Vis = CurrentCamera:WorldToScreenPoint(v.Character.Torso.Position)
+                if Vis then
+                    local Dist = (Vector2.new(Pos.X, Pos.Y) - Vector2.new(CurrentCamera.ViewportSize.X / 2, CurrentCamera.ViewportSize.Y / 2)).Magnitude
+                    if Dist < MaxDist then
+                        MaxDist, Closest = Dist, v
+                    end
+                end
+            end
+        end
+        return Closest
+    end
+
+    local MT = getrawmetatable(game)
+    local OldNC = MT.__namecall
+    local OldIDX = MT.__index
+    setreadonly(MT, false)
+
+    MT.__namecall = newcclosure(function(self, ...)
+        local Args, Method = {...}, getnamecallmethod()
+        if Method == "FindPartOnRayWithIgnoreList" and not checkcaller() then
+            local CP = ClosestPlayer()
+            if CP and CP.Character and CP.Character:FindFirstChild("Head") then
+                Args[1] = Ray.new(CurrentCamera.CFrame.Position, (CP.Character.Head.Position - CurrentCamera.CFrame.Position).Unit * 1000)
+                return OldNC(self, unpack(Args))
+            end
+        end
+        return OldNC(self, ...)
+    end)
+
+    MT.__index = newcclosure(function(self, K)
+        if K == "Clips" then
+            return workspace.Map
+        end
+        return OldIDX(self, K)
+    end)
+
+    setreadonly(MT, true)
+end)
+
+Combat:NewButton("ESP", "LOL", function()
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/BlockyCoder/Seraph-Hub/main/Esp%20by%20wearedevs"))()
+end)
+
+Combat:NewToggle("Wallbang", "honestly idk what to even put here", function(wallbang)
+    _G.Enable = wallbang
+
+    local MT = getrawmetatable(game)
+    local OldIndex = MT.__index
+    setreadonly(MT, false)
+
+    MT.__index = newcclosure(function(A, B)
+        if B == "Clips" and _G.Enable then
+            return workspace.Map
+        end
+        return OldIndex(A, B)
+    end)
+
+    game:GetService("UserInputService").InputBegan:Connect(function(Key, _)
+        if not _ and Key.KeyCode == Enum.KeyCode.T then
+            _G.Enable = not _G.Enable
+        end
+    end)
+end)
+
+Combat:NewToggle("Aim Lock", "Aim lock lol", function(AimLO)
+    local localPlayer = game:GetService("Players").LocalPlayer
+    local camera = workspace.CurrentCamera
+    local UIS = game:GetService("UserInputService")
+    local aim = AimLO
+
+    local function player()
+        local target, dist = nil, math.huge
+        for _, v in pairs(game:GetService("Players"):GetPlayers()) do
+            if v.Name ~= localPlayer.Name and v.TeamColor ~= localPlayer.TeamColor then
+                local magnitude = (v.Character.HumanoidRootPart.Position - localPlayer.Character.HumanoidRootPart.Position).Magnitude
+                if magnitude < dist then
+                    target, dist = v, magnitude
+                end
+            end
+        end
+        return target
+    end
+
+    game:GetService("RunService").RenderStepped:Connect(function()
+        if aim and player() then
+            camera.CFrame = CFrame.new(camera.CFrame.Position, player().Character.Head.Position)
+        end
+    end)
+
+    UIS.InputBegan:Connect(function(inp)
+        if inp.UserInputType == Enum.UserInputType.MouseButton2 then
+            aim = true
+        end
+    end)
+
+    UIS.InputEnded:Connect(function(inp)
+        if inp.UserInputType == Enum.UserInputType.MouseButton2 then
+            aim = false
+        end
+    end)
+end)
+
+Combat:NewToggle("Aimbot", "lol", function(aimbot)
+    local Players = game:GetService("Players")
+    local RunService = game:GetService("RunService")
+    local UserInputService = game:GetService("UserInputService")
+    local GuiService = game:GetService("GuiService")
+    local LocalPlayer = Players.LocalPlayer
+    local Camera = workspace.CurrentCamera
+    local sc = Vector2.new(Camera.ViewportSize.X / 2, Camera.ViewportSize.Y / 2)
+    local Inset = GuiService:GetGuiInset()
+
+    getgenv().Options = {
+        Enabled = aimbot,
+        TeamCheck = true,
+        Triggerbot = true,
+        Smoothness = true,
+        AimPart = "Torso",
+        FOV = 150
+    }
+
+    local function gc()
+        local nearest, nearplr = math.huge, nil
+        for _, v in pairs(Players:GetPlayers()) do
+            if v ~= LocalPlayer and v.Character and v.Character:FindFirstChild(Options.AimPart) then
+                local pos = Camera:WorldToScreenPoint(v.Character[Options.AimPart].Position)
+                local diff = math.sqrt((pos.X - sc.X) ^ 2 + (pos.Y + Inset.Y - sc.Y) ^ 2)
+                if diff < nearest and diff < Options.FOV then
+                    nearest, nearplr = diff, v
+                end
+            end
+        end
+        return nearplr
+    end
+
+    local function Circle()
+        local circ = Drawing.new("Circle")
+        circ.Transparency = 1
+        circ.Thickness = 1.5
+        circ.Visible = true
+        circ.Color = Color3.fromRGB(255, 255, 255)
+        circ.Filled = false
+        circ.NumSides = 150
+        circ.Radius = Options.FOV
+        return circ
+    end
+
+    local curc = Circle()
+
+    UserInputService.InputBegan:Connect(function(input)
+        if input.UserInputType == Enum.UserInputType.MouseButton2 then
+            getgenv().Down = true
+        end
+    end)
+
+    UserInputService.InputEnded:Connect(function(input)
+        if input.UserInputType == Enum.UserInputType.MouseButton2 then
+            getgenv().Down = false
+        end
+    end)
+
+    RunService.RenderStepped:Connect(function()
+        if Options.Enabled and getgenv().Down then
+            local target = gc()
+            if target and target.Character:FindFirstChild(Options.AimPart) then
+                if Options.Smoothness then
+                    local Info = TweenInfo.new(0.05, Enum.EasingStyle.Linear, Enum.EasingDirection.Out)
+                    game:GetService("TweenService"):Create(Camera, Info, {
+                        CFrame = CFrame.new(Camera.CFrame.Position, target.Character[Options.AimPart].CFrame.Position)
+                    }):Play()
+                else
+                    Camera.CFrame = CFrame.new(Camera.CFrame.Position, target.Character[Options.AimPart].CFrame.Position)
+                end
+            end
+        end
+        curc.Visible = Options.Enabled
+        curc.Position = Vector2.new(game.Players.LocalPlayer:GetMouse().X, game.Players.LocalPlayer:GetMouse().Y + Inset.Y)
+    end)
+end)
+
+Combat:NewButton("Hitbox Expander", "hitbox expander", function()
+    local function expandHitbox(character)
+        for _, part in pairs({"RightUpperLeg", "LeftUpperLeg", "HeadHB", "HumanoidRootPart"}) do
+            if character:FindFirstChild(part) then
+                local bodyPart = character[part]
+                bodyPart.CanCollide = false
+                bodyPart.Transparency = 0.75
+                bodyPart.Size = Vector3.new(21, 21, 21)
+            end
+        end
+    end
+
+    game:GetService("Players").PlayerAdded:Connect(function(player)
+        player.CharacterAdded:Connect(function(character)
+            expandHitbox(character)
+        end)
+    end)
+
+    for _, player in pairs(game:GetService("Players"):GetPlayers()) do
+        if player.Character then
+            expandHitbox(player.Character)
+        end
+    end
+end)
+
+GunMods:NewButton("RapidFire", "rapidfire", function()
+    game:GetService("StarterGui"):SetCore("SendNotification", {
+        Title = "Rapidfire Executed",
+        Text = "Hehe xd", 
+        Duration = 5
+    })
+
+    local module = require(game.ReplicatedStorage.Gun)
+    for i, v in pairs(module) do
+        if type(v) == "table" then
+            v.FireRate = 0.000001
+        end
+    end
+end)
+
+Player:NewButton("Speed", "Sets WalkSpeed to 50", function()
+    local player = game:GetService("Players").LocalPlayer
+    player.Character.Humanoid.WalkSpeed = 50
+end)
+
+Player:NewButton("Jump", "Sets JumpPower to 100", function()
+    local player = game:GetService("Players").LocalPlayer
+    player.Character.Humanoid.JumpPower = 100
+end)
+
+Player:NewButton("AutoFarm", "Execute autofarm", function()
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/Noboline/teste/main/kat.lua"))()
+end)
+
+Misc:NewButton("Anti Kick", "anti kick", function()
+    local mt = getrawmetatable(game)
+    local oldNameCall = mt.__namecall
+    setreadonly(mt, false)
+
+    mt.__namecall = newcclosure(function(self, ...)
+        if tostring(self) == "Kick" then
+            return
+        end
+        return oldNameCall(self, ...)
+    end)
+
+    setreadonly(mt, true)
+end)
+
+Misc:NewButton("Infinite Jump", "infinite jump", function()
+    game:GetService("UserInputService").JumpRequest:Connect(function()
+        game:GetService("Players").LocalPlayer.Character:FindFirstChildOfClass("Humanoid"):ChangeState("Jumping")
+    end)
+end)
