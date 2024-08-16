@@ -1,6 +1,6 @@
 local Library = loadstring(game:HttpGet("https://raw.githubusercontent.com/xHeptc/Kavo-UI-Library/main/source.lua"))()
 
-local Window = Library:CreateLib("Kat | Mobile", "BloodTheme")
+local Window = Library.CreateLib("Kat | Mobile", "BloodTheme")
 
 local combat = Window:NewTab("Combat")
 local gunmods = Window:NewTab("GunMods")
