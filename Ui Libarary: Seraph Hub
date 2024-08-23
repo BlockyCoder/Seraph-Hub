@@ -1233,14 +1233,13 @@ function Library:Create(xHubName)
 
 		Toggle.MouseEnter:Connect(function()
 			Tsound:Play()
-			TweenService:Create(ToggleBckg, TweenInfo.new(0.1), {BackgroundColor3 = Color3.fromRGB(45, 45, 45)}):Play()
+			
 
 			TweenService:Create(uistrokeT, TweenInfo.new(0.1), {Color = Color3.fromRGB(86, 34, 34)}):Play()
 		end)
 
 		Toggle.MouseLeave:Connect(function()
-			TweenService:Create(ToggleBckg, TweenInfo.new(0.1), {BackgroundColor3 = Color3.fromRGB(29, 29, 29)}):Play()
-
+			
 			TweenService:Create(uistrokeT, TweenInfo.new(0.1), {Color = Color3.fromRGB(50,50,50)}):Play()
 		end)
 		
