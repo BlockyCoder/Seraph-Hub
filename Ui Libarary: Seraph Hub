@@ -286,12 +286,19 @@ function Library:Create(xHubName)
 	local ImageButtonK = Instance.new("ImageButton")
 	local ImageButtonKCorner = Instance.new("UICorner")
 
-
+	function ScrollSize()
+		Holder2.CanvasSize = UDim2.new(0, 0, 0, UIListLayout.AbsoluteContentSize.Y)
+	end
+	
+	
 	--Properties:
 	ScreenGui.Name = xHubName
 	ScreenGui.Parent = game.Players.LocalPlayer.PlayerGui
 	ScreenGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
-
+	
+	
+	
+	
 	LoadingFrame.Name = "LoadingFrame"
 	LoadingFrame.Parent = ScreenGui
 	LoadingFrame.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
@@ -747,9 +754,18 @@ function Library:Create(xHubName)
 		local Holder = Instance.new("Frame")
 		local UIListLayout_3 = Instance.new("UIListLayout")
 		local UIPadding_2 = Instance.new("UIPadding")
+		
+		
+		ScrollSize()
+		
+		function Size()
+			Left.CanvasSize = UDim2.new(0, 0, 0, (UIListLayout.AbsoluteContentSize.Y + UIListLayout_2.AbsoluteContentSize.Y + UIListLayout_3.AbsoluteContentSize.Y))
+		end
+		
 
 		--Properties:
 
+		
 		Left.Name = "Left"
 		Left.Parent = PageHold
 		Left.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
@@ -808,12 +824,19 @@ function Library:Create(xHubName)
 
 		UIPadding_2.Parent = Left
 		UIPadding_2.PaddingTop = UDim.new(0, 5)
-
+		
+		
+		Size()
+		Holder.ChildAdded:Connect(Size)
+		Holder.ChildRemoved:Connect(Size)
+		
+		
 		-- Store the original color
 		local originalBackgroundColor = Example.BackgroundColor3
 
 		-- Connect button click to activation function
 		Example.MouseButton1Click:Connect(function()
+			Size()
 			-- Hide all other tab frames and reset their button colors
 			for _, frame in pairs(PageHold:GetChildren()) do
 				if frame:IsA("ScrollingFrame") then
