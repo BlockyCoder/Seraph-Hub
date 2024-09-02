@@ -1623,7 +1623,7 @@ function Library:Create(xHubName)
 		List.CanvasSize = UDim2.new(0, 0, 0, #options * (25 + 3))
 		List.ScrollBarThickness = 6
 		List.ScrollingDirection = Enum.ScrollingDirection.Y
-		List.Visible = isOpen
+		List.Visible = not isOpen
 
 		local UIListLayout = Instance.new("UIListLayout")
 		UIListLayout.Parent = List
@@ -1747,12 +1747,13 @@ function Library:Create(xHubName)
 			--	List.Visible = true
 				fadeIn(List, 0.3)
 				SearchBox.Visible = true
-			end
+		
 
 			-- Hide other elements
 			for _, gui in pairs(tab:GetChildren()) do
 				if gui:IsA("GuiObject") and gui ~= Dropdown and gui ~= List and gui ~= SearchBox then
 					gui.Visible = isOpen
+					end
 				end
 			end
 		end
