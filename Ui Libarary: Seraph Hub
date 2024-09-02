@@ -994,22 +994,22 @@ function Library:Create(xHubName)
 			Callback()
 			ImageLabel.ImageColor3 = Color3.fromRGB(104, 104, 104)
 		end)
-		
+
 		Button.MouseEnter:Connect(function()
 			game:GetService("TweenService"):Create(Button, TweenInfo.new(0.1, Enum.EasingStyle.Linear, Enum.EasingDirection.In), {
 				BackgroundColor3 = Color3.fromRGB(48, 51, 70)
 			}):Play()
 		end)
-		
+
 		Button.MouseLeave:Connect(function()
 			game:GetService("TweenService"):Create(Button, TweenInfo.new(0.1, Enum.EasingStyle.Linear, Enum.EasingDirection.In), {
 				BackgroundColor3 = Color3.fromRGB(35, 35, 35)
 			}):Play()
 		end)
-		
-		
-		
-		
+
+
+
+
 		print("Button created: " .. ButName .. " in " .. Parent.Name)
 
 		function ButtonFunction:UpdateButton(newTitle)
@@ -1127,11 +1127,11 @@ function Library:Create(xHubName)
 
 		return TextBox, UpdateText  -- Return TextBox in case further manipulation is needed
 	end
-	
-	
---toggle
+
+
+	--toggle
 	function Library:Toggle(tab, toggleName, callback)
-		
+
 		local Toggle = Instance.new("TextButton")
 		Toggle.Name = "Toggle"
 		Toggle.Parent = tab
@@ -1233,19 +1233,19 @@ function Library:Create(xHubName)
 
 		Toggle.MouseEnter:Connect(function()
 			Tsound:Play()
-			
+
 
 			TweenService:Create(uistrokeT, TweenInfo.new(0.1), {Color = Color3.fromRGB(86, 34, 34)}):Play()
 		end)
 
 		Toggle.MouseLeave:Connect(function()
-			
+
 			TweenService:Create(uistrokeT, TweenInfo.new(0.1), {Color = Color3.fromRGB(50,50,50)}):Play()
 		end)
-		
-		
-		
-		
+
+
+
+
 		return Toggle
 	end
 
@@ -1525,7 +1525,7 @@ function Library:Create(xHubName)
 	end
 
 
-
+	local activeDropdown = nil 
 
 	function Library:Dropdown(tab, dropdownName, options, callback, settings)
 		settings = settings or {}
@@ -1540,10 +1540,10 @@ function Library:Create(xHubName)
 		local showTooltips = settings.showTooltips or true
 		local showIcons = settings.showIcons or false
 
-		-- Validate options
+		
 		assert(type(options) == "table" and #options > 0, "Options should be a non-empty table.")
 
-		-- Create the dropdown structure
+		
 		local Dropdown = Instance.new("TextButton")
 		Dropdown.Name = dropdownName
 		Dropdown.Parent = tab
@@ -1710,52 +1710,30 @@ function Library:Create(xHubName)
 				end
 				Option.BackgroundColor3 = selectedColor
 				Option.TextColor3 = Color3.fromRGB(255, 255, 255)
-				Dot.Visible = true
+				Option:FindFirstChild("Dot").Visible = true
 				selectedOption = Option
-				Dropdown.Text = optionText
-				fadeOut(List, 0.3)
-				List.Visible = false
-				fadeOut(List, 0.3)
 				SearchBox.Visible = false
+				List.Visible = false
 				callback(optionText)
-
-				-- Show other elements
-				for _, gui in pairs(tab:GetChildren()) do
-					if gui:IsA("GuiObject") and gui ~= Dropdown and gui ~= List and gui ~= SearchBox then
-						gui.Visible = true
-					end
-				end
 			end)
 		end
 
-		local function toggleDropdown()
-			local isOpen = List.Visible
-			List.Visible = not isOpen
-			SearchBox.Visible = not isOpen
-
-			-- Hide other elements
-			for _, gui in pairs(tab:GetChildren()) do
-				if gui:IsA("GuiObject") and gui ~= Dropdown and gui ~= List and gui ~= SearchBox then
-					gui.Visible = isOpen
-				end
+		Dropdown.MouseButton1Click:Connect(function()
+			if activeDropdown then
+				activeDropdown.SearchBox.Visible = false
+				activeDropdown.List.Visible = false
 			end
-		end
 
-		Dropdown.MouseButton1Click:Connect(toggleDropdown)
-		Dropdown.MouseEnter:Connect(function()
-			Dropdown.BackgroundColor3 = hoverColor
+			if activeDropdown == Dropdown then
+				activeDropdown = nil
+			else
+				activeDropdown = Dropdown
+				SearchBox.Visible = true
+				List.Visible = true
+				updateOptions()
+			end
 		end)
-		Dropdown.MouseLeave:Connect(function()
-			Dropdown.BackgroundColor3 = defaultColor
-		end)
-
-		return Dropdown
-
 	end
-
-
-
-
 
 
 
