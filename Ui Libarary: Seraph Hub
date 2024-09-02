@@ -1525,123 +1525,76 @@ function Library:Create(xHubName)
 	end
 
 
-	local activeDropdown = nil 
 
-	function Library:Dropdown(tab, dropdownName, options, callback, settings)
-		settings = settings or {}
 
-		local hoverColor = settings.hoverColor or Color3.fromRGB(75, 75, 75)
-		local disabledColor = settings.disabledColor or Color3.fromRGB(100, 100, 100)
-		local selectedColor = settings.selectedColor or Color3.fromRGB(85, 85, 85)
-		local defaultColor = Color3.fromRGB(55, 55, 55)
-		local searchPlaceholder = settings.searchPlaceholder or "Search..."
-		local customFont = settings.customFont or Enum.Font.GothamMedium
-		local customFontSize = settings.customFontSize or 12
-		local showTooltips = settings.showTooltips or true
-		local showIcons = settings.showIcons or false
-
-		
-		assert(type(options) == "table" and #options > 0, "Options should be a non-empty table.")
-
-		
+	local function createDropdown(parent, options, defaultText, callback, showTooltips, showIcons, defaultColor, hoverColor, selectedColor, customFontSize)
 		local Dropdown = Instance.new("TextButton")
-		Dropdown.Name = dropdownName
-		Dropdown.Parent = tab
-		Dropdown.BackgroundColor3 = Color3.fromRGB(35, 35, 35)
-		Dropdown.BorderColor3 = Color3.fromRGB(27, 42, 53)
-		Dropdown.Position = UDim2.new(0, 0, 0.439393938, 0)
-		Dropdown.Size = UDim2.new(1, -20, 0, 31)
-		Dropdown.AutoButtonColor = false
-		Dropdown.Text = ""
+		local List = Instance.new("Frame")
+		local isOpen = false  -- Independent state variable
 
-		local UIStroke = Instance.new("UIStroke")
-		UIStroke.Parent = Dropdown
+		-- Setup Dropdown button
+		Dropdown.Name = "Dropdown"
+		Dropdown.Parent = parent
+		Dropdown.BackgroundColor3 = defaultColor
+		Dropdown.BorderSizePixel = 0
+		Dropdown.Size = UDim2.new(0, 200, 0, 30)
+		Dropdown.Text = defaultText or "Select an option"
+		Dropdown.TextColor3 = Color3.fromRGB(255, 255, 255)
+		Dropdown.TextWrapped = true
+		Dropdown.TextSize = customFontSize or 14
 
-		local Main = Instance.new("Frame")
-		Main.Name = "Main"
-		Main.Parent = Dropdown
-		Main.BackgroundTransparency = 1.000
-		Main.BorderColor3 = Color3.fromRGB(27, 42, 53)
-		Main.Size = UDim2.new(1, 0, 1, 0)
+		local corner = Instance.new("UICorner")
+		corner.Parent = Dropdown
 
-		local IconFrame = Instance.new("Frame")
-		IconFrame.Name = "IconFrame"
-		IconFrame.Parent = Main
-		IconFrame.BackgroundTransparency = 1.000
-		IconFrame.Size = UDim2.new(0, 31, 0, 31)
-		IconFrame.Position = UDim2.new(1, -31, 0, 0)
-
-		local Icon = Instance.new("ImageLabel")
-		Icon.Name = "Icon"
-		Icon.Parent = IconFrame
-		Icon.AnchorPoint = Vector2.new(0.5, 0.5)
-		Icon.BackgroundTransparency = 1.000
-		Icon.Position = UDim2.new(0.5, 0, 0.5, 0)
-		Icon.Size = UDim2.new(0, 25, 0, 25)
-		Icon.Image = "rbxassetid://6031091000"
-		Icon.ImageColor3 = Color3.fromRGB(109, 109, 109)
-
-		local Title = Instance.new("TextLabel")
-		Title.Name = "Title"
-		Title.Parent = Main
-		Title.BackgroundTransparency = 1.000
-		Title.BorderColor3 = Color3.fromRGB(27, 42, 53)
-		Title.Size = UDim2.new(1, -35, 1, 0)
-		Title.Font = customFont
-		Title.Text = dropdownName
-		Title.TextColor3 = Color3.fromRGB(193, 193, 193)
-		Title.TextSize = customFontSize
-		Title.TextXAlignment = Enum.TextXAlignment.Left
-
-		local SearchBox = Instance.new("TextBox")
-		SearchBox.Name = "SearchBox"
-		SearchBox.Parent = Dropdown.Parent
-		SearchBox.BackgroundColor3 = Color3.fromRGB(55, 55, 55)
-		SearchBox.BorderSizePixel = 0
-		SearchBox.Position = UDim2.new(0, 0, 1, 0)
-		SearchBox.Size = UDim2.new(1, -20, 0, 25)
-		SearchBox.Text = ""
-		SearchBox.PlaceholderText = searchPlaceholder
-		SearchBox.TextColor3 = Color3.fromRGB(214, 214, 214)
-		SearchBox.TextSize = customFontSize
-		SearchBox.ClearTextOnFocus = false
-		SearchBox.BackgroundTransparency = 0.3
-		SearchBox.Visible = false
-
-		local List = Instance.new("ScrollingFrame")
+		-- Setup List frame
 		List.Name = "List"
-		List.Parent = Dropdown.Parent
-		List.BackgroundColor3 = Color3.fromRGB(35, 35, 35)
-		List.BorderColor3 = Color3.fromRGB(27, 42, 53)
-		List.Position = UDim2.new(0, 0, 0.469696969, 0)
-		List.Size = UDim2.new(1, -20, 1, -20)
+		List.Parent = Dropdown
+		List.BackgroundColor3 = Color3.fromRGB(26, 26, 26)
+		List.BorderSizePixel = 0
+		List.Position = UDim2.new(0, 0, 1, 0)
+		List.Size = UDim2.new(1, 0, 0, 0)
 		List.ClipsDescendants = true
-		List.CanvasSize = UDim2.new(0, 0, 0, #options * (25 + 3))
-		List.ScrollBarThickness = 6
-		List.ScrollingDirection = Enum.ScrollingDirection.Y
 		List.Visible = false
+
+		local listCorner = Instance.new("UICorner")
+		listCorner.Parent = List
 
 		local UIListLayout = Instance.new("UIListLayout")
 		UIListLayout.Parent = List
 		UIListLayout.SortOrder = Enum.SortOrder.LayoutOrder
-		UIListLayout.Padding = UDim.new(0, 3)
 
-		local function updateOptions(filterText)
-			for i, optionText in ipairs(options) do
-				local optionButton = List:FindFirstChild("Option" .. i)
-				if not filterText or optionText:lower():find(filterText:lower()) then
-					optionButton.Visible = true
-				else
-					optionButton.Visible = false
-				end
+		local SearchBox = Instance.new("TextBox")
+		SearchBox.Parent = List
+		SearchBox.Size = UDim2.new(1, 0, 0, 25)
+		SearchBox.PlaceholderText = "Search..."
+		SearchBox.Visible = false
+
+		-- Dropdown toggle logic
+		Dropdown.MouseButton1Click:Connect(function()
+			isOpen = not isOpen
+			if isOpen then
+				List.Visible = true
+				SearchBox.Visible = true
+				List:TweenSize(UDim2.new(1, 0, 0, #options * 25 + (showTooltips and 25 or 0)), "Out", "Quad", 0.3, true)
+			else
+				List:TweenSize(UDim2.new(1, 0, 0, 0), "Out", "Quad", 0.3, true)
+				wait(0.3)
+				List.Visible = false
+				SearchBox.Visible = false
 			end
-			List.CanvasSize = UDim2.new(0, 0, 0, #List:GetChildren() * (25 + 3))
-		end
-
-		SearchBox:GetPropertyChangedSignal("Text"):Connect(function()
-			updateOptions(SearchBox.Text)
 		end)
 
+		Dropdown.MouseEnter:Connect(function()
+			Dropdown.BackgroundColor3 = hoverColor
+		end)
+
+		Dropdown.MouseLeave:Connect(function()
+			if not isOpen then
+				Dropdown.BackgroundColor3 = defaultColor
+			end
+		end)
+
+		-- Create and add options to the List
 		local selectedOption = nil
 		for i, optionText in ipairs(options) do
 			local Option = Instance.new("TextButton")
@@ -1696,10 +1649,10 @@ function Library:Create(xHubName)
 				local OptionIcon = Instance.new("ImageLabel")
 				OptionIcon.Name = "OptionIcon"
 				OptionIcon.Parent = Option
-				OptionIcon.BackgroundTransparency = 1.000
+				OptionIcon.BackgroundTransparency = 1
 				OptionIcon.Size = UDim2.new(0, 20, 0, 20)
 				OptionIcon.Position = UDim2.new(0, 30, 0.5, -10)
-				OptionIcon.Image = "rbxassetid://6031091000" -- Replace with your icon assets
+				OptionIcon.Image = "rbxassetid://6031091000"  -- Replace with your icon assets
 			end
 
 			Option.MouseButton1Click:Connect(function()
@@ -1710,30 +1663,107 @@ function Library:Create(xHubName)
 				end
 				Option.BackgroundColor3 = selectedColor
 				Option.TextColor3 = Color3.fromRGB(255, 255, 255)
-				Option:FindFirstChild("Dot").Visible = true
+				Dot.Visible = true
 				selectedOption = Option
-				SearchBox.Visible = false
+				Dropdown.Text = optionText
+				isOpen = false
 				List.Visible = false
+				SearchBox.Visible = false
 				callback(optionText)
 			end)
 		end
 
-		Dropdown.MouseButton1Click:Connect(function()
-			if activeDropdown then
-				activeDropdown.SearchBox.Visible = false
-				activeDropdown.List.Visible = false
-			end
+		return {
+			SetOptions = function(newOptions)
+				for _, child in pairs(List:GetChildren()) do
+					if child:IsA("TextButton") then
+						child:Destroy()
+					end
+				end
+				options = newOptions
+				for i, optionText in ipairs(options) do
+					local Option = Instance.new("TextButton")
+					Option.Name = "Option" .. i
+					Option.Parent = List
+					Option.BackgroundColor3 = defaultColor
+					Option.BorderSizePixel = 0
+					Option.Size = UDim2.new(1, 0, 0, 25)
+					Option.AutoButtonColor = true
+					Option.Text = optionText
+					Option.TextColor3 = Color3.fromRGB(214, 214, 214)
+					Option.TextWrapped = true
+					Option.TextSize = customFontSize
 
-			if activeDropdown == Dropdown then
-				activeDropdown = nil
-			else
-				activeDropdown = Dropdown
-				SearchBox.Visible = true
-				List.Visible = true
-				updateOptions()
+					local Dot = Instance.new("ImageLabel")
+					Dot.Name = "Dot"
+					Dot.Parent = Option
+					Dot.BackgroundColor3 = Color3.fromRGB(6, 53, 62)
+					Dot.BorderSizePixel = 0
+					Dot.Size = UDim2.new(0, 15, 0, 15)
+					Dot.Position = UDim2.new(0, 5, 0.5, -7.5)
+					Dot.ImageTransparency = 1
+					Dot.Visible = false
+
+					local dotCor = Instance.new("UICorner")
+					dotCor.Parent = Dot
+
+					local Tooltip = Instance.new("TextLabel")
+					Tooltip.Name = "Tooltip"
+					Tooltip.Parent = Option
+					Tooltip.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+					Tooltip.BackgroundTransparency = 0.5
+					Tooltip.BorderSizePixel = 0
+					Tooltip.Size = UDim2.new(1, 0, 0, 20)
+					Tooltip.Position = UDim2.new(0, 0, -1, -20)
+					Tooltip.Text = optionText
+					Tooltip.TextColor3 = Color3.fromRGB(255, 255, 255)
+					Tooltip.TextSize = 10
+					Tooltip.Visible = false
+
+					if showTooltips then
+						Option.MouseEnter:Connect(function()
+							Tooltip.Visible = true
+						end)
+
+						Option.MouseLeave:Connect(function()
+							Tooltip.Visible = false
+						end)
+					end
+
+					if showIcons then
+						local OptionIcon = Instance.new("ImageLabel")
+						OptionIcon.Name = "OptionIcon"
+						OptionIcon.Parent = Option
+						OptionIcon.BackgroundTransparency = 1
+						OptionIcon.Size = UDim2.new(0, 20, 0, 20)
+						OptionIcon.Position = UDim2.new(0, 30, 0.5, -10)
+						OptionIcon.Image = "rbxassetid://6031091000"  -- Replace with your icon assets
+					end
+
+					Option.MouseButton1Click:Connect(function()
+						if selectedOption then
+							selectedOption.BackgroundColor3 = defaultColor
+							selectedOption:FindFirstChild("Dot").Visible = false
+							selectedOption.TextColor3 = Color3.fromRGB(214, 214, 214)
+						end
+						Option.BackgroundColor3 = selectedColor
+						Option.TextColor3 = Color3.fromRGB(255, 255, 255)
+						Dot.Visible = true
+						selectedOption = Option
+						Dropdown.Text = optionText
+						isOpen = false
+						List.Visible = false
+						SearchBox.Visible = false
+						callback(optionText)
+					end)
+				end
 			end
-		end)
+		}
 	end
+
+
+
+
 
 
 
