@@ -1565,15 +1565,12 @@ function Library:Create(xHubName)
 		-- Setup List frame
 		List.Name = "List"
 		List.Parent = Dropdown.Parent
-		List.BackgroundColor3 = Color3.fromRGB(35, 35, 35)
-		List.BorderColor3 = Color3.fromRGB(27, 42, 53)
-		List.Position = UDim2.new(0, 0, 0.469696969, 0)
+		List.BackgroundColor3 = Color3.fromRGB(26, 26, 26)
+		List.BorderSizePixel = 0
+		List.Position = UDim2.new(0, 0, 1, 0)
 		List.Size = UDim2.new(1, -20, 1, -20)
 		List.ClipsDescendants = true
-		List.ScrollBarThickness = 6
-		List.ScrollingDirection = Enum.ScrollingDirection.Y
 		List.Visible = false
-
 
 		local listCorner = Instance.new("UICorner")
 		listCorner.Parent = List
