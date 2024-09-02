@@ -1712,7 +1712,7 @@ function Library:Create(xHubName)
 					selectedOption:FindFirstChild("Dot").Visible = false
 					selectedOption.TextColor3 = Color3.fromRGB(214, 214, 214)
 				end
-				
+
 				Option.BackgroundColor3 = selectedColor
 				Option.TextColor3 = Color3.fromRGB(255, 255, 255)
 				Dot.Visible = true
@@ -1720,7 +1720,7 @@ function Library:Create(xHubName)
 				Dropdown.Text = optionText
 				fadeOut(List, 0.3)
 				isOpen = false
-				--List.Visible = false
+				List.Visible = false
 				fadeOut(List, 0.3)
 				SearchBox.Visible = false
 				callback(optionText)
@@ -1735,6 +1735,8 @@ function Library:Create(xHubName)
 		end
 
 		local function toggleDropdown()
+			isOpen = not isOpen
+			
 			if isOpen then
 				fadeOut(List, 0.3)
 				isOpen = false
@@ -1747,16 +1749,16 @@ function Library:Create(xHubName)
 				List.Visible = true
 				fadeIn(List, 0.3)
 				SearchBox.Visible = true
-		
+			end
 
 			-- Hide other elements
+			--[[
 			for _, gui in pairs(tab:GetChildren()) do
 				if gui:IsA("GuiObject") and gui ~= Dropdown and gui ~= List and gui ~= SearchBox then
 					gui.Visible = isOpen
-					end
 				end
 			end
-		end
+		end ]]
 
 		Dropdown.MouseButton1Click:Connect(toggleDropdown)
 		Dropdown.MouseEnter:Connect(function()
@@ -1771,7 +1773,7 @@ function Library:Create(xHubName)
 
 	end
 
-
+end
 
 
 
