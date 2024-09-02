@@ -1527,7 +1527,23 @@ function Library:Create(xHubName)
 
 
 
-	local function createDropdown(parent, options, defaultText, callback, showTooltips, showIcons, defaultColor, hoverColor, selectedColor, customFontSize)
+	function Library:Dropdown(parent, defaultText, options, callback, settings)
+	settings = settings or {}
+
+	local hoverColor = settings.hoverColor or Color3.fromRGB(75, 75, 75)
+	local disabledColor = settings.disabledColor or Color3.fromRGB(100, 100, 100)
+	local selectedColor = settings.selectedColor or Color3.fromRGB(85, 85, 85)
+	local defaultColor = Color3.fromRGB(55, 55, 55)
+	local searchPlaceholder = settings.searchPlaceholder or "Search..."
+	local customFont = settings.customFont or Enum.Font.GothamMedium
+	local customFontSize = settings.customFontSize or 12
+	local showTooltips = settings.showTooltips or true
+	local showIcons = settings.showIcons or false
+
+	-- Validate options
+	assert(type(options) == "table" and #options > 0, "Options should be a non-empty table.")
+			
+		
 		local Dropdown = Instance.new("TextButton")
 		local List = Instance.new("Frame")
 		local isOpen = false  -- Independent state variable
