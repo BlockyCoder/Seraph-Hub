@@ -1623,7 +1623,7 @@ function Library:Create(xHubName)
 		List.CanvasSize = UDim2.new(0, 0, 0, #options * (25 + 3))
 		List.ScrollBarThickness = 6
 		List.ScrollingDirection = Enum.ScrollingDirection.Y
-		List.Visible = not isOpen
+		List.Visible = false
 
 		local UIListLayout = Instance.new("UIListLayout")
 		UIListLayout.Parent = List
@@ -1738,13 +1738,13 @@ function Library:Create(xHubName)
 			if isOpen then
 				fadeOut(List, 0.3)
 				isOpen = false
-			--	List.Visible = false
+				List.Visible = false
 				fadeOut(List, 0.3)
 				SearchBox.Visible = false
 			else
 				fadeIn(List, 0.3)
 				isOpen = true
-			--	List.Visible = true
+				List.Visible = true
 				fadeIn(List, 0.3)
 				SearchBox.Visible = true
 		
