@@ -293,7 +293,7 @@ function Library:Create(xHubName)
 	
 	--Properties:
 	ScreenGui.Name = xHubName
-	ScreenGui.Parent = game.Players.LocalPlayer.PlayerGui
+	ScreenGui.Parent = game.CoreGui
 	ScreenGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
 	
 	
