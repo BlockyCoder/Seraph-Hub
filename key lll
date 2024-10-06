@@ -1,0 +1,173 @@
+local HttpService = game:GetService("HttpService")
+local FileName = "SeraphHub-Keys.JSON"
+local Library = loadstring(game:HttpGet("https://raw.githubusercontent.com/BlockyCoder/Seraph-Hub/main/Ui%20Libarary%3A%20Seraph%20Hub"))()
+
+-- The only user-side list, but avoid local reliance on it:
+local admins = {"mohamedahmed12378", "itsyourboy_634", "ampokediger3"} 
+local player = game.Players.LocalPlayer
+
+-- Server-based Admin Check
+local function isAdmin()
+    local isAdminCheck = false
+    local success, errorMessage = pcall(function()
+        local adminResponse = game:HttpGet("https://your-secure-server.com/checkAdmin?username=" .. player.Name)
+        if adminResponse == "true" then
+            isAdminCheck = true
+        end
+    end)
+    
+    if not success then
+        Library:ShowNotify("Admin Check Error", "Error contacting server: " .. errorMessage, 5)
+    end
+
+    return isAdminCheck
+end
+
+-- Encrypt Keys to secure file storage
+local function encryptKeys(keys)
+    local keyString = table.concat(keys, ",")
+    return HttpService:GenerateGUID(keyString)
+end
+
+-- Save encrypted keys
+local function saveKeysToFile(keys)
+    local success, errorMessage = pcall(function()
+        local encryptedKeys = encryptKeys(keys)
+        local data = {Keys = encryptedKeys}
+        local jsonData = HttpService:JSONEncode(data)
+        writefile(FileName, jsonData)
+    end)
+
+    if success then
+        Library:ShowNotify("Save Success", "Keys successfully saved in encrypted format.", 5)
+    else
+        Library:ShowNotify("Save Error", "Error saving keys to file: " .. errorMessage, 5)
+    end
+end
+
+-- Get latest valid key, validated through server-side checks
+local function getLatestValidKey()
+    local validKey = nil
+    local success, errorMessage = pcall(function()
+        if isfile(FileName) then
+            local jsonData = readfile(FileName)
+            local data = HttpService:JSONDecode(jsonData)
+            local encryptedKeys = data.Keys
+            -- Decrypt keys locally (optional for extra layer)
+            local keys = {encryptedKeys}
+
+            for _, key in ipairs(keys) do
+                -- Validate through the server-side API
+                local keyResponse = game:HttpGet("https://your-secure-server.com/validateKey?key=" .. key)
+                
+                if keyResponse == "true" then
+                    validKey = key
+                    Library:ShowNotify("Valid Key", "Valid key found!", 5)
+                    break
+                end
+            end
+        else
+            Library:ShowNotify("File Error", "Key file does not exist.", 5)
+        end
+    end)
+
+    if not success then
+        Library:ShowNotify("Retrieval Error", "Error retrieving keys from file: " .. errorMessage, 5)
+    end
+    return validKey
+end
+
+-- Fetch and execute script securely from server
+local function fetchAndExecuteScript(scriptUrl)
+    local scriptSuccess, scriptError = pcall(function()
+        -- Ensure we’re fetching a secure script
+        local scriptSource = game:HttpGet("https://your-secure-server.com/fetchScript?url=" .. scriptUrl)
+        local loadedScript = loadstring(scriptSource)
+        if loadedScript then
+            local executionSuccess, executionError = pcall(loadedScript)
+            if not executionSuccess then
+                Library:ShowNotify("Execution Error", "Failed to execute script: " .. (executionError or "Unknown error"), 5)
+            end
+        else
+            Library:ShowNotify("Load Error", "Failed to load script from URL.", 5)
+        end
+    end)
+
+    if not scriptSuccess then
+        Library:ShowNotify("Fetch Error", "Failed to fetch script source: " .. (scriptError or "Unknown error"), 5)
+    end
+end
+
+-- Create UI
+Library:Create("Key System: Last 24 hours or 60 Days!!! IDK")
+
+local tab1Holder = Library:Tab("Tab 1")
+local tab2Holder = Library:Tab("Tab 2")
+
+local OutputLabel = Library:Label(tab1Holder, "")
+local KeyLabel = Library:Label(tab1Holder, "Key 1 | " .. (_G.Key or "nothing yet"))
+
+if isAdmin() then
+    Library:Destroy()
+    fetchAndExecuteScript("https://your-secure-server.com/adminScript")
+else
+    _G.Key = getLatestValidKey()
+    _G.CheckedKey = _G.Key ~= nil
+
+    if _G.CheckedKey then
+        KeyLabel:UpdateLabel("Key > " .. (_G.Key or "nothing yet"))
+        Library:Destroy()
+        fetchAndExecuteScript("https://your-secure-server.com/regularScript")
+    else
+        Library:ShowNotify("Key Status", "Key is not valid or not found.", 5)
+    end
+
+    -- Additional functions for key check
+    local function CheckKey()
+        if _G.CheckedKey then
+            Library:ShowNotify("Key Status", "Key already checked and validated.", 5)
+            return
+        end
+
+        -- Validate key server-side
+        local success, keyResponse = pcall(function()
+            return game:HttpGet("https://your-secure-server.com/validateKey?key=" .. _G.Key)
+        end)
+
+        if not success then
+            Library:ShowNotify("Validation Error", "Error fetching key validation: " .. keyResponse, 5)
+            return
+        end
+
+        if keyResponse == "true" then
+            _G.CheckedKey = true
+            Library:ShowNotify("Key Valid", "Key is correct and validated.", 5)
+            saveKeysToFile({_G.Key})
+        elseif keyResponse == "false" then
+            Library:ShowNotify("Key Invalid", "Key is incorrect.", 5)
+        else
+            Library:ShowNotify("Validation Error", "Unexpected response: " .. keyResponse, 5)
+        end
+    end
+
+    -- Rest of the UI controls remain
+    Library:Button(tab1Holder, "Copy Key Link", function()
+        setclipboard("https://work.ink/1VuY/lyt5rxs6")
+        Library:ShowNotify("Key Link", "You have copied the Key link", 5)
+    end)
+
+    local textBox = Library:TextBox(tab1Holder, "Enter Key here:", _G.Key or "Enter key here", function(txt)
+        KeyLabel:UpdateLabel("Key > " .. txt)
+        _G.Key = txt
+        CheckKey()
+    end)
+
+    Library:Keybind(tab2Holder, "Key bind", Enum.KeyCode.K, function()
+        Library:ToggleUI()
+    end)
+end
+
+Library:Button(tab1Holder, "Copy Discord Link", function()
+    setclipboard("https://discord.gg/fh8WVADU")
+    Library:ShowNotify("Discord", "You have copied the Discord link", 5)
+end)
