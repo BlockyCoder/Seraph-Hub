@@ -1,73 +1,77 @@
 local HttpService = game:GetService("HttpService")
 local FileName = "SeraphHub-Keys.JSON"
-local Library = loadstring(game:HttpGet("https://raw.githubusercontent.com/BlockyCoder/Seraph-Hub/main/Ui%20Libarary%3A%20Seraph%20Hub"))()
+local Library = loadstring(game:HttpGet("https://raw.githubusercontent.com/BlockyCoder/Seraph-Hub/main/Lib%20UI%3A%20Seraph%20Hub"))()
+local EncryptionKey = "SecretEncryptionKey123" -- Use a stronger key for encryption
 
--- The only user-side list, but avoid local reliance on it:
-local admins = {"mohamedahmed12378", "itsyourboy_634", "ampokediger3"} 
+local admins = {"mohamedahmed12378", "itsyourboy_634", "ampokediger3"} -- Replace with actual admin usernames
 local player = game.Players.LocalPlayer
 
--- Server-based Admin Check
-local function isAdmin()
-    local isAdminCheck = false
-    local success, errorMessage = pcall(function()
-        local adminResponse = game:HttpGet("https://your-secure-server.com/checkAdmin?username=" .. player.Name)
-        if adminResponse == "true" then
-            isAdminCheck = true
-        end
-    end)
-    
-    if not success then
-        Library:ShowNotify("Admin Check Error", "Error contacting server: " .. errorMessage, 5)
+-- Encrypting function (XOR-based)
+local function encrypt(text, key)
+    local result = {}
+    for i = 1, #text do
+        local keyChar = string.byte(key, (i % #key) + 1)
+        local encryptedChar = string.char(bit32.bxor(string.byte(text, i), keyChar))
+        table.insert(result, encryptedChar)
     end
-
-    return isAdminCheck
+    return table.concat(result)
 end
 
--- Encrypt Keys to secure file storage
-local function encryptKeys(keys)
-    local keyString = table.concat(keys, ",")
-    return HttpService:GenerateGUID(keyString)
+-- Decrypting function
+local function decrypt(text, key)
+    return encrypt(text, key) -- XOR encryption is symmetric, same function for encryption/decryption
 end
 
--- Save encrypted keys
+-- Secure admin check (more secure with server-side validation ideally)
+local function isAdmin()
+    -- Add server-side check here if possible
+    for _, admin in ipairs(admins) do
+        if player.Name == admin then
+            return true
+        end
+    end
+    return false
+end
+
+-- Encrypt and save keys to file
 local function saveKeysToFile(keys)
     local success, errorMessage = pcall(function()
-        local encryptedKeys = encryptKeys(keys)
-        local data = {Keys = encryptedKeys}
+        local data = {Keys = keys}
         local jsonData = HttpService:JSONEncode(data)
-        writefile(FileName, jsonData)
+        local encryptedData = encrypt(jsonData, EncryptionKey)
+        writefile(FileName, encryptedData)
     end)
 
     if success then
-        Library:ShowNotify("Save Success", "Keys successfully saved in encrypted format.", 5)
+        Library:ShowNotify("Save Success", "Keys successfully saved to file.", 5)
     else
         Library:ShowNotify("Save Error", "Error saving keys to file: " .. errorMessage, 5)
     end
 end
 
--- Get latest valid key, validated through server-side checks
+-- Get the latest valid key and validate with encryption
 local function getLatestValidKey()
     local validKey = nil
     local success, errorMessage = pcall(function()
         if isfile(FileName) then
-            local jsonData = readfile(FileName)
-            local data = HttpService:JSONDecode(jsonData)
-            local encryptedKeys = data.Keys
-            -- Decrypt keys locally (optional for extra layer)
-            local keys = {encryptedKeys}
+            local encryptedData = readfile(FileName)
+            local decryptedData = decrypt(encryptedData, EncryptionKey)
+            local data = HttpService:JSONDecode(decryptedData)
+            local keys = data.Keys
 
             for _, key in ipairs(keys) do
-                -- Validate through the server-side API
-                local keyResponse = game:HttpGet("https://your-secure-server.com/validateKey?key=" .. key)
-                
-                if keyResponse == "true" then
+                local validationSuccess, keyResponse = pcall(function()
+                    return game:HttpGet("https://redirect-api.work.ink/tokenValid/" .. key)
+                end)
+
+                if validationSuccess and keyResponse:find('{"valid":true}') then
                     validKey = key
                     Library:ShowNotify("Valid Key", "Valid key found!", 5)
                     break
                 end
             end
         else
-            Library:ShowNotify("File Error", "Key file does not exist.", 5)
+            Library:ShowNotify("File Error", "File does not exist.", 5)
         end
     end)
 
@@ -77,11 +81,20 @@ local function getLatestValidKey()
     return validKey
 end
 
--- Fetch and execute script securely from server
-local function fetchAndExecuteScript(scriptUrl)
+Library:Create("The Example UI for the script! 🔜")
+
+local tab1Holder = Library:Tab("Tab 1")
+local tab2Holder = Library:Tab("Tab 2")
+
+local OutputLabel = Library:Label(tab1Holder, "")
+local KeyLabel = Library:Label(tab1Holder, "Key 1 | " .. (_G.Key or "nothing yet"))
+
+-- Admin-only execution
+if isAdmin() then
+    Library:Destroy()
+    local scriptUrl = "https://paste.gg/p/IDK2210/3677dc68134d41c8b56ea1249ad157cb/files/0c7c67efd6674e41908bba620a4d1c4c/raw"
     local scriptSuccess, scriptError = pcall(function()
-        -- Ensure we’re fetching a secure script
-        local scriptSource = game:HttpGet("https://your-secure-server.com/fetchScript?url=" .. scriptUrl)
+        local scriptSource = game:HttpGet(scriptUrl, true)
         local loadedScript = loadstring(scriptSource)
         if loadedScript then
             local executionSuccess, executionError = pcall(loadedScript)
@@ -96,42 +109,43 @@ local function fetchAndExecuteScript(scriptUrl)
     if not scriptSuccess then
         Library:ShowNotify("Fetch Error", "Failed to fetch script source: " .. (scriptError or "Unknown error"), 5)
     end
-end
-
--- Create UI
-Library:Create("Key System: Last 24 hours or 60 Days!!! IDK")
-
-local tab1Holder = Library:Tab("Tab 1")
-local tab2Holder = Library:Tab("Tab 2")
-
-local OutputLabel = Library:Label(tab1Holder, "")
-local KeyLabel = Library:Label(tab1Holder, "Key 1 | " .. (_G.Key or "nothing yet"))
-
-if isAdmin() then
-    Library:Destroy()
-    fetchAndExecuteScript("https://your-secure-server.com/adminScript")
 else
     _G.Key = getLatestValidKey()
     _G.CheckedKey = _G.Key ~= nil
 
     if _G.CheckedKey then
         KeyLabel:UpdateLabel("Key > " .. (_G.Key or "nothing yet"))
+
         Library:Destroy()
-        fetchAndExecuteScript("https://your-secure-server.com/regularScript")
+        local scriptUrl = "https://paste.gg/p/IDK2210/3677dc68134d41c8b56ea1249ad157cb/files/0c7c67efd6674e41908bba620a4d1c4c/raw"
+        local scriptSuccess, scriptError = pcall(function()
+            local scriptSource = game:HttpGet(scriptUrl, true)
+            local loadedScript = loadstring(scriptSource)
+            if loadedScript then
+                local executionSuccess, executionError = pcall(loadedScript)
+                if not executionSuccess then
+                    Library:ShowNotify("Execution Error", "Failed to execute script: " .. (executionError or "Unknown error"), 5)
+                end
+            else
+                Library:ShowNotify("Load Error", "Failed to load script from URL.", 5)
+            end
+        end)
+
+        if not scriptSuccess then
+            Library:ShowNotify("Fetch Error", "Failed to fetch script source: " .. (scriptError or "Unknown error"), 5)
+        end
     else
         Library:ShowNotify("Key Status", "Key is not valid or not found.", 5)
     end
 
-    -- Additional functions for key check
     local function CheckKey()
         if _G.CheckedKey then
             Library:ShowNotify("Key Status", "Key already checked and validated.", 5)
             return
         end
 
-        -- Validate key server-side
         local success, keyResponse = pcall(function()
-            return game:HttpGet("https://your-secure-server.com/validateKey?key=" .. _G.Key)
+            return game:HttpGet("https://redirect-api.work.ink/tokenValid/" .. _G.Key)
         end)
 
         if not success then
@@ -139,24 +153,22 @@ else
             return
         end
 
-        if keyResponse == "true" then
+        if keyResponse:find('{"valid":true}') then
             _G.CheckedKey = true
             Library:ShowNotify("Key Valid", "Key is correct and validated.", 5)
             saveKeysToFile({_G.Key})
-        elseif keyResponse == "false" then
+        elseif keyResponse:find('{"valid":false}') then
             Library:ShowNotify("Key Invalid", "Key is incorrect.", 5)
         else
             Library:ShowNotify("Validation Error", "Unexpected response: " .. keyResponse, 5)
         end
     end
 
-    -- Rest of the UI controls remain
     Library:Button(tab1Holder, "Copy Key Link", function()
         setclipboard("https://work.ink/1VuY/lyt5rxs6")
-        Library:ShowNotify("Key Link", "You have copied the Key link", 5)
     end)
 
-    local textBox = Library:TextBox(tab1Holder, "Enter Key here:", _G.Key or "Enter key here", function(txt)
+    local textBox = Library:TextBox(tab1Holder, "Enter text here:", _G.Key or "Enter key here", function(txt)
         KeyLabel:UpdateLabel("Key > " .. txt)
         _G.Key = txt
         CheckKey()
@@ -166,8 +178,3 @@ else
         Library:ToggleUI()
     end)
 end
-
-Library:Button(tab1Holder, "Copy Discord Link", function()
-    setclipboard("https://discord.gg/fh8WVADU")
-    Library:ShowNotify("Discord", "You have copied the Discord link", 5)
-end)
