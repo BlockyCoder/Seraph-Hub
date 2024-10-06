@@ -696,7 +696,8 @@ function Library:Create(xHubName)
 		print("faded now waiting 0.3 seconds")
 		wait(0.3)  -- Delay to ensure fade out completes
 		print("Distroying screen gui...")
-		game.Players.LocalPlayer.PlayerGui:FindFirstChild(xHubName):Destroy()
+		--game.Players.LocalPlayer.PlayerGui:FindFirstChild(xHubName):Destroy()
+		game.CoreGui:FindFirstChild(xHubName):Destroy()
 		print("destroyed Screen GUI")
 	end
 
