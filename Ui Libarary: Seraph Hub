@@ -245,8 +245,8 @@ contract(frame, 1.5) -- Contract to zero size over 1.5 seconds
 
 function Library:Create(xHubName)
 
-	if game.Players.LocalPlayer.PlayerGui:FindFirstChild(xHubName) then
-		game.Players.LocalPlayer.PlayerGui[xHubName]:Destroy()
+	if game.CoreGui:FindFirstChild(xHubName) then
+		game.CoreGui[xHubName]:Destroy()
 	end
 
 	local xHubName = xHubName or "UI Library"
@@ -280,7 +280,15 @@ function Library:Create(xHubName)
 	local ProgressBar = Instance.new("Frame")
 	local ProgressBackground = Instance.new("Frame")
 
+	
+	
+	local UIStroke = Instance.new("UIStroke")
 
+	-- Applying UIStroke to various elements
+	UIStroke.Parent = Menu
+	UIStroke.Color = Color3.fromRGB(50, 50, 50)
+	UIStroke.Thickness = 2
+	
 	--close and open mobile
 
 	local ImageButtonK = Instance.new("ImageButton")
@@ -293,10 +301,8 @@ function Library:Create(xHubName)
 
 	--Properties:
 	ScreenGui.Name = xHubName
-	ScreenGui.Parent = game.Players.LocalPlayer.PlayerGui
+	ScreenGui.Parent =  game.CoreGui
 	ScreenGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
-
-
 
 
 	LoadingFrame.Name = "LoadingFrame"
@@ -333,7 +339,14 @@ function Library:Create(xHubName)
 	ProgressBar.Parent = ProgressBackground
 	ProgressBar.BackgroundColor3 = Color3.fromRGB(0, 170, 255)
 	ProgressBar.Size = UDim2.new(0, 0, 1, 0)
-
+	
+	
+	UIStroke:Clone().Parent = LoadingImage
+	UIStroke:Clone().Parent = LoadingLabel
+	UIStroke:Clone().Parent = ProgressBar
+	
+	
+	
 	local function cycleLoadingText()
 		local textArray = {"Loading.", "Loading..", "Loading..."}
 		local index = 1
@@ -505,12 +518,7 @@ function Library:Create(xHubName)
 	PageHold.Name = "PageHold"
 	PageHold.Parent = ExampleContainer
 
-	local UIStroke = Instance.new("UIStroke")
 
-	-- Applying UIStroke to various elements
-	UIStroke.Parent = Menu
-	UIStroke.Color = Color3.fromRGB(50, 50, 50)
-	UIStroke.Thickness = 2
 
 
 	UIStroke:Clone().Parent = Topbar
@@ -680,10 +688,10 @@ function Library:Create(xHubName)
 
 
 	function Library:ToggleUI()
-		if game.Players.LocalPlayer.PlayerGui:FindFirstChild(xHubName).Enabled then 
-			game.Players.LocalPlayer.PlayerGui:FindFirstChild(xHubName).Enabled = false
+		if game.CoreGui:FindFirstChild(xHubName).Enabled then 
+			game.CoreGui:FindFirstChild(xHubName).Enabled = false
 		else 
-			game.Players.LocalPlayer.PlayerGui:FindFirstChild(xHubName).Enabled = true
+			game.CoreGui:FindFirstChild(xHubName).Enabled = true
 		end
 	end
 
@@ -696,8 +704,8 @@ function Library:Create(xHubName)
 		print("faded now waiting 0.3 seconds")
 		wait(0.3)  -- Delay to ensure fade out completes
 		print("Distroying screen gui...")
-		--game.Players.LocalPlayer.PlayerGui:FindFirstChild(xHubName):Destroy()
-		game.Players.LocalPlayer.PlayerGui:FindFirstChild(xHubName):Destroy()
+		--game.CoreGui:FindFirstChild(xHubName):Destroy()
+		game.CoreGui:FindFirstChild(xHubName):Destroy()
 		print("destroyed Screen GUI")
 	end
 
@@ -871,7 +879,7 @@ function Library:Create(xHubName)
 
 
 		ScreenGuiM.Name = title
-		ScreenGuiM.Parent = game.Players.LocalPlayer.PlayerGui
+		ScreenGuiM.Parent = game.CoreGui
 		ScreenGuiM.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
 		ScreenGuiM.ResetOnSpawn = false
 
