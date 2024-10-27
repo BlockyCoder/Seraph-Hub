@@ -2089,7 +2089,12 @@ function Library:Create(xHubName)
 
 		local UIStroke = Instance.new("UIStroke")
 		UIStroke.Parent = Dropdown
-
+		
+		local UIC = Instance.new("UICorner")
+		UIC.CornerRadius = UDim.new(0, 5)
+		UIC.Parent = Dropdown
+		
+		
 		local Main = Instance.new("Frame")
 		Main.Name = "Main"
 		Main.Parent = Dropdown
@@ -2111,7 +2116,7 @@ function Library:Create(xHubName)
 		Icon.BackgroundTransparency = 1.000
 		Icon.Position = UDim2.new(0.5, 0, 0.5, 0)
 		Icon.Size = UDim2.new(0, 25, 0, 25)
-		Icon.Image = "rbxassetid://6031091000"
+		Icon.Image = "rbxassetid://6031091000" --close
 		Icon.ImageColor3 = Color3.fromRGB(109, 109, 109)
 
 		local Title = Instance.new("TextLabel")
@@ -2250,6 +2255,7 @@ function Library:Create(xHubName)
 
 		Dropdown.MouseButton1Click:Connect(function()
 			if isOpen then
+				Icon.Image = "rbxassetid://6031091000"
 				List.Visible = false
 				SearchBox.Visible = false
 				isOpen = false
@@ -2259,6 +2265,8 @@ function Library:Create(xHubName)
 					openDropdown:FindFirstChild("List").Visible = false
 					openDropdown:FindFirstChild("SearchBox").Visible = false
 				end
+				Icon.Image = "rbxassetid://6031090999"
+				
 				List.Visible = true
 				SearchBox.Visible = true
 				SearchBox:CaptureFocus()
