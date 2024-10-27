@@ -1,4 +1,7 @@
 
+
+
+
 -- Gui to Lua
 -- Version: 3.2
 
@@ -245,8 +248,9 @@ contract(frame, 1.5) -- Contract to zero size over 1.5 seconds
 
 function Library:Create(xHubName)
 
-	if game.CoreGui:FindFirstChild(xHubName) then
-		game.CoreGui[xHubName]:Destroy()
+	if  game.CoreGui
+:FindFirstChild(xHubName) then
+		 game.CoreGui[xHubName]:Destroy()
 	end
 
 	local xHubName = xHubName or "UI Library"
@@ -280,15 +284,15 @@ function Library:Create(xHubName)
 	local ProgressBar = Instance.new("Frame")
 	local ProgressBackground = Instance.new("Frame")
 
-	
-	
+
+
 	local UIStroke = Instance.new("UIStroke")
 
 	-- Applying UIStroke to various elements
 	UIStroke.Parent = Menu
 	UIStroke.Color = Color3.fromRGB(50, 50, 50)
 	UIStroke.Thickness = 2
-	
+
 	--close and open mobile
 
 	local ImageButtonK = Instance.new("ImageButton")
@@ -301,7 +305,8 @@ function Library:Create(xHubName)
 
 	--Properties:
 	ScreenGui.Name = xHubName
-	ScreenGui.Parent =  game.CoreGui
+	ScreenGui.Parent =   game.CoreGui
+
 	ScreenGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
 
 
@@ -339,14 +344,14 @@ function Library:Create(xHubName)
 	ProgressBar.Parent = ProgressBackground
 	ProgressBar.BackgroundColor3 = Color3.fromRGB(0, 170, 255)
 	ProgressBar.Size = UDim2.new(0, 0, 1, 0)
-	
-	
+
+
 	UIStroke:Clone().Parent = LoadingImage
 	UIStroke:Clone().Parent = LoadingLabel
 	UIStroke:Clone().Parent = ProgressBar
-	
-	
-	
+
+
+
 	local function cycleLoadingText()
 		local textArray = {"Loading.", "Loading..", "Loading..."}
 		local index = 1
@@ -688,10 +693,13 @@ function Library:Create(xHubName)
 
 
 	function Library:ToggleUI()
-		if game.CoreGui:FindFirstChild(xHubName).Enabled then 
-			game.CoreGui:FindFirstChild(xHubName).Enabled = false
+		if  game.CoreGui
+:FindFirstChild(xHubName).Enabled then 
+			 game.CoreGui
+:FindFirstChild(xHubName).Enabled = false
 		else 
-			game.CoreGui:FindFirstChild(xHubName).Enabled = true
+			 game.CoreGui
+:FindFirstChild(xHubName).Enabled = true
 		end
 	end
 
@@ -704,8 +712,10 @@ function Library:Create(xHubName)
 		print("faded now waiting 0.3 seconds")
 		wait(0.3)  -- Delay to ensure fade out completes
 		print("Distroying screen gui...")
-		--game.CoreGui:FindFirstChild(xHubName):Destroy()
-		game.CoreGui:FindFirstChild(xHubName):Destroy()
+		-- game.CoreGui
+:FindFirstChild(xHubName):Destroy()
+		 game.CoreGui
+:FindFirstChild(xHubName):Destroy()
 		print("destroyed Screen GUI")
 	end
 
@@ -879,7 +889,8 @@ function Library:Create(xHubName)
 
 
 		ScreenGuiM.Name = title
-		ScreenGuiM.Parent = game.CoreGui
+		ScreenGuiM.Parent =  game.CoreGui
+
 		ScreenGuiM.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
 		ScreenGuiM.ResetOnSpawn = false
 
@@ -1555,18 +1566,18 @@ function Library:Create(xHubName)
 
 		return Keybind
 	end
-	
-	
-	
+
+
+
 	--Color Picker is from Kavo!!!!!!!
-	
+
 	local focusing = false
-	
-	function Library:NewColorPicker(tab, colText, defcolor, callback)
+
+	function Library:ColorPicker(tab, colText, defcolor, callback)
 		colText = colText or "ColorPicker"
 		callback = callback or function() end
 		defcolor = defcolor or Color3.fromRGB(1,1,1)
-		
+
 		local h, s, v = Color3.toHSV(defcolor)
 		local ms = game.Players.LocalPlayer:GetMouse()
 		local colorOpened = false
@@ -1624,7 +1635,7 @@ function Library:Create(xHubName)
 					colorOpened = false
 					colorElement:TweenSize(UDim2.new(0, 352, 0, 33), "InOut", "Linear", 0.08)
 					wait(0.1)
-				
+
 					local c = sample:Clone()
 					c.Parent = btn
 					local x, y = (ms.X - c.AbsolutePosition.X), (ms.Y - c.AbsolutePosition.Y)
@@ -1645,7 +1656,7 @@ function Library:Create(xHubName)
 					colorOpened = true
 					colorElement:TweenSize(UDim2.new(0, 352, 0, 141), "InOut", "Linear", 0.08, true)
 					wait(0.1)
-				
+
 					local c = sample:Clone()
 					c.Parent = btn
 					local x, y = (ms.X - c.AbsolutePosition.X), (ms.Y - c.AbsolutePosition.Y)
@@ -1667,8 +1678,8 @@ function Library:Create(xHubName)
 				return
 			end
 		end)
-		
-		
+
+
 		UICorner.CornerRadius = UDim.new(0, 4)
 		UICorner.Parent = colorElement
 
@@ -1772,7 +1783,8 @@ function Library:Create(xHubName)
 		darkcircle.ImageColor3 = Color3.fromRGB(0, 0, 0)
 		darkcircle.ImageRectOffset = Vector2.new(628, 420)
 		darkcircle.ImageRectSize = Vector2.new(48, 48)
-
+		
+		--[[
 		toggleDisabled.Name = "toggleDisabled"
 		toggleDisabled.Parent = colorInners
 		toggleDisabled.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
@@ -1806,7 +1818,52 @@ function Library:Create(xHubName)
 		onrainbow.Text = ""
 		onrainbow.TextColor3 = Color3.fromRGB(0, 0, 0)
 		onrainbow.TextSize = 14.000
+		
+		]]--
+		
+		
+		
+		local ToggleBckg = Instance.new("TextButton")
+		local UICorner = Instance.new("UICorner")
+		local Icon = Instance.new("ImageLabel")
+		local UIScale = Instance.new("UIScale")
 
+		--Properties:
+
+		ToggleBckg.Name = "ToggleBckg"
+		ToggleBckg.Parent = colorInners
+		ToggleBckg.AnchorPoint = Vector2.new(0.5, 0.5)
+		ToggleBckg.BackgroundColor3 = Color3.fromRGB(29, 29, 29)
+		ToggleBckg.Position = UDim2.new(0.722793519, 0, 0.189809456, 0)
+		ToggleBckg.Size = UDim2.new(0, 20, 0, 20)
+		ToggleBckg.Text = ""
+		
+		UICorner.CornerRadius = UDim.new(0, 5)
+		UICorner.Parent = ToggleBckg
+
+		Icon.Name = "Icon"
+		Icon.Parent = ToggleBckg
+		Icon.AnchorPoint = Vector2.new(0.5, 0.5)
+		Icon.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+		Icon.BackgroundTransparency = 1.000
+		Icon.Position = UDim2.new(0.5, 0, 0.5, 0)
+		Icon.Size = UDim2.new(0, 20, 0, 20)
+		Icon.Image = "http://www.roblox.com/asset/?id=13319773302"
+		Icon.ImageColor3 = Color3.fromRGB(0, 0, 0)
+		Icon.ImageTransparency = 1.000
+
+		UIScale.Parent = Icon
+		UIScale.Scale = 0.800
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
 		togName_2.Name = "togName"
 		togName_2.Parent = colorInners
 		togName_2.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
@@ -1818,13 +1875,13 @@ function Library:Create(xHubName)
 		togName_2.TextColor3 = Color3.fromRGB(255,255,255)
 		togName_2.TextSize = 14.000
 		togName_2.TextXAlignment = Enum.TextXAlignment.Left
-		
-		
+
+
 		UIStroke:Clone().Parent = colorElement
 		UIStroke:Clone().Parent = colorHeader
 		UIStroke:Clone().Parent = colorInners
 
-		
+
 		local hovering = false
 
 		colorElement.MouseEnter:Connect(function()
@@ -1852,16 +1909,20 @@ function Library:Create(xHubName)
 				touch.ImageColor3 = Color3.fromRGB(64, 64, 64)
 				colorHeader.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
 				togName.TextColor3 = Color3.fromRGB(255,255,255)
-			
+
 				viewInfo.ImageColor3 = Color3.fromRGB(64, 64, 64)
 				colorInners.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
-				toggleDisabled.ImageColor3 = Color3.fromRGB(64, 64, 64)
-				toggleEnabled.ImageColor3 = Color3.fromRGB(64, 64, 64)
+				--toggleDisabled.ImageColor3 = Color3.fromRGB(64, 64, 64)
+				--toggleEnabled.ImageColor3 = Color3.fromRGB(64, 64, 64)
+				
+				Icon.ImageColor3  = Color3.fromRGB(64, 64, 64) --(255, 100, 100)
+				
+				
 				togName_2.TextColor3 = Color3.fromRGB(255,255,255)
 				Sample.ImageColor3 = Color3.fromRGB(64, 64, 64)
 			end
 		end)()
-	
+
 		local plr = game.Players.LocalPlayer
 		local mouse = plr:GetMouse()
 		local uis = game:GetService('UserInputService')
@@ -1939,15 +2000,19 @@ function Library:Create(xHubName)
 		end
 		local function togglerainbow()
 			if rainbow then
-				game.TweenService:Create(toggleEnabled, TweenInfo.new(0.1, Enum.EasingStyle.Linear, Enum.EasingDirection.InOut), {
+				game.TweenService:Create(Icon, TweenInfo.new(0.1, Enum.EasingStyle.Linear, Enum.EasingDirection.InOut), {
 					ImageTransparency = 1
 				}):Play()
+				ToggleBckg.BackgroundColor3 = Color3.fromRGB(75, 75, 75)
+
 				rainbow = false
 				rainbowconnection:Disconnect()
 			else
-				game.TweenService:Create(toggleEnabled, TweenInfo.new(0.1, Enum.EasingStyle.Linear, Enum.EasingDirection.InOut), {
+				game.TweenService:Create(Icon, TweenInfo.new(0.1, Enum.EasingStyle.Linear, Enum.EasingDirection.InOut), {
 					ImageTransparency = 0
 				}):Play()
+				ToggleBckg.BackgroundColor3 = Color3.fromRGB(255, 100, 100)
+				
 				rainbow = true
 				rainbowconnection = rs.RenderStepped:Connect(function()
 					setrgbcolor({zigzag(counter),1,1})
@@ -1956,7 +2021,7 @@ function Library:Create(xHubName)
 			end
 		end
 
-		onrainbow.MouseButton1Click:Connect(togglerainbow)
+		ToggleBckg.MouseButton1Click:Connect(togglerainbow)
 		--
 		mouse.Move:connect(cp)
 		rgb.MouseButton1Down:connect(function()colorpicker=true end)
@@ -1969,28 +2034,28 @@ function Library:Create(xHubName)
 		end)
 		setcolor({h,s,v})
 	end
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 	function Library:Dropdown(tab, dropdownName, options, callback, settings)
 		settings = settings or {}
