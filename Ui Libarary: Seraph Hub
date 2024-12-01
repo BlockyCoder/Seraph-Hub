@@ -627,12 +627,12 @@ function Library:Create(xHubName)
 
 	Close.MouseButton1Click:Connect(function()
 		print("Close clicked!")
-		-- Fade out the Main frame and ShadowHolder frame
+		
 		fadeOut(Menu, 0.3)
 		fadeOut(Topbar, 0.3)
 		fadeOut(Shadow, 0.3)
 		print("faded now waiting 0.3 seconds")
-		wait(0.3)  -- Delay to ensure fade out completes
+		wait(0.3)  
 		print("Distroying screen gui...")
 		ScreenGui:Destroy()
 		print("destroyed Screen GUI")
@@ -718,10 +718,8 @@ function Library:Create(xHubName)
 		print("faded now waiting 0.3 seconds")
 		wait(0.3)  -- Delay to ensure fade out completes
 		print("Distroying screen gui...")
-			-- game.CoreGui
-			:FindFirstChild(xHubName):Destroy()
-		game.CoreGui
-			:FindFirstChild(xHubName):Destroy()
+			-- game.CoreGui:FindFirstChild(xHubName):Destroy()
+		game.CoreGui:FindFirstChild(xHubName):Destroy()
 		print("destroyed Screen GUI")
 	end
 
@@ -1037,7 +1035,7 @@ function Library:Create(xHubName)
 
 		-- Button click event
 		Button.MouseButton1Click:Connect(function()
-			print("Button clicked: " .. ButName)
+			--print("Button clicked: " .. ButName)
 			--ImageLabel.ImageColor3 = Color3.fromRGB(255, 255, 255)
 			colorChange(ImageLabel, Color3.fromRGB(255, 255, 255), 2)
 			Callback()
