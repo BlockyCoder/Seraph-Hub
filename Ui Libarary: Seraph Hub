@@ -626,7 +626,6 @@ function Library:Create(xHubName)
 	end)
 
 	Close.MouseButton1Click:Connect(function()
-		print("Close clicked!")
 		
 		fadeOut(Menu, 0.3)
 		fadeOut(Topbar, 0.3)
@@ -1035,7 +1034,6 @@ function Library:Create(xHubName)
 
 		-- Button click event
 		Button.MouseButton1Click:Connect(function()
-			--print("Button clicked: " .. ButName)
 			--ImageLabel.ImageColor3 = Color3.fromRGB(255, 255, 255)
 			colorChange(ImageLabel, Color3.fromRGB(255, 255, 255), 2)
 			Callback()
@@ -1054,10 +1052,6 @@ function Library:Create(xHubName)
 			}):Play()
 		end)
 
-
-
-
-		print("Button created: " .. ButName .. " in " .. Parent.Name)
 
 		function ButtonFunction:UpdateButton(newTitle)
 			TextLabel.Text = newTitle
