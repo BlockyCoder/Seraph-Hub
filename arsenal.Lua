@@ -1,3 +1,6 @@
+
+--The codes aren't mine!! i changed the UI ONLY!! i found it on the internet!
+
 local Library = loadstring(game:HttpGet("https://raw.githubusercontent.com/BlockyCoder/Seraph-Hub/main/Ui Libarary: Seraph Hub"))()
 
 local Window = Library:Create("The Example UI for the script! ?")
