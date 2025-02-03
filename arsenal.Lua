@@ -3,7 +3,7 @@
 
 local Library = loadstring(game:HttpGet("https://raw.githubusercontent.com/BlockyCoder/Seraph-Hub/main/Ui Libarary: Seraph Hub"))()
 
-local Window = Library:Create("The Example UI for the script! ?")
+local Window = Library:Create("Arsenal | Mobile!! This Is Not Mine! i just changed the UI!")
 
 -- Tabs
 local Combat = Library:Tab("Combat")
