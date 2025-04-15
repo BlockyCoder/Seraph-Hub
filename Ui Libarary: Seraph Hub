@@ -22,9 +22,17 @@ function Library:Drag(obj)
 	local dragInput
 	local dragStart
 	local startPos
-
+	
+	
+	local startSize = gui.Size
+	
 	local function update(input)
 		local delta = input.Position - dragStart
+		local newWidth = math.max(200, startSize.X + delta.X)  -- Minimum width is 200
+		local newHeight = math.max(150, startSize.Y + delta.Y)  -- Minimum height is 150
+
+		-- Set the new size
+		gui.Size = UDim2.new(0, newWidth, 0, newHeight)
 		gui.Position = UDim2.new(startPos.X.Scale, startPos.X.Offset + delta.X, startPos.Y.Scale, startPos.Y.Offset + delta.Y)
 	end
 
@@ -2274,7 +2282,7 @@ function Library:Create(xHubName)
 				openDropdown = Dropdown
 			end
 		end)
-		
+
 
 
 		function Library:UpdateDropdown(dropdown, newOptions)
@@ -2283,7 +2291,7 @@ function Library:Create(xHubName)
 			local List = dropdown.Parent:FindFirstChild("List")
 			if not List then return end
 
-			
+
 			for _, child in ipairs(List:GetChildren()) do
 				if child:IsA("TextButton") then
 					child:Destroy()
@@ -2317,7 +2325,7 @@ function Library:Create(xHubName)
 			List.CanvasSize = UDim2.new(0, 0, 0, #newOptions * (25 + 3))
 		end
 
-			
+
 		return Dropdown
 	end
 
