@@ -101,9 +101,14 @@ function Library:EnableResizing(gui)
 	end)
 	
 	gui:GetPropertyChangedSignal("Size"):Connect(function()
-		for _, child in ipairs(gui:GetChildren()) do
-			if child:IsA("GuiObject") then
-				child.Size = UDim2.new(1, -20, child.Size.Y.Scale, child.Size.Y.Offset + 5)-- example adjustment
+		for _, Par in ipairs(gui.ExampleContainer.PageHold:GetChildren()) do
+			if Par:IsA("Frame") then
+				for _, child in ipairs(Par.Section.Holder:GetChildren()) do
+					if child:IsA("GuiObject") and child ~= handle and not child:IsA("UIListLayout") then
+						-- Adjust the size of the child
+						child.Size = UDim2.new(1, -20, child.Size.Y.Scale, child.Size.Y.Offset + 5)
+					end
+				end
 			end
 		end
 	end)
