@@ -17,27 +17,18 @@ function Library:Drag(obj)
 	local UserInputService = game:GetService("UserInputService")
 
 	local gui = obj
-
-	local dragging
+	local dragging = false
 	local dragInput
 	local dragStart
 	local startPos
-	
-	
-	local startSize = gui.Size
-	
+
 	local function update(input)
 		local delta = input.Position - dragStart
-		local newWidth = math.max(200, startSize.X + delta.X)  -- Minimum width is 200
-		local newHeight = math.max(150, startSize.Y + delta.Y)  -- Minimum height is 150
-
-		-- Set the new size
-		gui.Size = UDim2.new(0, newWidth, 0, newHeight)
 		gui.Position = UDim2.new(startPos.X.Scale, startPos.X.Offset + delta.X, startPos.Y.Scale, startPos.Y.Offset + delta.Y)
 	end
 
 	gui.InputBegan:Connect(function(input)
-		if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+		if input.UserInputType == Enum.UserInputType.MouseButton1 then
 			dragging = true
 			dragStart = input.Position
 			startPos = gui.Position
@@ -51,7 +42,7 @@ function Library:Drag(obj)
 	end)
 
 	gui.InputChanged:Connect(function(input)
-		if input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch then
+		if input.UserInputType == Enum.UserInputType.MouseMovement then
 			dragInput = input
 		end
 	end)
@@ -63,6 +54,50 @@ function Library:Drag(obj)
 	end)
 end
 
+
+function Library:EnableResizing(gui)
+	local UserInputService = game:GetService("UserInputService")
+
+	local handle = Instance.new("TextButton")
+	handle.Size = UDim2.new(0, 20, 0, 20)
+	handle.Position = UDim2.new(1, -20, 1, -20)
+	handle.AnchorPoint = Vector2.new(1, 1)
+	handle.BackgroundColor3 = Color3.fromRGB(150, 150, 150)
+	handle.BorderSizePixel = 0
+	handle.Text = ""
+	handle.Parent = gui
+
+	local resizing = false
+	local dragStart
+	local startSize
+
+	local function resize(input)
+		local delta = input.Position - dragStart
+		local newWidth = math.max(200, startSize.X.Offset + delta.X)
+		local newHeight = math.max(150, startSize.Y.Offset + delta.Y)
+		gui.Size = UDim2.new(0, newWidth, 0, newHeight)
+	end
+
+	handle.InputBegan:Connect(function(input)
+		if input.UserInputType == Enum.UserInputType.MouseButton1 then
+			resizing = true
+			dragStart = input.Position
+			startSize = gui.Size
+
+			input.Changed:Connect(function()
+				if input.UserInputState == Enum.UserInputState.End then
+					resizing = false
+				end
+			end)
+		end
+	end)
+
+	UserInputService.InputChanged:Connect(function(input)
+		if input.UserInputType == Enum.UserInputType.MouseMovement and resizing then
+			resize(input)
+		end
+	end)
+end
 
 
 
@@ -703,6 +738,7 @@ function Library:Create(xHubName)
 
 
 	Library:Drag(Menu, Topbar)
+	Library:EnableResizing(Menu, Topbar)
 
 
 	function Library:ToggleUI()
