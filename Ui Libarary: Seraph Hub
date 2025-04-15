@@ -24,7 +24,10 @@ function Library:Drag(obj)
 
 	local function update(input)
 		local delta = input.Position - dragStart
-		gui.Position = UDim2.new(startPos.X.Scale, startPos.X.Offset + delta.X, startPos.Y.Scale, startPos.Y.Offset + delta.Y)
+		gui.Position = UDim2.new(
+			startPos.X.Scale, startPos.X.Offset + delta.X,
+			startPos.Y.Scale, startPos.Y.Offset + delta.Y
+		)
 	end
 
 	gui.InputBegan:Connect(function(input)
@@ -53,7 +56,6 @@ function Library:Drag(obj)
 		end
 	end)
 end
-
 
 function Library:EnableResizing(gui)
 	local UserInputService = game:GetService("UserInputService")
@@ -98,6 +100,7 @@ function Library:EnableResizing(gui)
 		end
 	end)
 end
+
 
 
 
@@ -736,9 +739,8 @@ function Library:Create(xHubName)
 	end)
 
 
-
 	Library:Drag(Menu, Topbar)
-	Library:EnableResizing(Menu, Topbar)
+	Library:EnableResizing(Menu)
 
 
 	function Library:ToggleUI()
