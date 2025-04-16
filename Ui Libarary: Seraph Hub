@@ -881,27 +881,6 @@ function Library:Create(xHubName)
 		return Holder
 	end
 
-
-	function Library:SaveConfig(name, data)
-		local success, err = pcall(function()
-			local json = game:GetService("HttpService"):JSONEncode(data)
-			if not isfolder("UI_Library_Configs") then
-				makefolder("UI_Library_Configs")
-			end
-			writefile("UI_Library_Configs/"..name..".json", json)
-		end)
-		return success, err
-	end
-
-	function Library:LoadConfig(name)
-		local success, err = pcall(function()
-			if not isfolder("UI_Library_Configs") then return nil end
-			local path = "UI_Library_Configs/"..name..".json"
-			if not isfile(path) then return nil end
-			return game:GetService("HttpService"):JSONDecode(readfile(path))
-		end)
-		return success and err or nil
-	end
 	
 	
 	function Library:ShowNotify(title, text, duration)
@@ -974,9 +953,10 @@ function Library:Create(xHubName)
 
 		Notification:Destroy()
 	end
+	
 
-
-
+	
+	
 	function Library:Button(Parent, ButName, Callback)
 		local ButName = ButName or "Button"
 		local ButtonFunction = {}
@@ -2073,7 +2053,80 @@ function Library:Create(xHubName)
 
 
 
+	function Library:LoadConfig(name)
+		-- Double-check environment support
+		if type(isfile) ~= "function" or type(readfile) ~= "function" then
+			warn("[Config] File functions not available")
+			return nil
+		end
 
+		local path = "UI_Library_Configs/"..name..".json"
+
+		-- Safe file existence check
+		local fileExists = pcall(function() return isfile(path) end)
+		if not fileExists then
+			return nil
+		end
+
+		-- Attempt to read and parse
+		local success, data = pcall(function()
+			local content = readfile(path)
+			return game:GetService("HttpService"):JSONDecode(content)
+		end)
+
+		if not success then
+			warn("[Config] Failed to load config:", data)
+			return nil
+		end
+
+		return data
+	end
+
+	function Library:SaveConfig(name, data)
+		-- Environment check
+		if type(makefolder) ~= "function" or type(writefile) ~= "function" then
+			warn("[Config] File functions not available")
+			return false, "File functions not available"
+		end
+
+		-- Validate data
+		if type(data) ~= "table" then
+			return false, "Invalid config data (must be table)"
+		end
+
+		-- Ensure config directory
+		local folderSuccess, folderError = pcall(function()
+			if not isfolder("UI_Library_Configs") then
+				makefolder("UI_Library_Configs")
+			end
+		end)
+
+		if not folderSuccess then
+			warn("[Config] Failed to create config folder:", folderError)
+			return false, folderError
+		end
+
+		-- Serialize and save
+		local serializeSuccess, serialized = pcall(function()
+			return game:GetService("HttpService"):JSONEncode(data)
+		end)
+
+		if not serializeSuccess then
+			warn("[Config] Failed to serialize config:", serialized)
+			return false, serialized
+		end
+
+		local writeSuccess, writeError = pcall(function()
+			writefile("UI_Library_Configs/"..name..".json", serialized)
+		end)
+
+		if not writeSuccess then
+			warn("[Config] Failed to write config:", writeError)
+			return false, writeError
+		end
+
+		return true
+	end
 
 
 
@@ -2343,7 +2396,7 @@ function Library:Create(xHubName)
 		return Dropdown
 	end
 
-
+	
 	return Library
 end
 return Library
