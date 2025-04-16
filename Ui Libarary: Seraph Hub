@@ -57,64 +57,6 @@ function Library:Drag(obj)
 	end)
 end
 
-function Library:EnableResizing(gui)
-	local UserInputService = game:GetService("UserInputService")
-
-	local handle = Instance.new("TextButton")
-	handle.Size = UDim2.new(0, 20, 0, 20)
-	handle.Position = UDim2.new(1, -20, 1, -20)
-	handle.AnchorPoint = Vector2.new(1, 1)
-	handle.BackgroundColor3 = Color3.fromRGB(150, 150, 150)
-	handle.BorderSizePixel = 0
-	handle.Text = ""
-	handle.Parent = gui
-
-	local resizing = false
-	local dragStart
-	local startSize
-
-	local function resize(input)
-		local delta = input.Position - dragStart
-		local newWidth = math.max(200, startSize.X.Offset + delta.X)
-		local newHeight = math.max(150, startSize.Y.Offset + delta.Y)
-		gui.Size = UDim2.new(0, newWidth, 0, newHeight)
-	end
-
-	handle.InputBegan:Connect(function(input)
-		if input.UserInputType == Enum.UserInputType.MouseButton1 then
-			resizing = true
-			dragStart = input.Position
-			startSize = gui.Size
-
-			input.Changed:Connect(function()
-				if input.UserInputState == Enum.UserInputState.End then
-					resizing = false
-				end
-			end)
-		end
-	end)
-
-	UserInputService.InputChanged:Connect(function(input)
-		if input.UserInputType == Enum.UserInputType.MouseMovement and resizing then
-			resize(input)
-		end
-	end)
-
-	gui:GetPropertyChangedSignal("Size"):Connect(function()
-
-				for _, desc in ipairs(gui:GetDescendants()) do
-			if desc:IsA("GuiObject") and desc ~= handle and not desc:IsA("UIListLayout") then
-						-- Adjust the size of the child
-				desc.Size = UDim2.new(1, -20, desc.Size.Y.Scale, desc.Size.Y.Offset + 5)
-						
-				gui.Topbar.Size = UDim2.new(1, -20, desc.Size.Y.Scale, desc.Size.Y.Offset + 5)
-			
-			end
-		end
-	end)
-end
-
-
 
 
 
@@ -754,7 +696,6 @@ function Library:Create(xHubName)
 
 
 	Library:Drag(Menu, Topbar)
-	Library:EnableResizing(Menu)
 
 
 	function Library:ToggleUI()
@@ -941,7 +882,28 @@ function Library:Create(xHubName)
 	end
 
 
+	function Library:SaveConfig(name, data)
+		local success, err = pcall(function()
+			local json = game:GetService("HttpService"):JSONEncode(data)
+			if not isfolder("UI_Library_Configs") then
+				makefolder("UI_Library_Configs")
+			end
+			writefile("UI_Library_Configs/"..name..".json", json)
+		end)
+		return success, err
+	end
 
+	function Library:LoadConfig(name)
+		local success, err = pcall(function()
+			if not isfolder("UI_Library_Configs") then return nil end
+			local path = "UI_Library_Configs/"..name..".json"
+			if not isfile(path) then return nil end
+			return game:GetService("HttpService"):JSONDecode(readfile(path))
+		end)
+		return success and err or nil
+	end
+	
+	
 	function Library:ShowNotify(title, text, duration)
 
 		local ScreenGuiM = Instance.new("ScreenGui")
