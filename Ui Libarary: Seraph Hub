@@ -99,23 +99,21 @@ function Library:EnableResizing(gui)
 			resize(input)
 		end
 	end)
-	
+
 	gui:GetPropertyChangedSignal("Size"):Connect(function()
-		for _, Par in ipairs(gui.ExampleContainer.PageHold:GetChildren()) do
-			if Par:IsA("Frame") then
-				for _, child in ipairs(Par.Section.Holder:GetChildren()) do
-					if child:IsA("GuiObject") and child ~= handle and not child:IsA("UIListLayout") then
+
+				for _, desc in ipairs(gui:GetDescendants()) do
+			if desc:IsA("GuiObject") and desc ~= handle and not desc:IsA("UIListLayout") then
 						-- Adjust the size of the child
-						child.Size = UDim2.new(1, -20, child.Size.Y.Scale, child.Size.Y.Offset + 5)
-						Par.Size = UDim2.new(1, -20, child.Size.Y.Scale, child.Size.Y.Offset + 5)
-						gui.Topbar.Size = UDim2.new(1, -20, child.Size.Y.Scale, child.Size.Y.Offset + 5)
-					end
-				end
+				desc.Size = UDim2.new(1, -20, desc.Size.Y.Scale, desc.Size.Y.Offset + 5)
+						
+				gui.Topbar.Size = UDim2.new(1, -20, desc.Size.Y.Scale, desc.Size.Y.Offset + 5)
+			
 			end
 		end
 	end)
-
 end
+
 
 
 
