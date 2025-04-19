@@ -2300,13 +2300,6 @@ function Library:Create(xHubName)
 			List.CanvasSize = UDim2.new(0, 0, 0, #newOptions * (25 + 3))
 		end
 
-		-- Track selected option
-		Dropdown.Selected = selectedOption
-		Dropdown.Callback = callback
-		Dropdown.Main = Main
-		Dropdown.SearchBox = SearchBox
-		Dropdown.List = List
-
 		function Dropdown:Set(optionText)
 			for _, option in ipairs(List:GetChildren()) do
 				if option:IsA("TextButton") and option.Text == optionText then
