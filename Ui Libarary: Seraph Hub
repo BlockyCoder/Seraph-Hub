@@ -242,6 +242,8 @@ contract(exampleElement, duration)
 
 --Mains
 
+local plr = game:GetService("Players").LocalPlayer
+
 function Library:Create(xHubName)
 
 	if  game.CoreGui:FindFirstChild(xHubName) then
@@ -301,7 +303,7 @@ function Library:Create(xHubName)
 
 	--Properties:
 	ScreenGui.Name = xHubName
-	ScreenGui.Parent =   game.CoreGui
+	ScreenGui.Parent = game.CoreGui
 
 	ScreenGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
 
@@ -698,13 +700,10 @@ function Library:Create(xHubName)
 
 
 	function Library:ToggleUI()
-		if  game.CoreGui
-			:FindFirstChild(xHubName).Enabled then 
-			game.CoreGui
-				:FindFirstChild(xHubName).Enabled = false
+		if  game.CoreGui:FindFirstChild(xHubName).Enabled then 
+			game.CoreGui:FindFirstChild(xHubName).Enabled = false
 		else 
-			game.CoreGui
-				:FindFirstChild(xHubName).Enabled = true
+			game.CoreGui:FindFirstChild(xHubName).Enabled = true
 		end
 	end
 
@@ -1066,7 +1065,7 @@ function Library:Create(xHubName)
 		return labelFunctions
 	end
 
-
+	-- TextBox function
 	function Library:TextBox(parent, titleText, defaultValue, callback)
 		-- Create main Textbox container
 		local Textbox = Instance.new("TextButton")
@@ -1111,7 +1110,7 @@ function Library:Create(xHubName)
 		-- Create and configure TextBox
 		local TextBox = Instance.new("TextBox")
 		TextBox.Parent = Status
-		TextBox.Active = false
+		TextBox.Active = true  -- Make it interactive
 		TextBox.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
 		TextBox.BorderColor3 = Color3.fromRGB(27, 42, 53)
 		TextBox.ClipsDescendants = true
@@ -1120,44 +1119,56 @@ function Library:Create(xHubName)
 		TextBox.ClearTextOnFocus = false
 		TextBox.Font = Enum.Font.Gotham
 		TextBox.PlaceholderColor3 = Color3.fromRGB(104, 104, 104)
-		--TextBox.PlaceholderText = defaultValue
 		TextBox.Text = defaultValue
 		TextBox.TextColor3 = Color3.fromRGB(177, 177, 177)
 		TextBox.TextSize = 12.000
 
-
-		UIStroke:Clone().Parent = TextBox
-		UIStroke:Clone().Parent = Status
-
+		-- Apply UIStroke to TextBox and Status
+		local UIStroke = Instance.new("UIStroke")
+		UIStroke.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
+		UIStroke.Color = Color3.fromRGB(50, 50, 50)
+		UIStroke.Thickness = 2
+		UIStroke.Parent = TextBox
+		UIStroke.Parent = Status
 
 		-- Apply corner radius to TextBox
 		local UICorner_2 = Instance.new("UICorner")
 		UICorner_2.CornerRadius = UDim.new(0, 2)
 		UICorner_2.Parent = TextBox
 
-		-- Event handling for TextBox text changed
+		-- Textbox functions table
+		local textboxFunctions = {}
+
+		function textboxFunctions:SetText(newText)
+			TextBox.Text = newText
+			if callback then
+				callback(newText, true)
+			end
+		end
+
+		function textboxFunctions:GetText()
+			return TextBox.Text
+		end
+
+		-- Event connections
 		TextBox:GetPropertyChangedSignal("Text"):Connect(function()
-			callback(TextBox.Text, false)
+			if callback then
+				callback(TextBox.Text, false)
+			end
 		end)
 
-		local function UpdateText()
-			callback(TextBox.Text, true)
-		end
-		
-		function Textbox:set(newText)
-			TextBox.Text = newText
-			callback(TextBox.Text, false)
-		end
-		
-		TextBox.FocusLost:Connect(UpdateText)
+		TextBox.FocusLost:Connect(function()
+			if callback then
+				callback(TextBox.Text, true)
+			end
+		end)
 
-		return TextBox, UpdateText 
+		return textboxFunctions
 	end
 
 
-	--toggle
+	-- Toggle function
 	function Library:Toggle(tab, toggleName, callback)
-
 		local Toggle = Instance.new("TextButton")
 		Toggle.Name = "Toggle"
 		Toggle.Parent = tab
@@ -1182,8 +1193,6 @@ function Library:Create(xHubName)
 		Tsound.Parent = Toggle
 		Tsound.SoundId = "rbxassetid://2809024273"
 		Tsound.Volume = 0.5
-
-
 
 		local TextLabel = Instance.new("TextLabel")
 		TextLabel.Parent = Toggle
@@ -1223,9 +1232,7 @@ function Library:Create(xHubName)
 		UICorner_2.CornerRadius = UDim.new(0, 5)
 		UICorner_2.Parent = ToggleBckg
 
-
 		uistrokeT:Clone().Parent = ToggleBckg
-
 
 		local Icon = Instance.new("ImageLabel")
 		Icon.Name = "Icon"
@@ -1244,21 +1251,38 @@ function Library:Create(xHubName)
 		UIScale.Parent = Icon
 		UIScale.Scale = 0.800
 
-		
 		local isToggled = false
 
-		function Toggle:Set(state)
-			isToggled = state
+		local toggleFunctions = {}
+
+		local function updateVisualState()
 			Icon.ImageTransparency = isToggled and 0 or 1
 			ToggleBckg.BackgroundColor3 = isToggled and Color3.fromRGB(255, 100, 100) or Color3.fromRGB(29, 29, 29)
+			if callback then
+				callback(isToggled)
+			end
 		end
 
-		local function updateToggleState()
-			self:Set(not isToggled)
-			callback(isToggled)
+		function toggleFunctions:Set(state)
+			if isToggled ~= state then
+				isToggled = state
+				updateVisualState()
+			end
+			return isToggled
 		end
 
-		Toggle.MouseButton1Click:Connect(updateToggleState)
+		function toggleFunctions:Get()
+			return isToggled
+		end
+
+		function toggleFunctions:Toggle()
+			return self:Set(not isToggled)
+		end
+
+		-- Event Connections
+		Toggle.MouseButton1Click:Connect(function()
+			toggleFunctions:Toggle()
+		end)
 
 		Toggle.MouseEnter:Connect(function()
 			Tsound:Play()
@@ -1266,11 +1290,10 @@ function Library:Create(xHubName)
 		end)
 
 		Toggle.MouseLeave:Connect(function()
-			TweenService:Create(uistrokeT, TweenInfo.new(0.1), {Color = Color3.fromRGB(50,50,50)}):Play()
+			TweenService:Create(uistrokeT, TweenInfo.new(0.1), {Color = Color3.fromRGB(50, 50, 50)}):Play()
 		end)
 
-		
-		return Toggle
+		return toggleFunctions
 	end
 
 
@@ -2075,7 +2098,6 @@ function Library:Create(xHubName)
 		UIC.CornerRadius = UDim.new(0, 5)
 		UIC.Parent = Dropdown
 
-
 		local Main = Instance.new("Frame")
 		Main.Name = "Main"
 		Main.Parent = Dropdown
@@ -2147,24 +2169,10 @@ function Library:Create(xHubName)
 		UIListLayout.SortOrder = Enum.SortOrder.LayoutOrder
 		UIListLayout.Padding = UDim.new(0, 3)
 
-		local function updateOptions(filterText)
-			for i, optionText in ipairs(options) do
-				local optionButton = List:FindFirstChild("Option" .. i)
-				if not filterText or optionText:lower():find(filterText:lower()) then
-					optionButton.Visible = true
-				else
-					optionButton.Visible = false
-				end
-			end
-			List.CanvasSize = UDim2.new(0, 0, 0, #List:GetChildren() * (25 + 3))
-		end
-
-		SearchBox:GetPropertyChangedSignal("Text"):Connect(function()
-			updateOptions(SearchBox.Text)
-		end)
-
 		local selectedOption = nil
-		for i, optionText in ipairs(options) do
+		local currentOptions = table.clone(options)
+
+		local function createOption(i, optionText)
 			local Option = Instance.new("TextButton")
 			Option.Name = "Option" .. i
 			Option.Parent = List
@@ -2234,6 +2242,30 @@ function Library:Create(xHubName)
 				isOpen = false
 				openDropdown = nil
 			end)
+
+			return Option
+		end
+
+		local function updateOptions(filterText)
+			for i, optionText in ipairs(currentOptions) do
+				local optionButton = List:FindFirstChild("Option" .. i)
+				if optionButton then
+					if not filterText or optionText:lower():find(filterText:lower()) then
+						optionButton.Visible = true
+					else
+						optionButton.Visible = false
+					end
+				end
+			end
+		end
+
+		SearchBox:GetPropertyChangedSignal("Text"):Connect(function()
+			updateOptions(SearchBox.Text)
+		end)
+
+		-- Create initial options
+		for i, optionText in ipairs(currentOptions) do
+			createOption(i, optionText)
 		end
 
 		Dropdown.MouseButton1Click:Connect(function()
@@ -2252,76 +2284,53 @@ function Library:Create(xHubName)
 
 				List.Visible = true
 				SearchBox.Visible = true
+				SearchBox.Text = ""
 				SearchBox:CaptureFocus()
 				isOpen = true
 				openDropdown = Dropdown
+				updateOptions("")
 			end
 		end)
 
+		local dropdownFunctions = {}
 
-
-		function Library:UpdateDropdown(dropdown, newOptions)
+		function dropdownFunctions:Update(newOptions)
 			assert(type(newOptions) == "table" and #newOptions > 0, "Options should be a non-empty table.")
 
-			local List = dropdown.Parent:FindFirstChild("List")
-			if not List then return end
-
-
+			-- Clear existing options
 			for _, child in ipairs(List:GetChildren()) do
 				if child:IsA("TextButton") then
 					child:Destroy()
 				end
 			end
 
-			-- Update options dynamically
-			for i, optionText in ipairs(newOptions) do
-				local Option = Instance.new("TextButton")
-				Option.Name = "Option" .. i
-				Option.Parent = List
-				Option.BackgroundColor3 = Color3.fromRGB(55, 55, 55)
-				Option.BorderSizePixel = 0
-				Option.Size = UDim2.new(1, 0, 0, 25)
-				Option.Text = optionText
-				Option.TextColor3 = Color3.fromRGB(214, 214, 214)
-				Option.TextSize = 12
-				Option.AutoButtonColor = true
+			-- Update current options
+			currentOptions = table.clone(newOptions)
 
-				Option.MouseButton1Click:Connect(function()
-					dropdown.Main.Title.Text = optionText
-					List.Visible = false
-					dropdown.SearchBox.Visible = false
-					if dropdown.callback then
-						dropdown.callback(optionText)
-					end
-				end)
+			-- Add new options
+			for i, optionText in ipairs(currentOptions) do
+				createOption(i, optionText)
 			end
 
-			-- Adjust scrolling size
-			List.CanvasSize = UDim2.new(0, 0, 0, #newOptions * (25 + 3))
+			List.CanvasSize = UDim2.new(0, 0, 0, #currentOptions * (25 + 3))
+			updateOptions(SearchBox.Text)
 		end
 
-		function Dropdown:Set(optionText)
-			for _, option in ipairs(List:GetChildren()) do
-				if option:IsA("TextButton") and option.Text == optionText then
-					self.Selected = optionText
-					self.Main.Title.Text = optionText
-					if self.Callback then
-						self.Callback(optionText)
-					end
-					self.List.Visible = false
-					self.SearchBox.Visible = false
-					isOpen = false
-					openDropdown = nil
-					break
+		function dropdownFunctions:Set(optionText)
+			if table.find(currentOptions, optionText) then
+				selectedOption = optionText
+				Title.Text = selectedOption
+				if callback then
+					callback(selectedOption)
 				end
 			end
 		end
 
-		function Dropdown:Get()
-			return self.Selected
+		function dropdownFunctions:Get()
+			return selectedOption
 		end
 
-		return Dropdown
+		return dropdownFunctions
 	end
 
 
@@ -2331,3 +2340,9 @@ return Library
 
 
 --UDim2.new(0.5, 0, 0.5, 0)
+
+
+
+
+
+
