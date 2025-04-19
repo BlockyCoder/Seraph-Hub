@@ -722,16 +722,14 @@ function Library:Create(xHubName)
 		print("destroyed Screen GUI")
 	end
 
-	function Library:Tab(TabNam)
-		local TabNam = TabNam or "Tab"
+	function Library:Tab(TabNam, IconId)
+		TabNam = TabNam or "Tab"
 
-		--Tab button
-
+		-- Tab button
 		local Example = Instance.new("TextButton")
 		local UICorner = Instance.new("UICorner")
 		local TextLabel = Instance.new("TextLabel")
-
-		--Properties:
+		local Icon = Instance.new("ImageLabel")
 
 		Example.Name = TabNam
 		Example.Parent = Holder2
@@ -747,52 +745,48 @@ function Library:Create(xHubName)
 		UICorner.CornerRadius = UDim.new(0, 5)
 		UICorner.Parent = Example
 
+		-- Icon (optional)
+		if IconId then
+			Icon.Name = "Icon"
+			Icon.Parent = Example
+			Icon.BackgroundTransparency = 1
+			Icon.Size = UDim2.new(0, 16, 0, 16)
+			Icon.Position = UDim2.new(0.05, 0, 0.5, -8)
+			Icon.Image = "rbxassetid://" .. tostring(IconId)
+			Icon.ZIndex = 7
+		end
+
 		TextLabel.Parent = Example
-		TextLabel.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-		TextLabel.BackgroundTransparency = 1.000
-		TextLabel.BorderColor3 = Color3.fromRGB(27, 42, 53)
-		TextLabel.Position = UDim2.new(0.0945273638, 0, 0, 0)
+		TextLabel.BackgroundTransparency = 1
+		TextLabel.Position = UDim2.new(IconId and 0.2 or 0.094, 0, 0, 0)
 		TextLabel.Size = UDim2.new(0, 172, 0, 31)
 		TextLabel.ZIndex = 7
 		TextLabel.Font = Enum.Font.GothamMedium
 		TextLabel.Text = TabNam
 		TextLabel.TextColor3 = Color3.fromRGB(193, 193, 193)
-		TextLabel.TextSize = 12.000
+		TextLabel.TextSize = 12
 
-		---Tab frame
-
-		-- Gui to Lua
-		-- Version: 3.2
-
-		-- Instances:
-
+		-- === GUI content area setup ===
 		local Left = Instance.new("ScrollingFrame")
 		local UIListLayout = Instance.new("UIListLayout")
 		local ExampleSection = Instance.new("Frame")
 		local Title = Instance.new("Frame")
-		local TextLabel = Instance.new("TextLabel")
+		local SectionLabel = Instance.new("TextLabel")
 		local UIListLayout_2 = Instance.new("UIListLayout")
 		local UIPadding = Instance.new("UIPadding")
 		local Holder = Instance.new("Frame")
 		local UIListLayout_3 = Instance.new("UIListLayout")
 		local UIPadding_2 = Instance.new("UIPadding")
 
-
 		ScrollSize()
 
 		function Size()
-			Left.CanvasSize = UDim2.new(0, 0, 0, (UIListLayout.AbsoluteContentSize.Y + UIListLayout_2.AbsoluteContentSize.Y + UIListLayout_3.AbsoluteContentSize.Y))
+			Left.CanvasSize = UDim2.new(0, 0, 0, UIListLayout.AbsoluteContentSize.Y + UIListLayout_2.AbsoluteContentSize.Y + UIListLayout_3.AbsoluteContentSize.Y)
 		end
-
-
-		--Properties:
-
 
 		Left.Name = "Left"
 		Left.Parent = PageHold
-		Left.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-		Left.BackgroundTransparency = 1.000
-		Left.BorderColor3 = Color3.fromRGB(27, 42, 53)
+		Left.BackgroundTransparency = 1
 		Left.Size = UDim2.new(0, 301, 0, 282)
 		Left.Visible = false
 		Left.ScrollBarThickness = 0
@@ -802,29 +796,23 @@ function Library:Create(xHubName)
 
 		ExampleSection.Name = "Section"
 		ExampleSection.Parent = Left
-		ExampleSection.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-		ExampleSection.BackgroundTransparency = 1.000
-		ExampleSection.BorderColor3 = Color3.fromRGB(27, 42, 53)
+		ExampleSection.BackgroundTransparency = 1
 		ExampleSection.Size = UDim2.new(0, 301, 0, 277)
 
 		Title.Name = "Title"
 		Title.Parent = ExampleSection
-		Title.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-		Title.BackgroundTransparency = 1.000
-		Title.BorderColor3 = Color3.fromRGB(27, 42, 53)
+		Title.BackgroundTransparency = 1
 		Title.LayoutOrder = -1
 		Title.Size = UDim2.new(0, 255, 0, 29)
 
-		TextLabel.Parent = Title
-		TextLabel.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-		TextLabel.BackgroundTransparency = 1.000
-		TextLabel.BorderColor3 = Color3.fromRGB(27, 42, 53)
-		TextLabel.Size = UDim2.new(0, 255, 0, 34)
-		TextLabel.Font = Enum.Font.Gotham
-		TextLabel.Text = TabNam
-		TextLabel.TextColor3 = Color3.fromRGB(130, 130, 130)
-		TextLabel.TextSize = 12.000
-		TextLabel.TextXAlignment = Enum.TextXAlignment.Left
+		SectionLabel.Parent = Title
+		SectionLabel.BackgroundTransparency = 1
+		SectionLabel.Size = UDim2.new(0, 255, 0, 34)
+		SectionLabel.Font = Enum.Font.Gotham
+		SectionLabel.Text = TabNam
+		SectionLabel.TextColor3 = Color3.fromRGB(130, 130, 130)
+		SectionLabel.TextSize = 12
+		SectionLabel.TextXAlignment = Enum.TextXAlignment.Left
 
 		UIListLayout_2.Parent = ExampleSection
 		UIListLayout_2.SortOrder = Enum.SortOrder.LayoutOrder
@@ -834,9 +822,7 @@ function Library:Create(xHubName)
 
 		Holder.Name = "Holder"
 		Holder.Parent = ExampleSection
-		Holder.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-		Holder.BackgroundTransparency = 1.000
-		Holder.BorderColor3 = Color3.fromRGB(27, 42, 53)
+		Holder.BackgroundTransparency = 1
 		Holder.Position = UDim2.new(-0.00355871883, 0, 0.104693137, 0)
 		Holder.Size = UDim2.new(1.01067615, 0, 0.870036125, 0)
 
@@ -847,19 +833,13 @@ function Library:Create(xHubName)
 		UIPadding_2.Parent = Left
 		UIPadding_2.PaddingTop = UDim.new(0, 5)
 
-
 		Size()
 		Holder.ChildAdded:Connect(Size)
 		Holder.ChildRemoved:Connect(Size)
 
-
-		-- Store the original color
-		local originalBackgroundColor = Example.BackgroundColor3
-
-		-- Connect button click to activation function
+		-- Tab switch logic
 		Example.MouseButton1Click:Connect(function()
 			Size()
-			-- Hide all other tab frames and reset their button colors
 			for _, frame in pairs(PageHold:GetChildren()) do
 				if frame:IsA("ScrollingFrame") then
 					frame.Visible = false
@@ -871,7 +851,6 @@ function Library:Create(xHubName)
 					button.TextColor3 = Color3.fromRGB(193, 193, 193)
 				end
 			end
-			-- Show the selected tab frame
 			Left.Visible = true
 			Example.TextColor3 = Color3.fromRGB(4, 34, 40)
 			Example.BackgroundColor3 = Color3.fromRGB(17, 146, 172)
@@ -879,6 +858,7 @@ function Library:Create(xHubName)
 
 		return Holder
 	end
+
 
 
 
@@ -1163,7 +1143,12 @@ function Library:Create(xHubName)
 		local function UpdateText()
 			callback(TextBox.Text, true)
 		end
-
+		
+		function Textbox:set(newText)
+			TextBox.Text = newText
+			callback(TextBox.Text, false)
+		end
+		
 		TextBox.FocusLost:Connect(UpdateText)
 
 		return TextBox, UpdateText 
@@ -1259,34 +1244,32 @@ function Library:Create(xHubName)
 		UIScale.Parent = Icon
 		UIScale.Scale = 0.800
 
-		-- Function to toggle the icon visibility
+		
 		local isToggled = false
-		local function updateToggleState()
-			isToggled = not isToggled
+
+		function Toggle:Set(state)
+			isToggled = state
 			Icon.ImageTransparency = isToggled and 0 or 1
 			ToggleBckg.BackgroundColor3 = isToggled and Color3.fromRGB(255, 100, 100) or Color3.fromRGB(29, 29, 29)
+		end
 
+		local function updateToggleState()
+			self:Set(not isToggled)
 			callback(isToggled)
 		end
 
 		Toggle.MouseButton1Click:Connect(updateToggleState)
 
-
 		Toggle.MouseEnter:Connect(function()
 			Tsound:Play()
-
-
 			TweenService:Create(uistrokeT, TweenInfo.new(0.1), {Color = Color3.fromRGB(86, 34, 34)}):Play()
 		end)
 
 		Toggle.MouseLeave:Connect(function()
-
 			TweenService:Create(uistrokeT, TweenInfo.new(0.1), {Color = Color3.fromRGB(50,50,50)}):Play()
 		end)
 
-
-
-
+		
 		return Toggle
 	end
 
@@ -2274,7 +2257,7 @@ function Library:Create(xHubName)
 				openDropdown = Dropdown
 			end
 		end)
-		
+
 
 
 		function Library:UpdateDropdown(dropdown, newOptions)
@@ -2283,7 +2266,7 @@ function Library:Create(xHubName)
 			local List = dropdown.Parent:FindFirstChild("List")
 			if not List then return end
 
-			
+
 			for _, child in ipairs(List:GetChildren()) do
 				if child:IsA("TextButton") then
 					child:Destroy()
@@ -2317,7 +2300,34 @@ function Library:Create(xHubName)
 			List.CanvasSize = UDim2.new(0, 0, 0, #newOptions * (25 + 3))
 		end
 
-			
+		-- Track selected option
+		Dropdown.Selected = selectedOption
+		Dropdown.Callback = callback
+		Dropdown.Main = Main
+		Dropdown.SearchBox = SearchBox
+		Dropdown.List = List
+
+		function Dropdown:Set(optionText)
+			for _, option in ipairs(List:GetChildren()) do
+				if option:IsA("TextButton") and option.Text == optionText then
+					self.Selected = optionText
+					self.Main.Title.Text = optionText
+					if self.Callback then
+						self.Callback(optionText)
+					end
+					self.List.Visible = false
+					self.SearchBox.Visible = false
+					isOpen = false
+					openDropdown = nil
+					break
+				end
+			end
+		end
+
+		function Dropdown:Get()
+			return self.Selected
+		end
+
 		return Dropdown
 	end
 
