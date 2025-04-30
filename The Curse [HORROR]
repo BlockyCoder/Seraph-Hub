@@ -1,0 +1,441 @@
+--game link: https://www.roblox.com/games/15077422637/The-Curse-HORROR
+
+
+
+
+
+--first chapter:
+
+local Library = loadstring(game:HttpGet("https://raw.githubusercontent.com/BlockyCoder/Seraph-Hub/main/Ui%20Libarary%3A%20Seraph%20Hub"))()
+ 
+ 
+Library:Create("The Curse [HORROR] ch1")
+
+local tab1Holder = Library:Tab("Tab 1")
+
+
+Library:Button(tab1Holder, "Esp monster", function()
+  -- Settings --
+
+local settings = {
+
+	fillcolor = Color3.fromRGB(0, 255, 255),
+	filltransparency = 0.75,
+
+	outlinecolor = Color3.fromRGB(0, 255, 255),
+	outlinetransparency = 0,
+}
+
+-- Script --
+
+local plr = game.Players.LocalPlayer
+local highlights = Instance.new("Folder", game:service("CoreGui"))
+
+local function addhighlight(object)
+	local highlight = Instance.new("Highlight", highlights)
+	highlight.Adornee = object
+
+	highlight.FillColor = settings.fillcolor
+	highlight.FillTransparency = settings.filltransparency
+
+	highlight.OutlineColor = settings.outlinecolor
+	highlight.OutlineTransparency = settings.outlinetransparency
+
+	highlight.Adornee.Changed:Connect(function()
+		if not highlight.Adornee or not highlight.Adornee.Parent then
+			highlight:Destroy()
+		end
+	end)
+
+	return highlight
+end
+
+local function addto(object)
+	if object:IsA("Model") and object.Parent.Name == "npcs" then
+		addhighlight(object)
+	end
+end
+
+for _, v in pairs(workspace:FindFirstChild("Game_").Locations:GetDescendants()) do
+	addto(v)
+end
+
+workspace:FindFirstChild("Game_").Locations.DescendantAdded:Connect(function(v)
+	addto(v)
+end)
+
+end)
+
+
+Library:Button(tab1Holder, "Esp Tool", function()
+  -- Settings --
+
+local settings = {
+
+	fillcolor = Color3.fromRGB(0, 255, 255),
+	filltransparency = 0.75,
+
+	outlinecolor = Color3.fromRGB(0, 255, 255),
+	outlinetransparency = 0,
+}
+
+-- Script --
+
+local plr = game.Players.LocalPlayer
+local highlights = Instance.new("Folder", game:service("CoreGui"))
+
+local function addhighlight(object)
+	local highlight = Instance.new("Highlight", highlights)
+	highlight.Adornee = object
+
+	highlight.FillColor = settings.fillcolor
+	highlight.FillTransparency = settings.filltransparency
+
+	highlight.OutlineColor = settings.outlinecolor
+	highlight.OutlineTransparency = settings.outlinetransparency
+
+	highlight.Adornee.Changed:Connect(function()
+		if not highlight.Adornee or not highlight.Adornee.Parent then
+			highlight:Destroy()
+		end
+	end)
+
+	return highlight
+end
+
+local function addto(object)
+	if object:IsA("Model") and object.Parent.Name == "Tools" then
+		addhighlight(object)
+	end
+end
+
+for _, v in pairs(workspace:FindFirstChild("Game_").Locations:GetDescendants()) do
+	addto(v)
+end
+
+workspace:FindFirstChild("Game_").Locations.DescendantAdded:Connect(function(v)
+	addto(v)
+end)
+
+end)
+
+Library:Button(tab1Holder, "Get Tool (invaild)", function()
+	local plr = game.Players.LocalPlayer
+	local character = plr.Character or plr.CharacterAdded:Wait()
+	local backpack = plr:WaitForChild("Backpack")
+
+	local requiredTool = nil
+
+	-- Check for any tool that matches a model in "Tools"
+	for _, toolModel in pairs(workspace:FindFirstChild("Game_").Locations:GetDescendants()) do
+		if toolModel:IsA("Model") and toolModel.Parent and toolModel.Parent.Name == "Tools" then
+			for _, tool in ipairs(backpack:GetChildren()) do
+				if tool:IsA("Tool") and tool.Name == toolModel.Name then
+					requiredTool = tool.Name
+					break
+				end
+			end
+		end
+		if requiredTool then break end
+	end
+
+	local function hasTool()
+		return character:FindFirstChild(requiredTool) or backpack:FindFirstChild(requiredTool)
+	end
+
+	for _, v in pairs(workspace:FindFirstChild("Game_").Locations:GetDescendants()) do
+		if v:IsA("Part") and v.Parent and v.Parent.Name == "Triggers" then
+			if requiredTool and hasTool() then
+				if character:FindFirstChild("HumanoidRootPart") then
+					character:MoveTo(v.Position)
+					break
+				end
+			else
+				warn("You don't have the required tool:", requiredTool or "None found")
+			end
+		end
+	end
+end)
+
+
+Library:Button(tab1Holder, "Full bright", function()
+ if not _G.FullBrightExecuted then
+
+	_G.FullBrightEnabled = false
+
+	_G.NormalLightingSettings = {
+		Brightness = game:GetService("Lighting").Brightness,
+		ClockTime = game:GetService("Lighting").ClockTime,
+		FogEnd = game:GetService("Lighting").FogEnd,
+		GlobalShadows = game:GetService("Lighting").GlobalShadows,
+		Ambient = game:GetService("Lighting").Ambient
+	}
+
+	game:GetService("Lighting"):GetPropertyChangedSignal("Brightness"):Connect(function()
+		if game:GetService("Lighting").Brightness ~= 1 and game:GetService("Lighting").Brightness ~= _G.NormalLightingSettings.Brightness then
+			_G.NormalLightingSettings.Brightness = game:GetService("Lighting").Brightness
+			if not _G.FullBrightEnabled then
+				repeat
+					wait()
+				until _G.FullBrightEnabled
+			end
+			game:GetService("Lighting").Brightness = 1
+		end
+	end)
+
+	game:GetService("Lighting"):GetPropertyChangedSignal("ClockTime"):Connect(function()
+		if game:GetService("Lighting").ClockTime ~= 12 and game:GetService("Lighting").ClockTime ~= _G.NormalLightingSettings.ClockTime then
+			_G.NormalLightingSettings.ClockTime = game:GetService("Lighting").ClockTime
+			if not _G.FullBrightEnabled then
+				repeat
+					wait()
+				until _G.FullBrightEnabled
+			end
+			game:GetService("Lighting").ClockTime = 12
+		end
+	end)
+
+	game:GetService("Lighting"):GetPropertyChangedSignal("FogEnd"):Connect(function()
+		if game:GetService("Lighting").FogEnd ~= 786543 and game:GetService("Lighting").FogEnd ~= _G.NormalLightingSettings.FogEnd then
+			_G.NormalLightingSettings.FogEnd = game:GetService("Lighting").FogEnd
+			if not _G.FullBrightEnabled then
+				repeat
+					wait()
+				until _G.FullBrightEnabled
+			end
+			game:GetService("Lighting").FogEnd = 786543
+		end
+	end)
+
+	game:GetService("Lighting"):GetPropertyChangedSignal("GlobalShadows"):Connect(function()
+		if game:GetService("Lighting").GlobalShadows ~= false and game:GetService("Lighting").GlobalShadows ~= _G.NormalLightingSettings.GlobalShadows then
+			_G.NormalLightingSettings.GlobalShadows = game:GetService("Lighting").GlobalShadows
+			if not _G.FullBrightEnabled then
+				repeat
+					wait()
+				until _G.FullBrightEnabled
+			end
+			game:GetService("Lighting").GlobalShadows = false
+		end
+	end)
+
+	game:GetService("Lighting"):GetPropertyChangedSignal("Ambient"):Connect(function()
+		if game:GetService("Lighting").Ambient ~= Color3.fromRGB(178, 178, 178) and game:GetService("Lighting").Ambient ~= _G.NormalLightingSettings.Ambient then
+			_G.NormalLightingSettings.Ambient = game:GetService("Lighting").Ambient
+			if not _G.FullBrightEnabled then
+				repeat
+					wait()
+				until _G.FullBrightEnabled
+			end
+			game:GetService("Lighting").Ambient = Color3.fromRGB(178, 178, 178)
+		end
+	end)
+
+	game:GetService("Lighting").Brightness = 1
+	game:GetService("Lighting").ClockTime = 12
+	game:GetService("Lighting").FogEnd = 786543
+	game:GetService("Lighting").GlobalShadows = false
+	game:GetService("Lighting").Ambient = Color3.fromRGB(178, 178, 178)
+
+	local LatestValue = true
+	spawn(function()
+		repeat
+			wait()
+		until _G.FullBrightEnabled
+		while wait() do
+			if _G.FullBrightEnabled ~= LatestValue then
+				if not _G.FullBrightEnabled then
+					game:GetService("Lighting").Brightness = _G.NormalLightingSettings.Brightness
+					game:GetService("Lighting").ClockTime = _G.NormalLightingSettings.ClockTime
+					game:GetService("Lighting").FogEnd = _G.NormalLightingSettings.FogEnd
+					game:GetService("Lighting").GlobalShadows = _G.NormalLightingSettings.GlobalShadows
+					game:GetService("Lighting").Ambient = _G.NormalLightingSettings.Ambient
+				else
+					game:GetService("Lighting").Brightness = 1
+					game:GetService("Lighting").ClockTime = 12
+					game:GetService("Lighting").FogEnd = 786543
+					game:GetService("Lighting").GlobalShadows = false
+					game:GetService("Lighting").Ambient = Color3.fromRGB(178, 178, 178)
+				end
+				LatestValue = not LatestValue
+			end
+		end
+	end)
+end
+
+_G.FullBrightExecuted = true
+_G.FullBrightEnabled = not _G.FullBrightEnabled
+end)
+
+
+----Player
+
+local Players = game:GetService("Players")
+local LocalPlayer = Players.LocalPlayer
+
+-- Helper function to safely set Humanoid properties
+local function setHumanoidProperty(propertyName, value)
+    if LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("Humanoid") then
+        LocalPlayer.Character.Humanoid[propertyName] = value
+    end
+end
+
+-- Walkspeed Slider
+Library:Slider(tab1Holder, "Walkspeed", 0, 500, function(value)
+    setHumanoidProperty("WalkSpeed", value)
+end)
+
+-- Jump Power Slider
+Library:Slider(tab1Holder, "Jump Power", 0, 500, function(value)
+    setHumanoidProperty("JumpPower", value)
+end)
+
+
+
+Library:Button(tab1Holder, "Fly", function()
+    local mouse = game.Players.LocalPlayer:GetMouse()
+    
+    -- Initialize UserInputService correctly
+    local UserInputService = game:GetService("UserInputService")
+
+    local plr = game.Players.LocalPlayer
+    local torso = plr.Character:WaitForChild("Torso")
+    local flying = false
+    local ctrl = {f = 0, b = 0, l = 0, r = 0}
+    local lastctrl = {f = 0, b = 0, l = 0, r = 0}
+    local maxspeed = 50
+    local speed = 0
+    local bg, bv = nil, nil
+
+    -- Actual flying function
+    local function Fly()
+        game.StarterGui:SetCore("SendNotification", {Title="Fly Activated"; Text="WeAreDevs.net"; Duration=1;})
+        bg = Instance.new("BodyGyro", torso)
+        bg.P = 9e4
+        bg.maxTorque = Vector3.new(9e9, 9e9, 9e9)
+        bg.cframe = torso.CFrame
+        bv = Instance.new("BodyVelocity", torso)
+        bv.velocity = Vector3.new(0, 0.1, 0)
+        bv.maxForce = Vector3.new(9e9, 9e9, 9e9)
+        
+        repeat wait()
+            plr.Character.Humanoid.PlatformStand = true
+            if ctrl.l + ctrl.r ~= 0 or ctrl.f + ctrl.b ~= 0 then
+                speed = speed + 0.5 + (speed / maxspeed)
+                if speed > maxspeed then speed = maxspeed end
+            elseif speed ~= 0 then
+                speed = speed - 1
+                if speed < 0 then speed = 0 end
+            end
+            
+            if ctrl.l + ctrl.r ~= 0 or ctrl.f + ctrl.b ~= 0 then
+                bv.velocity = ((game.Workspace.CurrentCamera.CoordinateFrame.lookVector * (ctrl.f + ctrl.b)) +
+                               ((game.Workspace.CurrentCamera.CoordinateFrame * CFrame.new(ctrl.l + ctrl.r, (ctrl.f + ctrl.b) * 0.2, 0).p) - game.Workspace.CurrentCamera.CoordinateFrame.p)) * speed
+                lastctrl = {f = ctrl.f, b = ctrl.b, l = ctrl.l, r = ctrl.r}
+            elseif speed ~= 0 then
+                bv.velocity = ((game.Workspace.CurrentCamera.CoordinateFrame.lookVector * (lastctrl.f + lastctrl.b)) +
+                               ((game.Workspace.CurrentCamera.CoordinateFrame * CFrame.new(lastctrl.l + lastctrl.r, (lastctrl.f + lastctrl.b) * 0.2, 0).p) - game.Workspace.CurrentCamera.CoordinateFrame.p)) * speed
+            else
+                bv.velocity = Vector3.new(0, 0.1, 0)
+            end
+            bg.cframe = game.Workspace.CurrentCamera.CoordinateFrame * CFrame.Angles(-math.rad((ctrl.f + ctrl.b) * 50 * speed / maxspeed), 0, 0)
+        until not flying
+
+        ctrl = {f = 0, b = 0, l = 0, r = 0}
+        lastctrl = {f = 0, b = 0, l = 0, r = 0}
+        speed = 0
+        bg:Destroy()
+        bg = nil
+        bv:Destroy()
+        bv = nil
+        plr.Character.Humanoid.PlatformStand = false
+        game.StarterGui:SetCore("SendNotification", {Title="Fly Deactivated"; Text="WeAreDevs.net"; Duration=1;})
+    end
+
+
+    -- Mobile controls (Separate Fly Toggle button for mobile)
+    local mobileFlyButton = nil
+    if UserInputService.TouchEnabled then
+        warn("Mobile detected!")
+
+        local screen = Instance.new("ScreenGui")
+        screen.Parent = game.Players.LocalPlayer.PlayerGui
+        -- Add a mobile toggle button for Fly (only on mobile)
+        mobileFlyButton = Instance.new("TextButton")
+        mobileFlyButton.Text = "Toggle Fly"
+        mobileFlyButton.Position = UDim2.new(0, 200, 0, 200)  -- Adjust position as necessary
+        mobileFlyButton.Size = UDim2.new(0, 100, 0, 50)
+        mobileFlyButton.BackgroundColor3 = Color3.fromRGB(255, 0, 0)  -- Customize button color
+        mobileFlyButton.TextColor3 = Color3.fromRGB(255, 255, 255)  -- Customize text color
+        mobileFlyButton.Parent = screen  -- Add button to player GUI
+        
+        mobileFlyButton.MouseButton1Click:Connect(function()
+            flying = not flying
+
+			if flying then
+				mobileFlyButton.Text = "Fly (Off)"
+				else
+				mobileFlyButton.Text = "Fly (On)"
+			end
+
+            if flying then
+                Fly()
+            else
+                -- Stop flying
+                if bg then bg:Destroy() end
+                if bv then bv:Destroy() end
+                game.StarterGui:SetCore("SendNotification", {Title="Fly Deactivated"; Text="WeAreDevs.net"; Duration=1;})
+            end
+        end)
+        
+    end
+
+    warn("PC detected!")
+    -- Keyboard controls for desktop users
+    UserInputService.InputBegan:Connect(function(input)
+        if input.UserInputType == Enum.UserInputType.Keyboard then
+            local key = input.KeyCode
+            if key == Enum.KeyCode.E then
+                flying = not flying
+                if flying then
+                    Fly()
+                else
+                    if bg then bg:Destroy() end
+                    if bv then bv:Destroy() end
+                    game.StarterGui:SetCore("SendNotification", {Title="Fly Deactivated"; Text="WeAreDevs.net"; Duration=1;})
+                end
+            elseif key == Enum.KeyCode.W then
+                ctrl.f = 1
+            elseif key == Enum.KeyCode.S then
+                ctrl.b = -1
+            elseif key == Enum.KeyCode.A then
+                ctrl.l = -1
+            elseif key == Enum.KeyCode.D then
+                ctrl.r = 1
+            end
+        end
+    end)
+
+    UserInputService.InputEnded:Connect(function(input)
+        if input.UserInputType == Enum.UserInputType.Keyboard then
+            local key = input.KeyCode
+            if key == Enum.KeyCode.W then
+                ctrl.f = 0
+            elseif key == Enum.KeyCode.S then
+                ctrl.b = 0
+            elseif key == Enum.KeyCode.A then
+                ctrl.l = 0
+            elseif key == Enum.KeyCode.D then
+                ctrl.r = 0
+            end
+        end
+    end)
+
+end)
+
+
+
+
+
+
+
