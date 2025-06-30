@@ -1190,7 +1190,7 @@ function Library:Create(xHubName)
 	--toggle
 	function Library:Toggle(tab, toggleName, callback)
 		local TweenService = game:GetService("TweenService")
-
+		local TogFunction = {}
 		local Toggle = Instance.new("TextButton")
 		Toggle.Name = "Toggle"
 		Toggle.Parent = tab
@@ -1272,7 +1272,7 @@ function Library:Create(xHubName)
 		end
 
 		-- Public setter for external state control
-		function Toggle:Set(state)
+		function TogFunction:Set(state)
 			if isToggled == state then return end
 			isToggled = state
 			updateVisual()
@@ -1290,9 +1290,9 @@ function Library:Create(xHubName)
 		Toggle.MouseLeave:Connect(function()
 			TweenService:Create(uistrokeT, TweenInfo.new(0.1), {Color = Color3.fromRGB(50, 50, 50)}):Play()
 		end)
-
-		-- Return toggle button with Set() method
-		return Toggle
+		
+		
+		return TogFunction
 	end
 
 
@@ -2046,6 +2046,7 @@ function Library:Create(xHubName)
 	function Library:MultiDropdown(tab, dropdownName, options, callback, settings)
 		settings = settings or {}
 		local selectedOptions = {}
+		local MdrFunction = {}
 		local hoverColor = settings.hoverColor or Color3.fromRGB(75, 75, 75)
 		local disabledColor = settings.disabledColor or Color3.fromRGB(100, 100, 100)
 		local selectedColor = settings.selectedColor or Color3.fromRGB(85, 85, 85)
@@ -2286,7 +2287,7 @@ function Library:Create(xHubName)
 			end
 		end)
 
-		function Dropdown:UpdateOptions(newOptions)
+		function MdrFunction:UpdateM(newOptions)
 			assert(type(newOptions) == "table" and #newOptions > 0, "Options should be a non-empty table.")
 
 			-- Clear existing options
@@ -2371,7 +2372,7 @@ function Library:Create(xHubName)
 			end
 		end
 
-		function Dropdown:SetSelected(selected)
+		function MdrFunction:SetMSel(selected)
 			selectedOptions = selected or {}
 
 			-- Update checkboxes
@@ -2403,11 +2404,11 @@ function Library:Create(xHubName)
 			end
 		end
 
-		function Dropdown:GetSelected()
+		function MdrFunction:GetMSel()
 			return selectedOptions
 		end
 
-		return Dropdown
+		return MdrFunction
 	end
 
 
@@ -2420,7 +2421,7 @@ function Library:Create(xHubName)
 
 	function Library:Dropdown(tab, dropdownName, options, callback, settings)
 		settings = settings or {}
-
+		local DropFunction = {}
 		-- Settings with defaults
 		local hoverColor = settings.hoverColor or Color3.fromRGB(75, 75, 75)
 		local disabledColor = settings.disabledColor or Color3.fromRGB(100, 100, 100)
@@ -2685,7 +2686,7 @@ function Library:Create(xHubName)
 		end)
 
 		-- Dropdown methods
-		function Dropdown:Update(newOptions)
+		function DropFunction:Update(newOptions)
 			assert(type(newOptions) == "table" and #newOptions > 0, "Options should be a non-empty table.")
 
 			options = newOptions
@@ -2698,7 +2699,7 @@ function Library:Create(xHubName)
 			List.CanvasSize = UDim2.new(0, 0, 0, #options * 28)
 		end
 
-		function Dropdown:SetSelected(optionText)
+		function DropFunction:Setdrop(optionText)
 			for _, option in ipairs(List:GetChildren()) do
 				if option:IsA("TextButton") and option.Text == optionText then
 					selectedOption = optionText
@@ -2724,11 +2725,11 @@ function Library:Create(xHubName)
 			end
 		end
 
-		function Dropdown:GetSelected()
+		function DropFunction:GetSelected()
 			return selectedOption
 		end
 
-		return Dropdown
+		return DropFunction
 	end
 
 
