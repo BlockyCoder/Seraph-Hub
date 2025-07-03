@@ -2550,6 +2550,40 @@ function Library:Create(xHubName)
 		end
 		
 		
+		local function toggleDropdown(state)
+			if state == nil then
+				state = not isOpen
+			end
+
+			if state then
+				-- Close any other open dropdowns
+				if openDropdown and openDropdown ~= Dropdown then
+					openDropdown.List.Visible = false
+					openDropdown.SearchBox.Visible = false
+					openDropdown.Icon.Image = "rbxassetid://6031091000"
+				end
+
+				-- Update positions
+				SearchBox.Position = UDim2.new(0, 0, 0, Dropdown.AbsolutePosition.Y + Dropdown.AbsoluteSize.Y + 5)
+				List.Position = UDim2.new(0, 0, 0, SearchBox.AbsolutePosition.Y + SearchBox.AbsoluteSize.Y + 5)
+
+				-- Show dropdown
+				Icon.Image = "rbxassetid://6031090999" -- Open icon
+				SearchBox.Visible = true
+				List.Visible = true
+				SearchBox:CaptureFocus()
+				isOpen = true
+				openDropdown = Dropdown
+			else
+				-- Hide dropdown
+				Icon.Image = "rbxassetid://6031091000" -- Close icon
+				SearchBox.Visible = false
+				List.Visible = false
+				isOpen = false
+				openDropdown = nil
+			end
+		end
+		
 		-- Create option buttons
 		local function createOptions()
 			for _, child in ipairs(List:GetChildren()) do
@@ -2643,40 +2677,7 @@ function Library:Create(xHubName)
 			end
 		end
 
-		-- Toggle dropdown visibility
-		local function toggleDropdown(state)
-			if state == nil then
-				state = not isOpen
-			end
 
-			if state then
-				-- Close any other open dropdowns
-				if openDropdown and openDropdown ~= Dropdown then
-					openDropdown.List.Visible = false
-					openDropdown.SearchBox.Visible = false
-					openDropdown.Icon.Image = "rbxassetid://6031091000"
-				end
-
-				-- Update positions
-				SearchBox.Position = UDim2.new(0, 0, 0, Dropdown.AbsolutePosition.Y + Dropdown.AbsoluteSize.Y + 5)
-				List.Position = UDim2.new(0, 0, 0, SearchBox.AbsolutePosition.Y + SearchBox.AbsoluteSize.Y + 5)
-
-				-- Show dropdown
-				Icon.Image = "rbxassetid://6031090999" -- Open icon
-				SearchBox.Visible = true
-				List.Visible = true
-				SearchBox:CaptureFocus()
-				isOpen = true
-				openDropdown = Dropdown
-			else
-				-- Hide dropdown
-				Icon.Image = "rbxassetid://6031091000" -- Close icon
-				SearchBox.Visible = false
-				List.Visible = false
-				isOpen = false
-				openDropdown = nil
-			end
-		end
 
 		-- Search functionality
 		SearchBox:GetPropertyChangedSignal("Text"):Connect(function()
