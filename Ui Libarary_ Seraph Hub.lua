@@ -1290,8 +1290,8 @@ function Library:Create(xHubName)
 		Toggle.MouseLeave:Connect(function()
 			TweenService:Create(uistrokeT, TweenInfo.new(0.1), {Color = Color3.fromRGB(50, 50, 50)}):Play()
 		end)
-		
-		
+
+
 		return TogFunction
 	end
 
@@ -2539,7 +2539,17 @@ function Library:Create(xHubName)
 		UIListLayout.Parent = List
 		UIListLayout.SortOrder = Enum.SortOrder.LayoutOrder
 		UIListLayout.Padding = UDim.new(0, 3)
-
+		
+		
+		local function updateTitle()
+			if selectedOption then
+				Title.Text = selectedOption
+			else
+				Title.Text = dropdownName
+			end
+		end
+		
+		
 		-- Create option buttons
 		local function createOptions()
 			for _, child in ipairs(List:GetChildren()) do
@@ -2589,15 +2599,28 @@ function Library:Create(xHubName)
 					Title.Text = selectedOption
 
 					-- Update all options' visual state
-					for _, opt in ipairs(List:GetChildren()) do
-						if opt:IsA("TextButton") then
-							opt.BackgroundColor3 = defaultColor
-							opt.SelectionIndicator.Visible = false
-						end
-					end
+					if optionText == selectedOption then
+						-- If already selected, unselect it
+						selectedOption = nil
+						SelectionIndicator.Visible = false
+						Option.BackgroundColor3 = defaultColor
+					else
+						-- Otherwise, select this option
+						selectedOption = optionText
 
-					Option.BackgroundColor3 = selectedColor
-					SelectionIndicator.Visible = true
+						-- Deselect all other options visually
+						for _, opt in ipairs(List:GetChildren()) do
+							if opt:IsA("TextButton") and opt ~= Option then
+								opt.BackgroundColor3 = defaultColor
+								opt.SelectionIndicator.Visible = false
+							end
+						end
+
+						SelectionIndicator.Visible = true
+						Option.BackgroundColor3 = selectedColor
+					end
+					
+					updateTitle() -- Update the main dropdown title
 
 					if callback then
 						callback(selectedOption)
@@ -2668,7 +2691,8 @@ function Library:Create(xHubName)
 
 		-- Initialize options
 		createOptions()
-
+		updateTitle()
+		
 		-- Dropdown click handler
 		Dropdown.MouseButton1Click:Connect(function()
 			toggleDropdown()
@@ -2691,7 +2715,7 @@ function Library:Create(xHubName)
 
 			options = newOptions
 			selectedOption = nil
-			Title.Text = dropdownName
+			updateTitle()
 			createOptions()
 
 			-- Update sizes
@@ -2700,11 +2724,14 @@ function Library:Create(xHubName)
 		end
 
 		function DropFunction:Setdrop(optionText)
+			updateTitle()
+			
 			for _, option in ipairs(List:GetChildren()) do
 				if option:IsA("TextButton") and option.Text == optionText then
 					selectedOption = optionText
-					Title.Text = selectedOption
-
+				--	Title.Text = selectedOption
+					
+					
 					-- Update visual state
 					for _, opt in ipairs(List:GetChildren()) do
 						if opt:IsA("TextButton") then
