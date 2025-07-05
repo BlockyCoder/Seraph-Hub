@@ -304,7 +304,6 @@ function Library:Create(xHubName)
 	ScreenGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
 
 
-
 	LoadingFrame.Name = "LoadingFrame"
 	LoadingFrame.Parent = ScreenGui
 	LoadingFrame.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
@@ -947,7 +946,7 @@ function Library:Create(xHubName)
 		fadeOut(Notification, 0.5)
 		wait(0.5)
 
-		Notification:Destroy()
+		ScreenGuiM:Destroy()
 	end
 
 	function Library:SaveConfig(name, data)
@@ -2048,8 +2047,8 @@ function Library:Create(xHubName)
 		local selectedOptions = {}
 		local MdrFunction = {}
 		local hoverColor = settings.hoverColor or Color3.fromRGB(75, 75, 75)
-		local disabledColor = settings.disabledColor or Color3.fromRGB(100, 100, 100)
-		local selectedColor = settings.selectedColor or Color3.fromRGB(85, 85, 85)
+		local disabledColor = settings.disabledColor or Color3.fromRGB(29, 29, 29)
+		local selectedColor = settings.selectedColor or Color3.fromRGB(255, 100, 100)
 		local defaultColor = Color3.fromRGB(55, 55, 55)
 		local searchPlaceholder = settings.searchPlaceholder or "Search..."
 		local customFont = settings.customFont or Enum.Font.GothamMedium
@@ -2066,7 +2065,7 @@ function Library:Create(xHubName)
 
 		-- Create the dropdown structure
 		local Dropdown = Instance.new("TextButton")
-		Dropdown.Name = dropdownName
+		Dropdown.Name = "Dropdown"
 		Dropdown.Parent = tab
 		Dropdown.BackgroundColor3 = Color3.fromRGB(35, 35, 35)
 		Dropdown.BorderColor3 = Color3.fromRGB(27, 42, 53)
@@ -2074,6 +2073,9 @@ function Library:Create(xHubName)
 		Dropdown.Size = UDim2.new(1, -20, 0, 31)
 		Dropdown.AutoButtonColor = false
 		Dropdown.Text = ""
+		Dropdown.TextColor3 = Color3.fromRGB(193, 193, 193)
+		Dropdown.TextSize = customFontSize
+		Dropdown.Font = customFont
 
 		local UIStroke = Instance.new("UIStroke")
 		UIStroke.Parent = Dropdown
@@ -2090,22 +2092,25 @@ function Library:Create(xHubName)
 		Main.Size = UDim2.new(1, 0, 1, 0)
 
 		UIC:Clone().Parent = Main
-
+		
+		--[[
 		local IconFrame = Instance.new("Frame")
 		IconFrame.Name = "IconFrame"
 		IconFrame.Parent = Main
 		IconFrame.BackgroundTransparency = 1.000
 		IconFrame.Size = UDim2.new(0, 31, 0, 31)
 		IconFrame.Position = UDim2.new(1, -31, 0, 0)
-
+]]
+		
+		
 		local Icon = Instance.new("ImageLabel")
 		Icon.Name = "Icon"
-		Icon.Parent = IconFrame
+		Icon.Parent = Main
 		Icon.AnchorPoint = Vector2.new(0.5, 0.5)
 		Icon.BackgroundTransparency = 1.000
-		Icon.Position = UDim2.new(0.5, 0, 0.5, 0)
-		Icon.Size = UDim2.new(0, 25, 0, 25)
-		Icon.Image = "rbxassetid://6031091000" --close
+		Icon.Position = UDim2.new(1, -15, 0.5, 0)
+		Icon.Size = UDim2.new(0, 20, 0, 20)
+		Icon.Image = "rbxassetid://6031091000" -- Close icon
 		Icon.ImageColor3 = Color3.fromRGB(109, 109, 109)
 
 		local Title = Instance.new("TextLabel")
@@ -2119,6 +2124,10 @@ function Library:Create(xHubName)
 		Title.TextColor3 = Color3.fromRGB(193, 193, 193)
 		Title.TextSize = customFontSize
 		Title.TextXAlignment = Enum.TextXAlignment.Left
+
+		local UIPadding = Instance.new("UIPadding")
+		UIPadding.Parent = Title
+		UIPadding.PaddingLeft = UDim.new(0, 10)
 
 		local SearchBox = Instance.new("TextBox")
 		SearchBox.Name = "SearchBox"
@@ -2135,6 +2144,10 @@ function Library:Create(xHubName)
 		SearchBox.BackgroundTransparency = 0.3
 		SearchBox.Visible = false
 
+		local SearchCorner = Instance.new("UICorner")
+		SearchCorner.CornerRadius = UDim.new(0, 5)
+		SearchCorner.Parent = SearchBox
+
 		local List = Instance.new("ScrollingFrame")
 		List.Name = "List"
 		List.Parent = Dropdown.Parent
@@ -2147,6 +2160,10 @@ function Library:Create(xHubName)
 		List.ScrollBarThickness = 6
 		List.ScrollingDirection = Enum.ScrollingDirection.Y
 		List.Visible = false
+
+		local ListCorner = Instance.new("UICorner")
+		ListCorner.CornerRadius = UDim.new(0, 5)
+		ListCorner.Parent = List
 
 		local UIListLayout = Instance.new("UIListLayout")
 		UIListLayout.Parent = List
@@ -2175,20 +2192,28 @@ function Library:Create(xHubName)
 			Option.BorderSizePixel = 0
 			Option.Size = UDim2.new(1, 0, 0, 25)
 			Option.AutoButtonColor = false
-			Option.Text = optionText
+			Option.Text = ""
 			Option.TextColor3 = Color3.fromRGB(214, 214, 214)
 			Option.TextWrapped = true
 			Option.TextSize = customFontSize
 			Option.TextXAlignment = Enum.TextXAlignment.Left
 
-			local TextPadding = Instance.new("UIPadding")
-			TextPadding.Parent = Option
-			TextPadding.PaddingLeft = UDim.new(0, 30)
+			local OptionText = Instance.new("TextLabel")
+			OptionText.Name = "OptionText"
+			OptionText.Parent = Option
+			OptionText.BackgroundTransparency = 1
+			OptionText.Size = UDim2.new(1, -30, 1, 0)
+			OptionText.Position = UDim2.new(0, 30, 0, 0)
+			OptionText.Text = optionText
+			OptionText.TextColor3 = Color3.fromRGB(214, 214, 214)
+			OptionText.TextSize = customFontSize
+			OptionText.Font = customFont
+			OptionText.TextXAlignment = Enum.TextXAlignment.Left
 
 			local Checkbox = Instance.new("Frame")
 			Checkbox.Name = "Checkbox"
 			Checkbox.Parent = Option
-			Checkbox.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+			Checkbox.BackgroundColor3 = Color3.fromRGB(29, 29, 29)
 			Checkbox.BorderSizePixel = 0
 			Checkbox.Size = UDim2.new(0, 15, 0, 15)
 			Checkbox.Position = UDim2.new(0, 5, 0.5, -7.5)
@@ -2197,17 +2222,34 @@ function Library:Create(xHubName)
 			CheckboxCorner.CornerRadius = UDim.new(0, 3)
 			CheckboxCorner.Parent = Checkbox
 
-			local Checkmark = Instance.new("ImageLabel")
-			Checkmark.Name = "Checkmark"
-			Checkmark.Parent = Checkbox
-			Checkmark.BackgroundTransparency = 1.000
-			Checkmark.Size = UDim2.new(1, 0, 1, 0)
-			Checkmark.Image = "rbxassetid://3926309567"
-			Checkmark.ImageRectOffset = Vector2.new(784, 420)
-			Checkmark.ImageRectSize = Vector2.new(48, 48)
-			Checkmark.ImageColor3 = Color3.fromRGB(0, 170, 255)
-			Checkmark.Visible = false
+			-- Fixed checkmark with proper centering
+			--[[
+				local Checkmark = Instance.new("ImageLabel")
+				Checkmark.Name = "Checkmark"
+				Checkmark.Parent = Checkbox
+				Checkmark.BackgroundTransparency = 1.000
+				Checkmark.Size = UDim2.new(1, 0, 1, 0)
+				Checkmark.Image = "rbxassetid://3926309567"
+				Checkmark.ImageRectOffset = Vector2.new(784, 420)
+				Checkmark.ImageRectSize = Vector2.new(48, 48)
+				Checkmark.ImageColor3 = Color3.fromRGB(0, 170, 255)
+				Checkmark.Visible = false
+				]]
 
+			local Icon = Instance.new("ImageLabel", Checkbox)
+			Icon.Name = "Icon"
+			Icon.AnchorPoint = Vector2.new(0.5, 0.5)
+			Icon.BackgroundTransparency = 1.000
+			Icon.Position = UDim2.new(0.5, 0, 0.5, 0)
+			Icon.Size = UDim2.new(0, 20, 0, 20)
+			Icon.Image = "http://www.roblox.com/asset/?id=13319773302"
+			Icon.ImageColor3 = Color3.fromRGB(0, 0, 0)
+			--Icon.ImageTransparency = 1.000
+			
+			local UIScale = Instance.new("UIScale", Icon)
+			UIScale.Scale = 0.800
+			
+			
 			if showTooltips then
 				local Tooltip = Instance.new("TextLabel")
 				Tooltip.Name = "Tooltip"
@@ -2234,12 +2276,16 @@ function Library:Create(xHubName)
 			Option.MouseButton1Click:Connect(function()
 				if table.find(selectedOptions, optionText) then
 					table.remove(selectedOptions, table.find(selectedOptions, optionText))
-					Checkmark.Visible = false
-					Checkbox.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+					game:GetService("TweenService"):Create(Icon, TweenInfo.new(0.1), {
+						ImageTransparency = 1
+					}):Play()
+					Checkbox.BackgroundColor3 = disabledColor
 				else
 					table.insert(selectedOptions, optionText)
-					Checkmark.Visible = true
-					Checkbox.BackgroundColor3 = Color3.fromRGB(0, 85, 127)
+					game:GetService("TweenService"):Create(Icon, TweenInfo.new(0.1), {
+						ImageTransparency = 0
+					}):Play()
+					Checkbox.BackgroundColor3 = selectedColor
 				end
 
 				-- Update title text
@@ -2287,7 +2333,7 @@ function Library:Create(xHubName)
 			end
 		end)
 
-		function MdrFunction:UpdateM(newOptions)
+		function MdrFunction:Update(newOptions)
 			assert(type(newOptions) == "table" and #newOptions > 0, "Options should be a non-empty table.")
 
 			-- Clear existing options
@@ -2313,15 +2359,23 @@ function Library:Create(xHubName)
 				Option.BorderSizePixel = 0
 				Option.Size = UDim2.new(1, 0, 0, 25)
 				Option.AutoButtonColor = false
-				Option.Text = optionText
+				Option.Text = ""
 				Option.TextColor3 = Color3.fromRGB(214, 214, 214)
 				Option.TextWrapped = true
 				Option.TextSize = customFontSize
 				Option.TextXAlignment = Enum.TextXAlignment.Left
 
-				local TextPadding = Instance.new("UIPadding")
-				TextPadding.Parent = Option
-				TextPadding.PaddingLeft = UDim.new(0, 30)
+				local OptionText = Instance.new("TextLabel")
+				OptionText.Name = "OptionText"
+				OptionText.Parent = Option
+				OptionText.BackgroundTransparency = 1
+				OptionText.Size = UDim2.new(1, -30, 1, 0)
+				OptionText.Position = UDim2.new(0, 30, 0, 0)
+				OptionText.Text = optionText
+				OptionText.TextColor3 = Color3.fromRGB(214, 214, 214)
+				OptionText.TextSize = customFontSize
+				OptionText.Font = customFont
+				OptionText.TextXAlignment = Enum.TextXAlignment.Left
 
 				local Checkbox = Instance.new("Frame")
 				Checkbox.Name = "Checkbox"
@@ -2334,7 +2388,7 @@ function Library:Create(xHubName)
 				local CheckboxCorner = Instance.new("UICorner")
 				CheckboxCorner.CornerRadius = UDim.new(0, 3)
 				CheckboxCorner.Parent = Checkbox
-
+			--[[
 				local Checkmark = Instance.new("ImageLabel")
 				Checkmark.Name = "Checkmark"
 				Checkmark.Parent = Checkbox
@@ -2345,15 +2399,30 @@ function Library:Create(xHubName)
 				Checkmark.ImageRectSize = Vector2.new(48, 48)
 				Checkmark.ImageColor3 = Color3.fromRGB(0, 170, 255)
 				Checkmark.Visible = false
-
+				]]
+				
+				local Icon = Instance.new("ImageLabel", Checkbox)
+				Icon.Name = "Icon"
+				Icon.AnchorPoint = Vector2.new(0.5, 0.5)
+				Icon.BackgroundTransparency = 1.000
+				Icon.Position = UDim2.new(0.5, 0, 0.5, 0)
+				Icon.Size = UDim2.new(0, 20, 0, 20)
+				Icon.Image = "rbxassetid://3926309567"
+				Icon.ImageColor3 = Color3.fromRGB(0, 0, 0)
+				--Icon.ImageTransparency = 1.000
+				
 				Option.MouseButton1Click:Connect(function()
 					if table.find(selectedOptions, optionText) then
 						table.remove(selectedOptions, table.find(selectedOptions, optionText))
-						Checkmark.Visible = false
+						game:GetService("TweenService"):Create(Icon, TweenInfo.new(0.1), {
+							ImageTransparency = 1
+						}):Play()
 						Checkbox.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
 					else
 						table.insert(selectedOptions, optionText)
-						Checkmark.Visible = true
+						game:GetService("TweenService"):Create(Icon, TweenInfo.new(0.1), {
+							ImageTransparency = 0
+						}):Play()
 						Checkbox.BackgroundColor3 = Color3.fromRGB(0, 85, 127)
 					end
 
@@ -2372,7 +2441,7 @@ function Library:Create(xHubName)
 			end
 		end
 
-		function MdrFunction:SetMSel(selected)
+		function MdrFunction:SetSel(selected)
 			selectedOptions = selected or {}
 
 			-- Update checkboxes
@@ -2404,7 +2473,7 @@ function Library:Create(xHubName)
 			end
 		end
 
-		function MdrFunction:GetMSel()
+		function MdrFunction:GetSel()
 			return selectedOptions
 		end
 
@@ -2539,8 +2608,7 @@ function Library:Create(xHubName)
 		UIListLayout.Parent = List
 		UIListLayout.SortOrder = Enum.SortOrder.LayoutOrder
 		UIListLayout.Padding = UDim.new(0, 3)
-		
-		
+
 		local function updateTitle()
 			if selectedOption then
 				Title.Text = selectedOption
@@ -2548,8 +2616,7 @@ function Library:Create(xHubName)
 				Title.Text = dropdownName
 			end
 		end
-		
-		
+
 		local function toggleDropdown(state)
 			if state == nil then
 				state = not isOpen
@@ -2583,7 +2650,7 @@ function Library:Create(xHubName)
 				openDropdown = nil
 			end
 		end
-		
+
 		-- Create option buttons
 		local function createOptions()
 			for _, child in ipairs(List:GetChildren()) do
@@ -2629,10 +2696,6 @@ function Library:Create(xHubName)
 				end
 
 				Option.MouseButton1Click:Connect(function()
-					selectedOption = optionText
-					Title.Text = selectedOption
-
-					-- Update all options' visual state
 					if optionText == selectedOption then
 						-- If already selected, unselect it
 						selectedOption = nil
@@ -2641,6 +2704,8 @@ function Library:Create(xHubName)
 					else
 						-- Otherwise, select this option
 						selectedOption = optionText
+						SelectionIndicator.Visible = true
+						Option.BackgroundColor3 = selectedColor
 
 						-- Deselect all other options visually
 						for _, opt in ipairs(List:GetChildren()) do
@@ -2649,11 +2714,8 @@ function Library:Create(xHubName)
 								opt.SelectionIndicator.Visible = false
 							end
 						end
-
-						SelectionIndicator.Visible = true
-						Option.BackgroundColor3 = selectedColor
 					end
-					
+
 					updateTitle() -- Update the main dropdown title
 
 					if callback then
@@ -2677,8 +2739,6 @@ function Library:Create(xHubName)
 			end
 		end
 
-
-
 		-- Search functionality
 		SearchBox:GetPropertyChangedSignal("Text"):Connect(function()
 			local searchText = string.lower(SearchBox.Text)
@@ -2693,7 +2753,7 @@ function Library:Create(xHubName)
 		-- Initialize options
 		createOptions()
 		updateTitle()
-		
+
 		-- Dropdown click handler
 		Dropdown.MouseButton1Click:Connect(function()
 			toggleDropdown()
@@ -2725,30 +2785,25 @@ function Library:Create(xHubName)
 		end
 
 		function DropFunction:Setdrop(optionText)
-			updateTitle()
-			
-			for _, option in ipairs(List:GetChildren()) do
-				if option:IsA("TextButton") and option.Text == optionText then
-					selectedOption = optionText
-				--	Title.Text = selectedOption
-					
-					
-					-- Update visual state
-					for _, opt in ipairs(List:GetChildren()) do
-						if opt:IsA("TextButton") then
-							opt.BackgroundColor3 = defaultColor
-							opt.SelectionIndicator.Visible = false
+			if table.find(options, optionText) then
+				selectedOption = optionText
+				updateTitle()
+
+				-- Update visual state
+				for _, option in ipairs(List:GetChildren()) do
+					if option:IsA("TextButton") then
+						if option.Text == optionText then
+							option.BackgroundColor3 = selectedColor
+							option.SelectionIndicator.Visible = true
+						else
+							option.BackgroundColor3 = defaultColor
+							option.SelectionIndicator.Visible = false
 						end
 					end
+				end
 
-					option.BackgroundColor3 = selectedColor
-					option.SelectionIndicator.Visible = true
-
-					if callback then
-						callback(selectedOption)
-					end
-
-					break
+				if callback then
+					callback(selectedOption)
 				end
 			end
 		end
