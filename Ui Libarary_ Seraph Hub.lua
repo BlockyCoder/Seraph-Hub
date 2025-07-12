@@ -740,8 +740,8 @@ function Library:Create(xHubName)
 		PreviousGUIs = {} -- Clear the tracking table
 		print("All GUIs destroyed.")
 	end
-	
-	
+
+
 	function Library:Tab(TabNam)
 		local TabNam = TabNam or "Tab"
 
@@ -778,8 +778,8 @@ function Library:Create(xHubName)
 		TextLabel.Text = TabNam
 		TextLabel.TextColor3 = Color3.fromRGB(193, 193, 193)
 		TextLabel.TextSize = 12.000
-		
-		
+
+
 		-- Gui to Lua
 		-- Version: 3.2
 
