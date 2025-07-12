@@ -3,13 +3,9 @@
 
 -- Instances:
 local Library = {}
-local PreviousGUIs = {} 
-
 
 -- Random UI Name
 local LibraryName = tostring(math.random(100000,200000))..tostring(math.random(100000,200000))..tostring(math.random(100000,200000))
-table.insert(PreviousGUIs, LibraryName)
-
 
 
 function Library:Drag(obj)
@@ -245,13 +241,10 @@ contract(exampleElement, duration)
 
 function Library:Create(xHubName)
 
-	for _, guiName in ipairs(PreviousGUIs) do
-		if game.CoreGui:FindFirstChild(guiName) then
-			game.CoreGui[guiName]:Destroy()
-		end
-	end
-	PreviousGUIs = {} -- Clear the table
 
+	if  game.CoreGui:FindFirstChild(xHubName) then
+		game.CoreGui[xHubName]:Destroy()
+	end
 
 	local xHubName = xHubName or "UI Library"
 
@@ -699,46 +692,30 @@ function Library:Create(xHubName)
 	Library:Drag(Menu, Topbar)
 
 
+
 	function Library:ToggleUI()
-		if #PreviousGUIs == 0 then return end -- No GUI exists
-
-		local lastGUI = game.CoreGui:FindFirstChild(PreviousGUIs[#PreviousGUIs])
-		if not lastGUI then return end -- GUI not found
-
-		lastGUI.Enabled = not lastGUI.Enabled
+		if  game.CoreGui
+			:FindFirstChild(xHubName).Enabled then 
+			game.CoreGui
+				:FindFirstChild(xHubName).Enabled = false
+		else 
+			game.CoreGui
+				:FindFirstChild(xHubName).Enabled = true
+		end
 	end
 
 
 	function Library:Destroy()
-		-- Fade out all GUIs (if they exist)
-		for _, guiName in ipairs(PreviousGUIs) do
-			local gui = game.CoreGui:FindFirstChild(guiName)
-			if gui then
-				-- Find the Menu, Topbar, and Shadow inside the GUI
-				local Menu = gui:FindFirstChild("Menu")
-				local Topbar = Menu and Menu:FindFirstChild("Topbar")
-				local Shadow = Menu and Menu:FindFirstChild("Shadow")
-
-				-- Apply fade-out animations if elements exist
-				if Menu then fadeOut(Menu, 0.3) end
-				if Topbar then fadeOut(Topbar, 0.3) end
-				if Shadow then fadeOut(Shadow, 0.3) end
-			end
-		end
-
-		wait(0.3) -- Wait for fade-out
-
-		-- Destroy all tracked GUIs
-		for _, guiName in ipairs(PreviousGUIs) do
-			local gui = game.CoreGui:FindFirstChild(guiName)
-			if gui then
-				gui:Destroy()
-				print("Destroyed GUI:", guiName)
-			end
-		end
-
-		PreviousGUIs = {} -- Clear the tracking table
-		print("All GUIs destroyed.")
+		-- Fade out the Main frame and ShadowHolder frame
+		fadeOut(Menu, 0.3)
+		fadeOut(Topbar, 0.3)
+		fadeOut(Shadow, 0.3)
+		print("faded now waiting 0.3 seconds")
+		wait(0.3)  -- Delay to ensure fade out completes
+		print("Distroying screen gui...")
+		-- game.CoreGui:FindFirstChild(xHubName):Destroy()
+		game.CoreGui:FindFirstChild(xHubName):Destroy()
+		print("destroyed Screen GUI")
 	end
 
 
@@ -968,8 +945,9 @@ function Library:Create(xHubName)
 		wait(0.3)
 		fadeOut(Notification, 0.5)
 		wait(0.5)
-
+		Notification:Destroy()
 		ScreenGuiM:Destroy()
+		
 	end
 
 	function Library:SaveConfig(name, data)
