@@ -34,7 +34,7 @@ game:GetService("Players").LocalPlayer.Idled:connect(function()
 end)
 
 
-local Library = loadstring(game:HttpGet("https://raw.githubusercontent.com/BlockyCoder/Seraph-Hub/refs/heads/main/Ui%20Libarary_%20Seraph%20Hub.lua"))()
+local Library = loadstring(game:HttpGet("https://raw.githubusercontent.com/BlockyCoder/Seraph-Hub/refs/heads/main/Ui%20Libarary_%20Seraph%20Hub"))()
 Library:Create("[MAGMA🌋] Infinite Mining Incremental ⛏️")
 
 local maint = Library:Tab("Main")
