@@ -1,3 +1,3 @@
-local URL = "https://gist.githubusercontent.com/BlockyCoder/edc38c3bbef593003892e55ddb9bcc66/raw/10f3712b7ce43d5465eaa84efd34f9f449d8f4c8/Ui%2520Libarary_%2520Seraph%2520HubV2"
+local URL = "https://gist.githubusercontent.com/BlockyCoder/f3ebe445094e6d0aa9199975c529aed3/raw/6d03fb5b9848b44f1da576286bc79dccaa3da403/Ui%2520Libarary_%2520Seraph%2520HubV2"
 
 return loadstring(game:HttpGet(URL))()
