@@ -1,0 +1,33 @@
+{
+	"1254185591": {
+		"url": "https://pastebin.com/raw/zkvVP9eN",
+		"name": "Dominus Lifting Simulator"
+	},
+
+	"17144957461": {
+		"url": "https://pastebin.com/raw/0tAcVWnc",
+		"name": "SLS"
+	},
+
+	"286090429": {
+		"url": "https://gist.githubusercontent.com/BlockyCoder/3247f2f2ff2ef275b9a15ff8f4ac923a/raw/da0b88b4866ef6820f67c6dcf25bb91fd44833e5/Arsenal",
+		"name": "Arsenal",
+		"places": ["95645135481640"]
+	},
+
+	"3956818381": {
+		"url": "https://pastebin.com/raw/u2VShkE9",
+		"name": "Ninja Legends"
+	},
+
+	"108730407897379": {
+		"url": "https://gist.githubusercontent.com/BlockyCoder/7cbb90bf3511e2daa8ea259c8f91af33/raw/e69cd085528749a59502625daf4ff267cde6501b/Amber%2520Alert%2520%255BUPD%255D%2520%255BHORROR%255D",
+		"name": "Amber Alert [UPD] [HORROR]",
+		"places": ["76265039822282", "79943475071382"]
+	},
+"74193805629461": {
+		"url": "https://gist.githubusercontent.com/BlockyCoder/468ac552acba0c7539a57d6cde55195b/raw/0a7619cf796ce128671f2b4c8475d8fad5337e17/+1%2520Mine%2520Per%2520Click%2520%25E2%259B%258F%25EF%25B8%258F",
+		"name": "+1 Mine Per Click ⛏️"
+	}
+
+}
